@@ -73,7 +73,7 @@ class HandlerDB extends HandlerBase
         }
         if (!($result = DB::table("sources")->where("file_id",$id)->where("source",$file)->first()))
         {
-            DB::table("sources")->insert(["file_id"=>$id,"source"=>$file]);
+            DB::table("sources")->insert(["file_id"=>$id,"source"=>$file,"host"=>gethostname()]);
         }
     }
     
