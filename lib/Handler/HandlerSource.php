@@ -1,6 +1,6 @@
 <?php
 
-namespace Lib;
+namespace Lib\Handler;
 
 
 use Illuminate\Support\Facades\DB;

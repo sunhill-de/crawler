@@ -6,6 +6,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
+use Lib\Handler\HandlerDB;
+use Lib\Handler\HandlerFilesystem;
+use Lib\Handler\HandlerLinks;
+use Lib\Handler\HandlerSource;
+
 class crawler 
 {
     
@@ -104,6 +109,12 @@ class crawler
             HandlerSource::class,
             HandlerLinks::class
         ];
+        
+        usort($handlers, function($a,$b) {
+            if ($a::$prio == $b::$prio) {
+                return 0;
+            } else return ($a::$prio < $b::$prio)? -1 : 1;
+        });
         
         $descriptor = new \stdClass();
         $descriptor->keep = $this->keep;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lib;
+namespace Lib\Handler;
 
 
 use Illuminate\Support\Str;
@@ -36,9 +36,14 @@ class HandlerFilesystem extends HandlerBase
         if ($this->descriptor->keep) {
             copy($this->descriptor->source,$destination);
         } else {
-            if (!rename($this->descriptor->source,$destination)) {
+            try {
+                if (!rename($this->descriptor->source,$destination)) {
+                    copy($this->descriptor->source,$destination);
+                    unlink($this->descriptor->source);   
+                }
+            } catch (\Exception $e) {
                 copy($this->descriptor->source,$destination);
-                unlink($this->descriptor->source);   
+                unlink($this->descriptor->source);               
             }
         }
         $this->descriptor->destination = $destination;

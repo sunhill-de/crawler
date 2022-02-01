@@ -1,6 +1,6 @@
 <?php
 
-namespace Lib;
+namespace Lib\Handler;
 
 use Illuminate\Support\Str;
 
@@ -9,6 +9,8 @@ abstract class HandlerBase
     protected $parent;
     
     protected $descriptor;
+    
+    static public $prio = 50;
     
     public function __construct($parent,$descriptor)
     {
