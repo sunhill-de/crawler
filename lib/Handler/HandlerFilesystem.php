@@ -48,7 +48,7 @@ class HandlerFilesystem extends HandlerBase
                     copy($this->descriptor->source,$destination);
                     unlink($this->descriptor->source);
                     if (file_exists($this->descriptor->source)) {
-                        $this->error("File '".$this->descriptor->source."' could not be deleted. Is kept.")
+                        $this->error("File '".$this->descriptor->source."' could not be deleted. Is kept.");
                     }
                 }
             }
