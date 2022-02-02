@@ -54,6 +54,16 @@ class crawler
         }        
     }
     
+    public function fatal($message)
+    {
+        if ($this->command) {
+           $this->command->error($message);
+        } else {
+            echo $message;            
+        }
+        die();
+    }
+    
     /**
      * Does the crawling
      * @param unknown $command

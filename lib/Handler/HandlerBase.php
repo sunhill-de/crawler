@@ -38,6 +38,11 @@ abstract class HandlerBase
         $this->parent->debug($message);
     }
     
+    public function fatal($message)
+    {
+        $this->parent->fatal($message);    
+    }
+    
     protected function createDir($path)
     {
         $this->debug("Dir '$path' does not exist. Creating it.");
