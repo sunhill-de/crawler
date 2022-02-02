@@ -1,42 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
-use Tests\TestCase;
 use Lib\crawler;
+use Tests\CrawlerTestCase;
 
-class CrawlerFeatureTest extends TestCase
+class CrawlerFeatureTest extends CrawlerTestCase
 {
  
-    protected $temp;
-    
-    private function prepareDatabase()
-    {
-        DB::table("files")->truncate();  
-        DB::table("mime")->truncate();
-        DB::table("sources")->truncate();
-    }
-    
-    protected function getTemp($subdir="")
-    {
-        return $this->temp.$subdir;    
-    }
-    
-    private function prepareFilesystem()
-    {
-        $this->temp = dirname(__FILE__)."/../temp";
-        Config::set("crawler.media_dir",$this->getTemp("/media"));
-        exec("rm -rf ".$this->getTemp("/*"));
-        exec("mkdir ".$this->getTemp("/media"));
-        exec("mkdir ".$this->getTemp("/scan"));
-        exec("cp -rf ".dirname(__FILE__)."/../files/* ".$this->getTemp("/scan"));
-    }
-    
-    public function prepareScenario()
-    {
-        $this->prepareDatabase();
-        $this->prepareFilesystem();
-    }
     
     public function testScenarioSane()
     {
