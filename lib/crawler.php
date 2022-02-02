@@ -20,11 +20,15 @@ class crawler
     
     protected $keep;
     
+    /**
+     * Writes an error message to the screen (if a command is defined)
+     * @param unknown $message
+     */
     public function error($message) 
     {
         if ($this->command) {
             $this->command->error($message);
-        }
+        } 
     }
     
     public function info($message)

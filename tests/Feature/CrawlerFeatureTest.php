@@ -106,6 +106,14 @@ class CrawlerFeatureTest extends TestCase
         $return = $leading_slash . implode(DIRECTORY_SEPARATOR, $absolutes);
         return (substr($return, - 1) == DIRECTORY_SEPARATOR) ? $return : $return . DIRECTORY_SEPARATOR;
     }
-    
+ 
+    /**
+     * @depends testScenarioSane
+     */
+    public function testDatabaseFilled()
+    {
+        $this->assertDatabaseHas('files',['hash' => '6dcd4ce23d88e2ee9568ba546c007c63d9131c1b']);     
+        $this->assertDatabaseHas('mime',['mime' => 'application/octet-stream']);
+    }
     
 }
