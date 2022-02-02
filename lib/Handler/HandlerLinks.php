@@ -16,19 +16,19 @@ class HandlerLinks extends HandlerBase
     
     function process(Descriptor $descriptor)
     {
-        if (count($this->descriptor->addLinks)) {
-            $this->addLinks($this->descriptor->addLinks);
+        if (count($descriptor->addLinks)) {
+            $this->addLinks($descriptor);
         }
-        if (count($this->descriptor->removeLinks)) {
-            $this->removeLinks($this->descriptor->removeLinks);
+        if (count($descriptor->removeLinks)) {
+            $this->removeLinks($descriptor);
         }
     }
 
-    private function addLinks($links)
+    private function addLinks($descriptor)
     {
-        foreach ($links as $link) {
+        foreach ($descriptor->addLinks as $link) {
             $destination = $this->normalizeFile(config('crawler.media_dir')."/".$link);
-            $target = $this->descriptor->destination;
+            $target = $descriptor->destination;
             $destination_dir = pathinfo($destination,PATHINFO_DIRNAME);
             $target_dir = pathinfo($target,PATHINFO_DIRNAME);
             $relative = $this->getRelativeDir($destination_dir,$target_dir);
@@ -41,8 +41,15 @@ class HandlerLinks extends HandlerBase
             
     }
     
-    private function removeLinks($links)
+    private function removeLinks($descriptor)
     {
         
     }
+    
+    function matches(Descriptor $descriptor): Bool
+    {
+        return $descriptor->fileReadable();
+    }
+    
+    
 }

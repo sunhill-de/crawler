@@ -15,65 +15,57 @@ class HandlerDB extends HandlerBase
     
     function process(Descriptor $descriptor)
     {
-        $this->descriptor->hash = sha1_file($descriptor->source);
-        $this->descriptor->size  = filesize($descriptor->source);
-        $this->descriptor->cdate = filectime($descriptor->source);
-        $this->descriptor->mdate = filemtime($descriptor->source);
-        $this->descriptor->mime = mime_content_type($descriptor->source);
-        $this->descriptor->ext = $this->getExt($descriptor->source);
+        $descriptor->size  = filesize($descriptor->source);
+        $descriptor->cdate = filectime($descriptor->source);
+        $descriptor->mdate = filemtime($descriptor->source);
+        $descriptor->mime = mime_content_type($descriptor->source);
+        $descriptor->ext = $this->getExt($descriptor->source);
         
-        $this->verboseinfo("  Hash is '".$this->descriptor->hash."'");
-        $this->verboseinfo("  Size is '".$this->descriptor->size."'");
-        $this->verboseinfo("  ctime is '".$this->descriptor->cdate."'");
-        $this->verboseinfo("  mdate is '".$this->descriptor->mdate."'");
-        $this->verboseinfo("  mime is '".$this->descriptor->mime."'");
+        $this->verboseinfo("  Size is '".$descriptor->size."'");
+        $this->verboseinfo("  ctime is '".$descriptor->cdate."'");
+        $this->verboseinfo("  mdate is '".$descriptor->mdate."'");
+        $this->verboseinfo("  mime is '".$descriptor->mime."'");
         
-        if ($id = $this->searchHash($this->descriptor->hash)) {
-            $this->handleKnownFile($id,$descriptor->source);
+        if ($descriptor->alreadyInDatabase()) {
+            $this->handleKnownFile($descriptor);
         } else {
-            $this->handleUnknownFile($descriptor->source,$this->descriptor->hash,$this->descriptor->size,$this->descriptor->cdate,$this->descriptor->mdate,$this->descriptor->mime);
+            $this->handleUnknownFile($descriptor);
         }        
     }
 
-    protected function searchHash($hash)
-    {
-        if ($result = DB::table("files")->where("hash",$hash)->first()) {
-            return $result->id;
-        } else {
-            return false;
-        }
-    }
-    
-    protected function handleKnownFile($id,$file)
+    protected function handleKnownFile($descriptor)
     {
         $this->verboseinfo(" Hash already in database");
-        $this->handleSource($id,$file);
+        $this->handleSource($descriptor);
     }
     
-    protected function handleUnknownFile($file,$hash,$size,$cdate,$mdate,$mime)
+    protected function handleUnknownFile($descriptor)
     {
         $this->verboseinfo(" Hash not in database");
         DB::table("files")->insert(
             [
-                'hash'=>$hash,
-                'ext'=>$this->descriptor->ext,
-                'size'=>$size,
-                'mime'=>$this->getMime($mime),
-                'cdate'=>date("Y-m-d H:i:s",$cdate),
-                'mdate'=>date("Y-m-d H:i:s",$mdate)
+                'hash'=>$descriptor->hash,
+                'ext'=>$descriptor->ext,
+                'size'=>$descriptor->size,
+                'mime'=>$this->getMime($descriptor->mime),
+                'cdate'=>date("Y-m-d H:i:s",$descriptor->cdate),
+                'mdate'=>date("Y-m-d H:i:s",$descriptor->mdate)
             ]);
-        $id = DB::getPdo()->lastInsertId();
-        $this->handleSource($id,$file);
+        $descriptor->fileID = DB::getPdo()->lastInsertId();
+        $this->handleSource($descriptor);
     }
     
-    protected function handleSource($id,$file)
+    protected function handleSource(Descriptor $descriptor)
     {
-        if ($file[0] == ".") {
-            $file = $this->normalizeFile(getcwd()."/".$file);
+        if ($descriptor->source[0] == ".") {
+            $file = $this->normalizeFile(getcwd()."/".$descriptor->source);
+        } else {
+            $file = $this->normalizeFile($descriptor->source);
         }
-        if (!($result = DB::table("sources")->where("file_id",$id)->where("source",$file)->first()))
+        
+        if (!($result = DB::table("sources")->where("file_id",$descriptor->fileID)->where("source",$file)->first()))
         {
-            DB::table("sources")->insert(["file_id"=>$id,"source"=>$file,"host"=>gethostname()]);
+            DB::table("sources")->insert(["file_id"=>$descriptor->fileID,"source"=>$file,"host"=>gethostname()]);
         }
     }
     
@@ -97,5 +89,11 @@ class HandlerDB extends HandlerBase
         
         return DB::getPdo()->lastInsertId();
     }
+
+    function matches(Descriptor $descriptor): Bool
+    {
+        return $descriptor->fileReadable();
+    }
+    
     
 }

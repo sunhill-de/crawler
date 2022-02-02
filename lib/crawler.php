@@ -10,6 +10,8 @@ use Lib\Handler\HandlerDB;
 use Lib\Handler\HandlerFilesystem;
 use Lib\Handler\HandlerLinks;
 use Lib\Handler\HandlerSource;
+use Lib\Handler\HandlerHash;
+use Lib\Handler\HandlerFileStatus;
 
 class crawler 
 {
@@ -121,7 +123,9 @@ class crawler
             HandlerDB::class,
             HandlerFilesystem::class,
             HandlerSource::class,
-            HandlerLinks::class
+            HandlerLinks::class,
+            HandlerHash::class,
+            HandlerFileStatus::class,
         ];
         
         usort($handlers, function($a,$b) {
@@ -138,7 +142,9 @@ class crawler
         
         foreach ($handlers as $handler) {
             $handlerObject = new $handler($this,$descriptor);
-            $handlerObject->process($descriptor);
+            if ($handlerObject->matches($descriptor)) {
+                $handlerObject->process($descriptor);
+            }
         }
         
     }

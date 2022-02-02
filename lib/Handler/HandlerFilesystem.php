@@ -17,42 +17,49 @@ class HandlerFilesystem extends HandlerBase
     function process(Descriptor $descriptor)
     {
         $targetDir = $this->normalizeDir(config('crawler.media_dir')."/originals/".
-                     $this->descriptor->hash[0]."/".
-                     $this->descriptor->hash[1]."/".
-                     $this->descriptor->hash[2]."/");
+                     $descriptor->hash[0]."/".
+                     $descriptor->hash[1]."/".
+                     $descriptor->hash[2]."/");
         $this->debug("Target dir is calulated to '$targetDir'");
         if (!file_exists($targetDir)) {
             $this->createDir($targetDir);
         }
-        $this->copyFileToDestination($descriptor->source);
+        $this->copyFileToDestination($descriptor);
     }
     
-    protected function copyFileToDestination()
+    protected function copyFileToDestination(Descriptor $descriptor)
     {
         $destination =  $this->normalizeDir(config('crawler.media_dir')."/originals/".
-            $this->descriptor->hash[0]."/".
-            $this->descriptor->hash[1]."/".
-            $this->descriptor->hash[2]."/").$this->descriptor->hash.".".$this->descriptor->ext;
-        if ($this->descriptor->keep) {
-            copy($this->descriptor->source,$destination);
+            $descriptor->hash[0]."/".
+            $descriptor->hash[1]."/".
+            $descriptor->hash[2]."/").$descriptor->hash.".".$descriptor->ext;
+        if ($descriptor->keep) {
+            copy($descriptor->source,$destination);
         } else {
             if (file_exists($destination)) {
-                $this->error("File '".$this->descriptor->source."' already in originals.");
+                $this->error("File '".$descriptor->source."' already in originals.");
             } else {
                 try {
-                    if (!rename($this->descriptor->source,$destination)) {
-                        copy($this->descriptor->source,$destination);
-                        unlink($this->descriptor->source);   
+                    if (!rename($descriptor->source,$destination)) {
+                        copy($descriptor->source,$destination);
+                        unlink($descriptor->source);   
                     }
                 } catch (\Exception $e) {
-                    copy($this->descriptor->source,$destination);
-                    unlink($this->descriptor->source);
-                    if (file_exists($this->descriptor->source)) {
-                        $this->error("File '".$this->descriptor->source."' could not be deleted. Is kept.");
+                    copy($descriptor->source,$destination);
+                    unlink($descriptor->source);
+                    if (file_exists($descriptor->source)) {
+                        $this->error("File '".$descriptor->source."' could not be deleted. Is kept.");
                     }
                 }
             }
         }
-        $this->descriptor->destination = $destination;
+        $descriptor->destination = $destination;
     }
+    
+    function matches(Descriptor $descriptor): Bool
+    {
+        return $descriptor->fileReadable();
+    }
+    
+    
 }

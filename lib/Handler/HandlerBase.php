@@ -13,10 +13,9 @@ abstract class HandlerBase
     
     static public $prio = 50;
     
-    public function __construct($parent,$descriptor)
+    public function __construct($parent = null)
     {
         $this->parent = $parent;
-        $this->descriptor = $descriptor;
     }
     
     public function error($message)
@@ -113,5 +112,7 @@ abstract class HandlerBase
     }
     
     abstract function process(Descriptor $descriptor);
+    
+    abstract function matches(Descriptor $descriptor): Bool;
     
 }

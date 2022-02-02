@@ -16,8 +16,13 @@ class HandlerSource extends HandlerBase
     
     function process(Descriptor $descriptor)
     {
-        $this->descriptor->addLinks[] = "/sources/all/".$this->descriptor->source;
+        $descriptor->addLinks[] = "/sources/all/".$descriptor->source;
     }
 
+    function matches(Descriptor $descriptor): Bool
+    {
+        return $descriptor->fileReadable();
+    }
+    
     
 }
