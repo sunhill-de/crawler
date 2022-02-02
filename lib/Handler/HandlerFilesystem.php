@@ -39,17 +39,19 @@ class HandlerFilesystem extends HandlerBase
             if (file_exists($destination)) {
                 $this->error("File '".$descriptor->source."' already in originals.");
             } else {
-                try {
+                if ($descriptor->fileWriteable()) {
                     if (!rename($descriptor->source,$destination)) {
+                        $this->info("Rename() didn't work. Trying copy and unlink.");
                         copy($descriptor->source,$destination);
-                        unlink($descriptor->source);   
-                    }
-                } catch (\Exception $e) {
+                        unlink($descriptor->source);
+                    }                    
+                } else {
+                    $this->info("Original is not writeable, trying copy and unlink.");
                     copy($descriptor->source,$destination);
                     unlink($descriptor->source);
-                    if (file_exists($descriptor->source)) {
-                        $this->error("File '".$descriptor->source."' could not be deleted. Is kept.");
-                    }
+                }
+                if (file_exists($descriptor->source)) {
+                    $this->error("File '".$descriptor->source."' could not be deleted. Is kept.");
                 }
             }
         }
@@ -58,7 +60,7 @@ class HandlerFilesystem extends HandlerBase
     
     function matches(Descriptor $descriptor): Bool
     {
-        return $descriptor->fileReadable();
+        return $descriptor->fileProcessable();
     }
     
     
