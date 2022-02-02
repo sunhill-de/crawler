@@ -40,7 +40,12 @@ class HandlerFilesystem extends HandlerBase
                 $this->error("File '".$descriptor->source."' already in originals.");
             } else {
                 if ($descriptor->fileWriteable()) {
-                    if (!rename($descriptor->source,$destination)) {
+                    try {
+                        $success = rename($descriptor->source,$destination);
+                    } catch (\Exception $e) {
+                        $success = false;
+                    }
+                    if (!$success) {
                         $this->info("Rename() didn't work. Trying copy and unlink.");
                         copy($descriptor->source,$destination);
                         unlink($descriptor->source);
