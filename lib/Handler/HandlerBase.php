@@ -3,6 +3,7 @@
 namespace Lib\Handler;
 
 use Illuminate\Support\Str;
+use Lib\Descriptor;
 
 abstract class HandlerBase
 {
@@ -111,6 +112,6 @@ abstract class HandlerBase
         return $this->normalizeDir(Str::finish(pathinfo($path, PATHINFO_DIRNAME), DIRECTORY_SEPARATOR)).pathinfo($path, PATHINFO_BASENAME);
     }
     
-    abstract function processFile(string $file);
+    abstract function process(Descriptor $descriptor);
     
 }

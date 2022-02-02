@@ -2,8 +2,8 @@
 
 namespace Lib\Handler;
 
-
 use Illuminate\Support\Facades\DB;
+use Lib\Descriptor;
 
 /**
  * Handles the entries in the database
@@ -13,14 +13,14 @@ use Illuminate\Support\Facades\DB;
 class HandlerDB extends HandlerBase
 {
     
-    function processFile(string $file)
+    function process(Descriptor $descriptor)
     {
-        $this->descriptor->hash = sha1_file($file);
-        $this->descriptor->size  = filesize($file);
-        $this->descriptor->cdate = filectime($file);
-        $this->descriptor->mdate = filemtime($file);
-        $this->descriptor->mime = mime_content_type($file);
-        $this->descriptor->ext = $this->getExt($file);
+        $this->descriptor->hash = sha1_file($descriptor->source);
+        $this->descriptor->size  = filesize($descriptor->source);
+        $this->descriptor->cdate = filectime($descriptor->source);
+        $this->descriptor->mdate = filemtime($descriptor->source);
+        $this->descriptor->mime = mime_content_type($descriptor->source);
+        $this->descriptor->ext = $this->getExt($descriptor->source);
         
         $this->verboseinfo("  Hash is '".$this->descriptor->hash."'");
         $this->verboseinfo("  Size is '".$this->descriptor->size."'");
@@ -29,9 +29,9 @@ class HandlerDB extends HandlerBase
         $this->verboseinfo("  mime is '".$this->descriptor->mime."'");
         
         if ($id = $this->searchHash($this->descriptor->hash)) {
-            $this->handleKnownFile($id,$file);
+            $this->handleKnownFile($id,$descriptor->source);
         } else {
-            $this->handleUnknownFile($file,$this->descriptor->hash,$this->descriptor->size,$this->descriptor->cdate,$this->descriptor->mdate,$this->descriptor->mime);
+            $this->handleUnknownFile($descriptor->source,$this->descriptor->hash,$this->descriptor->size,$this->descriptor->cdate,$this->descriptor->mdate,$this->descriptor->mime);
         }        
     }
 

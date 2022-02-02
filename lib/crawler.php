@@ -130,7 +130,7 @@ class crawler
             } else return ($a::$prio < $b::$prio)? -1 : 1;
         });
         
-        $descriptor = new \stdClass();
+        $descriptor = new Descriptor();
         $descriptor->keep = $this->keep;
         $descriptor->source = $file;
         $descriptor->addLinks    = [];
@@ -138,7 +138,7 @@ class crawler
         
         foreach ($handlers as $handler) {
             $handlerObject = new $handler($this,$descriptor);
-            $handlerObject->processFile($file);
+            $handlerObject->process($descriptor);
         }
         
     }

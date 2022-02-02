@@ -4,6 +4,7 @@ namespace Lib\Handler;
 
 
 use Illuminate\Support\Facades\DB;
+use Lib\Descriptor;
 
 /**
  * Handles the entries in the database
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class HandlerSource extends HandlerBase
 {
     
-    function processFile(string $file)
+    function process(Descriptor $descriptor)
     {
         $this->descriptor->addLinks[] = "/sources/all/".$this->descriptor->source;
     }

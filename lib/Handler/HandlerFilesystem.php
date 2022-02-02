@@ -2,9 +2,9 @@
 
 namespace Lib\Handler;
 
-
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Lib\Descriptor;
 
 /**
  * Handles the entries in the database
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class HandlerFilesystem extends HandlerBase
 {
     
-    function processFile(string $file)
+    function process(Descriptor $descriptor)
     {
         $targetDir = $this->normalizeDir(config('crawler.media_dir')."/originals/".
                      $this->descriptor->hash[0]."/".
@@ -24,7 +24,7 @@ class HandlerFilesystem extends HandlerBase
         if (!file_exists($targetDir)) {
             $this->createDir($targetDir);
         }
-        $this->copyFileToDestination($file);
+        $this->copyFileToDestination($descriptor->source);
     }
     
     protected function copyFileToDestination()

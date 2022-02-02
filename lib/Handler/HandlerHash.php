@@ -2,8 +2,8 @@
 
 namespace Lib\Handler;
 
-
 use Illuminate\Support\Facades\DB;
+use Lib\Descriptor;
 
 /**
  * Handles the entries in the database
@@ -15,7 +15,7 @@ class HandlerHash extends HandlerBase
  
     public static $prio = 1;
     
-    function processFile(string $file)
+    function process(Descriptor $descriptor)
     {
 //        $this->descriptor->hash = sha1_file($file);
         
