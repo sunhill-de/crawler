@@ -47,8 +47,12 @@ class HandlerFilesystem extends HandlerBase
                     }
                     if (!$success) {
                         $this->info("Rename() didn't work. Trying copy and unlink.");
-                        copy($descriptor->source,$destination);
-                        unlink($descriptor->source);
+                        try {
+                            copy($descriptor->source,$destination);
+                            unlink($descriptor->source);
+                        } catch (\Exception $e) {
+                            $this->error("Backup move method didn't work either. File NOT moved!");
+                        }
                     }                    
                 } else {
                     $this->info("Original is not writeable, trying copy and unlink.");
