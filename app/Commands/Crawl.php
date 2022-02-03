@@ -20,7 +20,7 @@ class Crawl extends Command
      *
      * @var string
      */
-    protected $description = 'Crawls the given file or directory';
+    protected $description = 'Crawls the given file or directory [Function depcrecated, will be removed]';
 
     /**
      * Execute the console command.
@@ -29,6 +29,7 @@ class Crawl extends Command
      */
     public function handle()
     {
+        $this->error("Function is depcrecated, please use scan");
         $crawler = new Scanner();
         $crawler->scan($this,$this->argument("target"),$this->option("keep"),$this->getOutput()->getVerbosity());
     }
