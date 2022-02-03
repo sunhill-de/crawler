@@ -1,6 +1,7 @@
 <?php
 
-use Lib\crawler;
+use Illuminate\Support\Facades\Config;
+use Lib\Processors\Scanner;
 use Tests\CrawlerTestCase;
 
 class CrawlerFeatureTest extends CrawlerTestCase
@@ -18,8 +19,8 @@ class CrawlerFeatureTest extends CrawlerTestCase
     {
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
-        $crawler = new crawler();
-        $crawler->crawl(null,$this->getTemp("/scan"),false,0);
+        $crawler = new Scanner();
+        $crawler->scan(null,$this->getTemp("/scan"),false,0);
     }
     
     /**

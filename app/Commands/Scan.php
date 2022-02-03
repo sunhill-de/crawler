@@ -6,21 +6,21 @@ use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use Lib\Processors\Scanner;
 
-class Crawl extends Command
+class Scan extends Command
 {
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'crawl {target=. : The file or directory to scan} {--keep} {--no-keep}';
+    protected $signature = 'scan {target=. : The file or directory to scan} {--keep} {--no-keep}';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Crawls the given file or directory';
+    protected $description = 'Scans the given file or directory';
 
     /**
      * Execute the console command.
@@ -29,8 +29,8 @@ class Crawl extends Command
      */
     public function handle()
     {
-        $crawler = new Scanner();
-        $crawler->scan($this,$this->argument("target"),$this->option("keep"),$this->getOutput()->getVerbosity());
+        $scanner = new Scanner();
+        $scanner->scan($this,$this->argument("target"),$this->option("keep"),$this->getOutput()->getVerbosity());
     }
 
     /**
