@@ -24,7 +24,8 @@ class Scanner extends CrawlerBase
      * @param unknown $keep
      * @param unknown $verbosity
      */
-    public function scan($command,$target,$keep,$recursive,$skip,$verbosity) 
+    public function scan($command,string $target,bool $keep,bool $recursive = true, 
+                         bool $skip = false, bool $ignore_dups = false, int $verbosity,$tags = null,$assocations = null) 
     {
         $this->verbosity = $verbosity;
         $this->command = $command;
@@ -35,13 +36,13 @@ class Scanner extends CrawlerBase
             return;            
         }
         if (is_dir($target)) {
-            $this->handleDir($target);
+            $this->handleDir($target,$recursive);
         } else if (is_file($target)) {
             $this->handleFile($target);
         }
     }
     
-    protected function handleDir($target)
+    protected function handleDir($target,$recursive=true)
     {
         $this->info("Processing directory '$target'");    
         $dir = dir($target);
@@ -53,7 +54,9 @@ class Scanner extends CrawlerBase
             $filename = $target.'/'.$entry;
             
             if (is_dir($filename)){
-                $this->handleDir($filename);
+                if ($recursive) {
+                    $this->handleDir($filename);
+                }
             } else if (is_link($filename)) {
             } else if (is_file($filename)) {
                 $this->handleFile($filename);

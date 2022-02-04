@@ -20,7 +20,7 @@ class CrawlerFeatureTest extends CrawlerTestCase
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan"),false,0);
+        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,false,0, null, null);
     }
     
     /**

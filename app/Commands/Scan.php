@@ -40,7 +40,9 @@ class Scan extends Command
             $this->getRecursive(),
             $this->getSkipDuplicates(),
             $this->getSuppressSource(),
-            $this->getOutput()->getVerbosity());
+            $this->getOutput()->getVerbosity(),
+            $this->getTags(),
+            $this->getAssociations());
     }
 
     /**

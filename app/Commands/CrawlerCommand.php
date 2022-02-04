@@ -41,4 +41,19 @@ trait CrawlerCommand
     {
         return $this->getSwitch('suppress-source','no-suppress-source',false);
     }
+    
+    protected function getTags()
+    {
+        if (!empty($tags = $this->Option('tags'))) {
+            $this->error("Tags are not supportet yet. Ignoring.");
+        }
+    }
+    
+    protected function getAssociations()
+    {
+        if (!empty($associations = $this->Option('associations'))) {
+            $this->error("Associations are not supportet yet. Ignoring.");           
+        }
+    }
+    
 }
