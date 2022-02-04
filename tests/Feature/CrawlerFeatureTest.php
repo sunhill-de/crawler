@@ -44,6 +44,25 @@ class CrawlerFeatureTest extends CrawlerTestCase
         $this->assertEquals("A",file_get_contents($destination),"Content of destination not as expected.");
     }
     
+    
+    /**
+     * @dataProvider LinkCreatedProvider
+     * @param unknown $link
+    public function testLinkCreated($link,$content)
+    {
+        $this->temp = dirname(__FILE__)."/../temp";
+        $expectation = $this->normalizeDir($this->getTemp().$link);
+        $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
+        $this->assertEquals($content,file_get_contents($expectation),"The link has not the expected content");        
+    }
+    
+    public function LinkCreatedProvider()
+    {
+        return [
+            ["/media/"]        
+        ];    
+    }
+    */ 
     /**
      * @depends testScenarioSane
      */

@@ -3,17 +3,21 @@
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
-use LaravelZero\Framework\Commands\Command;
 use Lib\Processors\Scanner;
+use LaravelZero\Framework\Commands\Command;
+use App\Commands\CrawlerCommand;
 
 class Scan extends Command
 {
+
+    use CrawlerCommand;
+    
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'scan {target=. : The file or directory to scan} {--keep} {--no-keep}';
+    protected $signature = 'scan {target} {--s|sync} {--S|no-sync} {--r|recursive} {--R|no-recursive} {--K|skip-duplicates} {--k|no-skip-duplicates} {--P|suppress-source} {--p|no-suppress-source} {--tags=} {--associations=}';
 
     /**
      * The description of the command.
@@ -30,7 +34,13 @@ class Scan extends Command
     public function handle()
     {
         $scanner = new Scanner();
-        $scanner->scan($this,$this->argument("target"),$this->option("keep"),$this->getOutput()->getVerbosity());
+        $scanner->scan($this,
+            $this->argument("target"),
+            $this->getSync(),
+            $this->getRecursive(),
+            $this->getSkipDuplicates(),
+            $this->getSuppressSource(),
+            $this->getOutput()->getVerbosity());
     }
 
     /**

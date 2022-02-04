@@ -24,7 +24,7 @@ class Scanner extends CrawlerBase
      * @param unknown $keep
      * @param unknown $verbosity
      */
-    public function scan($command,$target,$keep,$verbosity) 
+    public function scan($command,$target,$keep,$recursive,$skip,$verbosity) 
     {
         $this->verbosity = $verbosity;
         $this->command = $command;
