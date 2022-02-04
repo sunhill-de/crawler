@@ -37,9 +37,11 @@ class HandlerLinks extends HandlerBase
                 $this->createDir($destination_dir);
             }
             if (file_exists($destination)) {
-                $this->error("The target '$destination' already exists.");
+                $this->error("The destination '$destination' already exists.");
+            } if (!file_exists($destination_dir.'/'.$relative_target)) {
+                $this->error("The target '".$destination_dir.'/'.$relative_target."' does not exist.");   
             } else {
-                symlink($relative_target,$destination);
+                exec("ln -s '$relative_target' '$destination'");
             }
         }
             

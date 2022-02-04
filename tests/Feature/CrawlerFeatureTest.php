@@ -20,7 +20,7 @@ class CrawlerFeatureTest extends CrawlerTestCase
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,false,0, null, null);
+        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,false,100, null, null);
     }
     
     /**
@@ -103,6 +103,113 @@ class CrawlerFeatureTest extends CrawlerTestCase
     {
         $this->assertDatabaseHas('files',['hash' => '6dcd4ce23d88e2ee9568ba546c007c63d9131c1b']);     
         $this->assertDatabaseHas('mime',['mime' => 'application/octet-stream']);
+    }
+    
+    public function testSync()
+    {
+        $this->prepareScenario();
+        $this->temp = dirname(__FILE__)."/../temp";
+        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        $crawler = new Scanner();
+        $crawler->scan(null,$this->getTemp("/scan/A.txt"),true,true,false,false,0, null, null);
+ 
+        $this->assertTrue(file_exists($this->getTemp("/scan/A.txt")));
+    }
+    
+    public function testNoSync()
+    {
+        $this->prepareScenario();
+        $this->temp = dirname(__FILE__)."/../temp";
+        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        $crawler = new Scanner();
+        $crawler->scan(null,$this->getTemp("/scan/A.txt"),false,true,false,false,0, null, null);
+        
+        $this->assertFalse(file_exists($this->getTemp("/scan/A.txt")));
+    }
+    
+    public function testRecursive()
+    {
+        $this->prepareScenario();
+        $this->temp = dirname(__FILE__)."/../temp";
+        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        $crawler = new Scanner();
+        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,false,0, null, null);
+    
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $this->assertTrue(file_exists($search));
+        
+    }
+    
+    public function testNoRecursive()
+    {
+        $this->prepareScenario();
+        $this->temp = dirname(__FILE__)."/../temp";
+        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        $crawler = new Scanner();
+        $crawler->scan(null,$this->getTemp("/scan"),false,false,false,false,0, null, null);
+        
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $this->assertFalse(file_exists($search));
+        
+    }
+    
+    public function testSkipDuplicates()
+    {
+        $this->prepareScenario();
+        $this->temp = dirname(__FILE__)."/../temp";
+        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        $crawler = new Scanner();
+        $crawler->scan(null,$this->getTemp("/scan"),false,true,true,false,0, null, null);
+        
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $this->assertFalse(file_exists($search));
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/")."A.txt";
+        $this->assertTrue(file_exists($search));
+        
+    }
+    
+    public function testNoSkipDuplicates()
+    {
+        $this->prepareScenario();
+        $this->temp = dirname(__FILE__)."/../temp";
+        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        $crawler = new Scanner();
+        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,false,0, null, null);
+        
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $this->assertTrue(file_exists($search));
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/")."A.txt";
+        $this->assertTrue(file_exists($search));
+        
+    }
+    
+    public function testIgnoreSource()
+    {
+        $this->prepareScenario();
+        $this->temp = dirname(__FILE__)."/../temp";
+        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        $crawler = new Scanner();
+        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,true,0, null, null);
+        
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $this->assertFalse(file_exists($search));
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/")."A.txt";
+        $this->assertFalse(file_exists($search));
+        
+    }
+    
+    public function testNoIgnoreSource()
+    {
+        $this->prepareScenario();
+        $this->temp = dirname(__FILE__)."/../temp";
+        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        $crawler = new Scanner();
+        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,false,0, null, null);
+        
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $this->assertTrue(file_exists($search));
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/")."A.txt";
+        $this->assertTrue(file_exists($search));        
     }
     
 }

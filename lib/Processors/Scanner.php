@@ -16,6 +16,14 @@ use Lib\Handler\HandlerFileStatus;
 
 class Scanner extends CrawlerBase
 {
+ 
+    protected $skip_duplicates;
+    
+    protected $ignore_source;
+    
+    protected $tags;
+    
+    protected $associations;
     
     /**
      * Does the crawling
@@ -25,11 +33,15 @@ class Scanner extends CrawlerBase
      * @param unknown $verbosity
      */
     public function scan($command,string $target,bool $keep,bool $recursive = true, 
-                         bool $skip = false, bool $ignore_dups = false, int $verbosity,$tags = null,$assocations = null) 
+                         bool $skip = false, bool $ignore_source = false, int $verbosity,$tags = null,$assocations = null) 
     {
         $this->verbosity = $verbosity;
         $this->command = $command;
         $this->keep = $keep;
+        $this->skip_duplicates = $skip;
+        $this->ignore_source = $ignore_source;
+        $this->tags = $tags;
+        $this->associations = $assocations;
         
         if (!file_exists($target)) {
             $this->error("The file/directory $target does not exist.");
@@ -90,9 +102,14 @@ class Scanner extends CrawlerBase
         $descriptor->addLinks    = [];
         $descriptor->removeLinks = [];
         
+        $descriptor->skip_duplicates = $this->skip_duplicates;
+        $descriptor->ignore_source = $this->ignore_source;
+        $descriptor->tags = $this->tags;
+        $descriptor->associations = $this->associations;
+        
         foreach ($handlers as $handler) {
             $handlerObject = new $handler($this,$descriptor);
-            if ($handlerObject->matches($descriptor)) {
+            if ($handlerObject->matches($descriptor) && !$descriptor->stop) {
                 $handlerObject->process($descriptor);
             }
         }

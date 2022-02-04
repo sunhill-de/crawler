@@ -4,7 +4,12 @@ namespace Lib;
 
 class Descriptor extends \StdClass
 {
-    
+
+    public function __construct()
+    {
+        $this->stop = false;   
+    }
+        
     public function alreadyInDatabase(): Bool
     {
          return $this->fileInDatabase;  
@@ -23,5 +28,10 @@ class Descriptor extends \StdClass
     public function fileProcessable(): Bool
     {
         return $this->fileReadable();
+    }
+    
+    public function stopProcessing()
+    {
+        $this->stop = true;
     }
 }
