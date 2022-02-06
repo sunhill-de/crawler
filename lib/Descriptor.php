@@ -7,7 +7,7 @@ class Descriptor extends \StdClass
 
     public function __construct()
     {
-        $this->stop = false;   
+        $this->stop              = false;
     }
         
     public function alreadyInDatabase(): Bool
@@ -33,5 +33,10 @@ class Descriptor extends \StdClass
     public function stopProcessing()
     {
         $this->stop = true;
+    }
+    
+    public function getSource(): String
+    {
+        return $this->source;
     }
 }

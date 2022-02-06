@@ -7,12 +7,13 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 use Lib\Descriptor;
-use Lib\Handler\HandlerDB;
+use Lib\Handler\HandlerDBFile;
 use Lib\Handler\HandlerFilesystem;
 use Lib\Handler\HandlerLinks;
 use Lib\Handler\HandlerSource;
 use Lib\Handler\HandlerHash;
 use Lib\Handler\HandlerFileStatus;
+use Lib\Handler\HandlerMime;
 
 class Scanner extends CrawlerBase
 {
@@ -82,12 +83,13 @@ class Scanner extends CrawlerBase
         $this->info("Processing file '$file'");
         
         $handlers = [
-            HandlerDB::class,
+            HandlerDBFile::class,            
             HandlerFilesystem::class,
             HandlerSource::class,
             HandlerLinks::class,
             HandlerHash::class,
             HandlerFileStatus::class,
+            HandlerMime::class
         ];
         
         usort($handlers, function($a,$b) {
