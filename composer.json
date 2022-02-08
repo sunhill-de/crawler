@@ -1,29 +1,27 @@
 {
-	"name" : "laravel-zero/laravel-zero",
-	"description" : "The Laravel Zero Framework.",
+	"name" : "sunhill-de/crawler",
+	"description" : "A php file crawler that sorts and categorizes files.",
 	"keywords" : [
-		"framework",
-		"laravel",
-		"laravel zero",
+		"application",
+		"file management",
 		"console",
+		"php",
 		"cli"
 	],
-	"homepage" : "https://laravel-zero.com",
+	"homepage" : "https://github.com/sunhill-de/crawler",
 	"type" : "project",
 	"license" : "MIT",
-	"support" : {
-		"issues" : "https://github.com/laravel-zero/laravel-zero/issues",
-		"source" : "https://github.com/laravel-zero/laravel-zero"
-	},
 	"authors" : [{
-			"name" : "Nuno Maduro",
-			"email" : "enunomaduro@gmail.com"
+			"name" : "Klaus Dimde",
+			"email" : "klaus@metalhorde.de"
 		}
 	],
 	"require" : {
 		"php": "^7.3|^8.0",
 		"illuminate/database": "^8.40",
-		"laravel-zero/framework": "^8.8"
+		"laravel-zero/framework": "^8.8",
+        "sunhill-de/basic":"*",
+        "sunhill-de/ORM":"*"
 	},
 	"require-dev" : {
 		"fakerphp/faker": "^1.9.1",
