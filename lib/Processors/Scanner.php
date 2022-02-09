@@ -103,6 +103,8 @@ class Scanner extends CrawlerBase
         $descriptor->source = $file;
         $descriptor->addLinks    = [];
         $descriptor->removeLinks = [];
+        $descriptor->addDirs     = [];
+        $descriptor->removeDirs  = [];
         
         $descriptor->skip_duplicates = $this->skip_duplicates;
         $descriptor->ignore_source = $this->ignore_source;
