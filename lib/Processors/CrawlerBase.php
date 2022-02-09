@@ -1,17 +1,17 @@
 <?php
 
-namespace Lib\Processors;
+namespace Sunhill\Crawler\Processors;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-use Lib\Handler\HandlerDB;
-use Lib\Handler\HandlerFilesystem;
-use Lib\Handler\HandlerLinks;
-use Lib\Handler\HandlerSource;
-use Lib\Handler\HandlerHash;
-use Lib\Handler\HandlerFileStatus;
+use Sunhill\Crawler\Handler\HandlerDB;
+use Sunhill\Crawler\Handler\HandlerFilesystem;
+use Sunhill\Crawler\Handler\HandlerLinks;
+use Sunhill\Crawler\Handler\HandlerSource;
+use Sunhill\Crawler\Handler\HandlerHash;
+use Sunhill\Crawler\Handler\HandlerFileStatus;
 
 class CrawlerBase 
 {
