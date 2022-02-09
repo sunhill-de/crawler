@@ -1,12 +1,15 @@
 <?php
 
-namespace Lib;
+namespace Sunhill\Crawler;
 
-class Descriptor extends \StdClass
+use Sunhill\Basic\Descriptor;
+
+class Descriptor extends Descriptor
 {
 
     public function __construct()
     {
+        parent::__construct();
         $this->stop              = false;
     }
         
