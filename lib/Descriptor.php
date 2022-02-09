@@ -4,7 +4,7 @@ namespace Sunhill\Crawler;
 
 use Sunhill\Basic\Descriptor;
 
-class Descriptor extends Descriptor
+class CrawlerDescriptor extends Descriptor
 {
 
     public function __construct()
