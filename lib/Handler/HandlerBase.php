@@ -1,9 +1,9 @@
 <?php
 
-namespace Lib\Handler;
+namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Str;
-use Lib\Descriptor;
+use Sunhill\Crawler\Descriptor;
 
 abstract class HandlerBase
 {
