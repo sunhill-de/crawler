@@ -1,10 +1,10 @@
 <?php
 
-namespace Lib\Handler;
+namespace Sunhill\Crawler\Handler;
 
 
 use Illuminate\Support\Facades\DB;
-use Lib\Descriptor;
+use Sunhill\Crawler\Descriptor;
 
 /**
  * Handles the entries in the database
