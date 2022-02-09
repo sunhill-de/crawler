@@ -1,9 +1,9 @@
 <?php
 
-namespace Lib\Handler;
+namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
-use Lib\Descriptor;
+use Sunhill\Crawler\Descriptor;
 
 /**
  * Checks if the file exists and if its readable respective writeable
