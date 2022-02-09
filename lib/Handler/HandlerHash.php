@@ -1,9 +1,9 @@
 <?php
 
-namespace Lib\Handler;
+namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
-use Lib\Descriptor;
+use Sunhill\Crawler\Descriptor;
 
 /**
  * Calculates the hash of the file and checks if this hash is already in the Database
