@@ -51,6 +51,10 @@ class HandlerHash extends HandlerBase
             $this->verboseinfo(" Hash not in database");
             return false;
         }
+        $descriptor->targetDir = $this->normalizeDir(config('crawler.media_dir')."/originals/".
+                                        $descriptor->hash[0]."/".
+                                        $descriptor->hash[1]."/".
+                                        $descriptor->hash[2]."/");
     }
 
     private function lookUpMime($mimeid): String
