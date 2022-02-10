@@ -14,6 +14,8 @@ use Sunhill\Crawler\Descriptor;
 class HandlerSource extends HandlerBase
 {
     
+    public static $prio = 52;
+
     function process(Descriptor $descriptor)
     {
         $this->handleSource($descriptor);
