@@ -11,28 +11,14 @@ use Sunhill\Crawler\Descriptor;
  * @author klaus
  *
  */
-class HandlerFilesystem extends HandlerBase
+class HandlerMoveDestination extends HandlerBase
 {
     
+    public static $prio = 50; 
+ 
     function process(Descriptor $descriptor)
     {
-        $targetDir = $this->normalizeDir(config('crawler.media_dir')."/originals/".
-                     $descriptor->hash[0]."/".
-                     $descriptor->hash[1]."/".
-                     $descriptor->hash[2]."/");
-        $this->debug("Target dir is calulated to '$targetDir'");
-        if (!file_exists($targetDir)) {
-            $this->createDir($targetDir);
-        }
-        $this->copyFileToDestination($descriptor);
-    }
-    
-    protected function copyFileToDestination(Descriptor $descriptor)
-    {
-        $destination =  $this->normalizeDir(config('crawler.media_dir')."/originals/".
-            $descriptor->hash[0]."/".
-            $descriptor->hash[1]."/".
-            $descriptor->hash[2]."/").$descriptor->hash.".".$descriptor->ext;
+        $destination = $descriptor->targetDir."/".$descriptor->hash.".".$descriptor->ext;
         if ($descriptor->keep) {
             copy($descriptor->source,$destination);
         } else {
@@ -52,6 +38,7 @@ class HandlerFilesystem extends HandlerBase
                             unlink($descriptor->source);
                         } catch (\Exception $e) {
                             $this->error("Backup move method didn't work either. File NOT moved!");
+                            $descriptor->stop = true; // Stop further processing
                         }
                     }                    
                 } else {
