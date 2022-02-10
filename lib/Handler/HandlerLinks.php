@@ -14,6 +14,8 @@ use Sunhill\Crawler\Descriptor;
 class HandlerLinks extends HandlerBase
 {
     
+    public static $prio = 55;
+
     function process(Descriptor $descriptor)
     {
         if (count($descriptor->addLinks)) {
