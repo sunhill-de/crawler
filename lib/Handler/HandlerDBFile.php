@@ -13,6 +13,8 @@ use Sunhill\Crawler\Descriptor;
 class HandlerDBFile extends HandlerBase
 {
     
+    public static $prio = 51; // Execute after MoveDestination
+ 
     function process(Descriptor $descriptor)
     {
         DB::table("files")->insert(
