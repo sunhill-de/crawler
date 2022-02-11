@@ -24,7 +24,7 @@
 		"php" : "^7.3|^8.0",
 		"illuminate/database" : "^8.40",
 		"laravel-zero/framework" : "^8.8",
-		"illuminate/translation": "^8.0"
+		"illuminate/translation": "^9.0"
 	},
 	"require-dev" : {
 		"fakerphp/faker" : "^1.9.1",
