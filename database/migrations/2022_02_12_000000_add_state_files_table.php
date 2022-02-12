@@ -14,8 +14,8 @@ class AddStateFilesTable extends Migration
     public function up()
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->enum('state',['regular','converted_to','deleted','ignored','converted_from','alterated_from']);
-            $table->bigInteger('reference');
+            $table->enum('state',['regular','converted_to','deleted','ignored','converted_from','alterated_from'])->defaults('regular');
+            $table->bigInteger('reference')->nullable();
             $table->dateTime('checkedout')->nullable();            
         });
     }
