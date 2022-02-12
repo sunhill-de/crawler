@@ -27,7 +27,7 @@ class FileManagerTest extends CrawlerTestCase
      * @dataProvider GetAbolutePathProvider
      */
     public function testGetAbsolutePath($test,$expect) {
-        ddFileManager::setMediaDir($this->getTempDir());
+        FileManager::setMediaDir($this->getTempDir());
         $expect = str_replace('__TEMP__',$this->getTempDir(),$expect);
         $test = str_replace('__TEMP__',$this->getTempDir(),$test);
         $this->assertEquals($expect,FileManager::getAbsolutePath($test));
