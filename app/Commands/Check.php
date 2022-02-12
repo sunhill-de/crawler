@@ -5,6 +5,7 @@ namespace App\Commands;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use Lib\Processors\Scanner;
+use Illuminate\Support\Facades\DB;
 
 class Check extends Command
 {
@@ -29,10 +30,10 @@ class Check extends Command
      */
     public function handle()
     {
-        $this->handleDir($this->getCheckDir());
+        $this->scanDir(config('crawler.media_dir'));
     }
 
-    private function handleDir(string $dirname)
+    private function scanDir(string $dirname,$depth=0)
     {
         $dir = dir($dirname);
         while (false !== ($entry = $dir->read())) {
@@ -43,33 +44,39 @@ class Check extends Command
             $filename = $dirname.'/'.$entry;
             
             if (is_dir($filename)){
-                $this->handleDir($filename);
+                $this->handleDir($dirname."/".$filename);
+            } else if (is_link($filename)) {
+                $this->handleLink($dirname."/".$filename);
             } else if (is_file($filename)) {
-                if (substr(pathinfo($filename,PATHINFO_FILENAME),0,5) == 'Check') {
-                    $this->performChecks($filename);
-                }
+                $this->handleFile($dirname."/".$filename);
             }
         }
         $dir->close();        
     }
 
-    private function performChecks($checkfile)
+    private function searchDir($path)
     {
-        $this->info("Performing checks in $checkfile");
-        require_once($checkfile);
-        $classname = "\\Lib\\Checks\\".pathinfo($checkfile,PATHINFO_FILENAME);
-        $check = new $classname($this);
-        foreach (get_class_methods($check) as $method) {
-            if (substr($method,0,5) == 'check') {
-                $this->info("Performing check $method");
-                $check->$method();
-            }
+        $result = DB::table('dirs')->where('full_path',$path)->first();
+        if ($result) {
+            return $result->id;
+        } else {
+            return 0;
         }
     }
-    
-    private function getCheckDir(): String
+        
+    private function handleDir($dirname)
     {
-        return dirname(__FILE__).'/../../lib/Checks';    
+            
+    }
+    
+    private function handleLink($linkname)
+    {
+        
+    }
+    
+    private function handleFile($linkname)
+    {
+        
     }
     
     /**
