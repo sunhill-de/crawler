@@ -59,6 +59,10 @@ class SimpleScanScenario extends ScenarioBase
                 ['file_id','source','host'],
                 [
                 ]
+            ],
+            'dirs'=>[
+                ['id','full_path','name','parent_dir'],
+                []
             ]
         ];
     }

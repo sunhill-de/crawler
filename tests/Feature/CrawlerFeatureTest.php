@@ -81,6 +81,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
         ];    
     }
     */ 
+    
     /**
      * @depends testScenarioSane
      */
@@ -94,6 +95,18 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
         $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/"))."B.txt";
         $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
         $this->assertEquals("B",file_get_contents($expectation),"The link has not the expected content");
+        
+        $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/"))."C.TXT";
+        $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
+        $this->assertEquals("C",file_get_contents($expectation),"The link has not the expected content");
+        
+        $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/"))."D.TXT";
+        $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
+        $this->assertEquals("D",file_get_contents($expectation),"The link has not the expected content");
+        
+        $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/subdir/"))."AnotherA.txt";
+        $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
+        $this->assertEquals("A",file_get_contents($expectation),"The link has not the expected content");
         
         
         $this->skipRebuild();
@@ -127,6 +140,10 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testDatabaseFilled()
     {
         $this->assertDatabaseHas('files',['hash' => '6dcd4ce23d88e2ee9568ba546c007c63d9131c1b']);     
+        $this->assertDatabaseHas('files',['hash' => '32096c2e0eff33d844ee6d675407ace18289357d']);
+        $this->assertDatabaseHas('files',['hash' => '50c9e8d5fc98727b4bbc93cf5d64a68db647f04f']);
+        $this->assertDatabaseHas('files',['hash' => 'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec']);
+        
         $this->assertDatabaseHas('mime',['mime' => 'application/octet-stream']);
     }
     
