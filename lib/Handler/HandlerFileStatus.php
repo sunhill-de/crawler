@@ -3,7 +3,7 @@
 namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
-use Sunhill\Crawler\Descriptor;
+use Sunhill\Crawler\CrawlerDescriptor;
 
 /**
  * Checks if the file exists and if its readable respective writeable
@@ -15,7 +15,7 @@ class HandlerFileStatus extends HandlerBase
  
     public static $prio = 1; // Should run first
     
-    function process(Descriptor $descriptor)
+    function process(CrawlerDescriptor $descriptor)
     {
         if ($descriptor->fileExists = file_exists($descriptor->source)) {            
             $descriptor->fileReadable = is_readable($descriptor->source);
@@ -37,7 +37,7 @@ class HandlerFileStatus extends HandlerBase
         }
     }
 
-    function matches(Descriptor $descriptor): Bool
+    function matches(CrawlerDescriptor $descriptor): Bool
     {
         return true; // Every file can be processed
     }

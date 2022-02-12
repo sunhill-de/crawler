@@ -16,12 +16,23 @@
 			"email" : "klaus@metalhorde.de"
 		}
 	],
+	"repositories": [
+		{
+			"type":"vcs",
+			"url":"https://github.com/sunhill-de/basic.git",
+			"reference":"stable"		
+		},
+		{
+			"type":"git",
+			"url":"https://github.com/sunhill-de/ORM.git"
+		}
+	],
 	"require" : {
 		"php": "^7.3|^8.0",
 		"illuminate/database": "^8.40",
 		"laravel-zero/framework": "^8.8",
-        "sunhill-de/basic":"*",
-        "sunhill-de/ORM":"*"
+		"sunhill/basic":"dev-main",
+		"sunhill/orm":"dev-main"
 	},
 	"require-dev" : {
 		"fakerphp/faker": "^1.9.1",

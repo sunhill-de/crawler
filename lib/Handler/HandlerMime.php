@@ -3,7 +3,7 @@
 namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
-use Sunhill\Crawler\Descriptor;
+use Sunhill\Crawler\CrawlerDescriptor;
 
 /**
  * Handles the entries in the database
@@ -22,12 +22,12 @@ class HandlerMime extends HandlerBase
      */
     private static $header_infos = [
         'audio/flac' => '^fLaC',
-        'audo/mpeg' => '^\\xFF[\\xE2-\\xE7\\xF2-\\xF7\\xFA-\\xFF][\\x00-\\x0B\\x10-\\x1B\\x20-\\x2B\\x30-\\x3B\\x40-\\x4B\\x50-\\x5B\\x60-\\x6B\\x70-\\x7B\\x80-\\x8B\\x90-\\x9B\\xA0-\\xAB\\xB0-\\xBB\\xC0-\\xCB\\xD0-\\xDB\\xE0-\\xEB\\xF0-\\xFB]',
+        'audio/mpeg' => '^\\xFF[\\xE2-\\xE7\\xF2-\\xF7\\xFA-\\xFF][\\x00-\\x0B\\x10-\\x1B\\x20-\\x2B\\x30-\\x3B\\x40-\\x4B\\x50-\\x5B\\x60-\\x6B\\x70-\\x7B\\x80-\\x8B\\x90-\\x9B\\xA0-\\xAB\\xB0-\\xBB\\xC0-\\xCB\\xD0-\\xDB\\xE0-\\xEB\\xF0-\\xFB]',
         'image/jpeg' => '^\\xFF\\xD8\\xFF',
         'image/heic' => '\\x66\\x74\\x79\\x70\\x6d\\x69\\x66'
     ];
     
-    function process(Descriptor $descriptor)
+    function process(CrawlerDescriptor $descriptor)
     {
         $this->verboseinfo("  Detecting mime");
         $descriptor->mime = $this->detectMime($descriptor->source);
@@ -51,13 +51,13 @@ class HandlerMime extends HandlerBase
      */
     protected function detectMime(string $source): String
     {
-        $sample = $this->get_header($path);
+        $sample = $this->get_header($source);
         foreach (static::$header_infos as $mime => $pattern) {
             if (preg_match('#' . $pattern . '#s', $sample)) {
                 return $mime;
             }
         }
-        return $this->get_mime_type($path);
+        return $this->get_mime_type($source);
     }
     
     protected function getMime(string $mime): Int
@@ -139,7 +139,7 @@ class HandlerMime extends HandlerBase
         }
     }
 
-    function matches(Descriptor $descriptor): Bool
+    function matches(CrawlerDescriptor $descriptor): Bool
     {
         return $descriptor->fileReadable() && !$descriptor->alreadyInDatabase();
     }

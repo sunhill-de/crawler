@@ -3,7 +3,7 @@
 namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
-use Sunhill\Crawler\Descriptor;
+use Sunhill\Crawler\CrawlerDescriptor;
 
 /**
  * Calculates the hash of the file and checks if this hash is already in the Database
@@ -15,7 +15,7 @@ class HandlerHash extends HandlerBase
  
     public static $prio = 5;
     
-    function process(Descriptor $descriptor)
+    function process(CrawlerDescriptor $descriptor)
     {
         $descriptor->hash = sha1_file($descriptor->source);        
         $this->verboseinfo("  Hash is '".$descriptor->hash."'");
@@ -51,7 +51,7 @@ class HandlerHash extends HandlerBase
             $this->verboseinfo(" Hash not in database");
             return false;
         }
-        $descriptor->targetDir = $this->normalizeDir(config('crawler.media_dir')."/originals/".
+        $descriptor->targetDir = $this->normalizeDir("/originals/".
                                         $descriptor->hash[0]."/".
                                         $descriptor->hash[1]."/".
                                         $descriptor->hash[2]."/");
@@ -67,7 +67,7 @@ class HandlerHash extends HandlerBase
         }
     }
     
-    function matches(Descriptor $descriptor): Bool
+    function matches(CrawlerDescriptor $descriptor): Bool
     {
         return $descriptor->fileReadable();
     }

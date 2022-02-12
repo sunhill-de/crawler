@@ -2,9 +2,8 @@
 
 namespace Sunhill\Crawler\Handler;
 
-
 use Illuminate\Support\Facades\DB;
-use Sunhill\Crawler\Descriptor;
+use Sunhill\Crawler\CrawlerDescriptor;
 
 /**
  * Handles the entries in the database
@@ -14,34 +13,19 @@ use Sunhill\Crawler\Descriptor;
 class HandlerSource extends HandlerBase
 {
     
-    public static $prio = 52;
+    public static $prio = 40;
 
-    function process(Descriptor $descriptor)
+    function process(CrawlerDescriptor $descriptor)
     {
-        $this->handleSource($descriptor);
         $this->handleSourceLinks($descriptor);
     }
 
-    protected function handleSource(Descriptor $descriptor)
+    protected function handleSourceLinks(CrawlerDescriptor $descriptor)
     {
-        if ($descriptor->source[0] == ".") {
-            $file = $this->normalizeFile(getcwd()."/".$descriptor->source);
-        } else {
-            $file = $this->normalizeFile($descriptor->source);
-        }
-        
-        if (!($result = DB::table("sources")->where("file_id",$descriptor->fileID)->where("source",$file)->first()))
-        {
-            DB::table("sources")->insert(["file_id"=>$descriptor->fileID,"source"=>$file,"host"=>gethostname()]);
-        }
+        $this->addLink($descriptor,"/sources/all".$descriptor->source);
     }
     
-    protected function handleSourceLinks(Descriptor $descriptor)
-    {
-        $descriptor->addLinks[] = "/sources/all/".$descriptor->source;        
-    }
-    
-    function matches(Descriptor $descriptor): Bool
+    function matches(CrawlerDescriptor $descriptor): Bool
     {
         return $descriptor->fileReadable() && !$descriptor->ignore_source &&
                (!$descriptor->fileInDatabase || !$descriptor->skip_duplicates);

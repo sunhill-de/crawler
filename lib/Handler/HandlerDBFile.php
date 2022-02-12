@@ -3,7 +3,7 @@
 namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
-use Sunhill\Crawler\Descriptor;
+use Sunhill\Crawler\CrawlerDescriptor;
 
 /**
  * Handles the entries in the database
@@ -15,7 +15,7 @@ class HandlerDBFile extends HandlerBase
     
     public static $prio = 51; // Execute after MoveDestination
  
-    function process(Descriptor $descriptor)
+    function process(CrawlerDescriptor $descriptor)
     {
         DB::table("files")->insert(
             [
@@ -30,7 +30,7 @@ class HandlerDBFile extends HandlerBase
         $this->verboseinfo("File added to Database. ID is '".$descriptor->fileID."'");
     }
 
-    function matches(Descriptor $descriptor): Bool
+    function matches(CrawlerDescriptor $descriptor): Bool
     {
         return $descriptor->fileReadable() && !$descriptor->alreadyInDatabase();
     }

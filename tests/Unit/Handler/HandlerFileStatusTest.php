@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
-use Lib\crawler;
-use Lib\Descriptor;
-use Lib\Handler\HandlerFileStatus;
+use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Handler\HandlerFileStatus;
 use Tests\CrawlerTestCase;
 
 class HandlerFileStatusTest extends CrawlerTestCase
@@ -16,7 +15,7 @@ class HandlerFileStatusTest extends CrawlerTestCase
         $this->prepareFilesystem();
         $temp = $this->getTemp();
         
-        $descriptor = new Descriptor();
+        $descriptor = new CrawlerDescriptor();
         $descriptor->source = $temp.'/scan';
         
         $test = new HandlerFileStatus(null);
@@ -33,7 +32,7 @@ class HandlerFileStatusTest extends CrawlerTestCase
         $this->prepareFilesystem();
         $temp = $this->getTemp();
         
-        $descriptor = new Descriptor();
+        $descriptor = new CrawlerDescriptor();
         $descriptor->source = $temp.'/scan/A.txt';
         
         $test = new HandlerFileStatus(null);
@@ -51,7 +50,7 @@ class HandlerFileStatusTest extends CrawlerTestCase
         $temp = $this->getTemp();
         chmod($temp."/scan/A.txt",0555);
         
-        $descriptor = new Descriptor();
+        $descriptor = new CrawlerDescriptor();
         $descriptor->source = $temp.'/scan/A.txt';
         
         $test = new HandlerFileStatus(null);
@@ -68,7 +67,7 @@ class HandlerFileStatusTest extends CrawlerTestCase
         $this->prepareFilesystem();
         $temp = $this->getTemp();
         
-        $descriptor = new Descriptor();
+        $descriptor = new CrawlerDescriptor();
         $descriptor->source = "/etc/shadow"; // Better not run as root
         
         $test = new HandlerFileStatus(null);

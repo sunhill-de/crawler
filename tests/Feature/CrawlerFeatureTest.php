@@ -1,16 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Config;
-use Lib\Processors\Scanner;
-use Tests\CrawlerTestCase;
+use Illuminate\Support\Facades\DB;
+use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Handler\HandlerLinks;
+use Sunhill\Basic\Tests\SunhillScenarioTestCase;
+use Tests\CreatesApplication;
+use Tests\Scenarios\SimpleScanScenario;
+use Sunhill\Crawler\Processors\Scanner;
 
-class CrawlerFeatureTest extends CrawlerTestCase
+class CrawlerFeatureTest extends SunhillScenarioTestCase
 {
- 
+    
+    use CreatesApplication;
+    
+    protected function getTemp($subpath="")
+    {
+        return dirname(__FILE__).'/../temp'.$subpath;   
+    }
+    
+    protected function GetScenarioClass()
+    {
+        return SimpleScanScenario::class;
+    }
     
     public function testScenarioSane()
     {
-        $this->prepareScenario();
         $this->assertTrue(file_exists($this->getTemp("/media")));
         $this->assertTrue(file_exists($this->getTemp("/scan")));
     }
@@ -30,6 +45,7 @@ class CrawlerFeatureTest extends CrawlerTestCase
     {
         $this->executeCrawler();    
         $this->assertTrue(file_exists($this->getTemp("/media/originals/3/2/0")));
+        $this->skipRebuild();
     }
 
     /**
@@ -42,12 +58,14 @@ class CrawlerFeatureTest extends CrawlerTestCase
         $this->assertTrue(file_exists($destination),"Destination '$destination' does not exist");
         $this->assertFalse(file_exists($this->getTemp("/scan/")."A.txt"),"Original still exists.");
         $this->assertEquals("A",file_get_contents($destination),"Content of destination not as expected.");
+        $this->skipRebuild();
     }
     
     
     /**
      * @dataProvider LinkCreatedProvider
      * @param unknown $link
+     
     public function testLinkCreated($link,$content)
     {
         $this->temp = dirname(__FILE__)."/../temp";
@@ -72,6 +90,13 @@ class CrawlerFeatureTest extends CrawlerTestCase
         $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/"))."A.txt";
         $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
         $this->assertEquals("A",file_get_contents($expectation),"The link has not the expected content");        
+        
+        $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/"))."B.txt";
+        $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
+        $this->assertEquals("B",file_get_contents($expectation),"The link has not the expected content");
+        
+        
+        $this->skipRebuild();
     }
     
     protected function normalizeDir($path)
@@ -107,7 +132,6 @@ class CrawlerFeatureTest extends CrawlerTestCase
     
     public function testSync()
     {
-        $this->prepareScenario();
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
         $crawler = new Scanner();
@@ -118,7 +142,6 @@ class CrawlerFeatureTest extends CrawlerTestCase
     
     public function testNoSync()
     {
-        $this->prepareScenario();
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
         $crawler = new Scanner();
@@ -129,7 +152,6 @@ class CrawlerFeatureTest extends CrawlerTestCase
     
     public function testRecursive()
     {
-        $this->prepareScenario();
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
         $crawler = new Scanner();
@@ -142,7 +164,6 @@ class CrawlerFeatureTest extends CrawlerTestCase
     
     public function testNoRecursive()
     {
-        $this->prepareScenario();
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
         $crawler = new Scanner();
@@ -155,22 +176,20 @@ class CrawlerFeatureTest extends CrawlerTestCase
     
     public function testSkipDuplicates()
     {
-        $this->prepareScenario();
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
         $crawler = new Scanner();
         $crawler->scan(null,$this->getTemp("/scan"),false,true,true,false,0, null, null);
         
         $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
-        $this->assertFalse(file_exists($search));
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/")."A.txt";
         $this->assertTrue(file_exists($search));
+        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/")."A.txt";
+        $this->assertFalse(file_exists($search));
         
     }
     
     public function testNoSkipDuplicates()
     {
-        $this->prepareScenario();
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
         $crawler = new Scanner();
@@ -185,7 +204,6 @@ class CrawlerFeatureTest extends CrawlerTestCase
     
     public function testIgnoreSource()
     {
-        $this->prepareScenario();
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
         $crawler = new Scanner();
@@ -200,7 +218,6 @@ class CrawlerFeatureTest extends CrawlerTestCase
     
     public function testNoIgnoreSource()
     {
-        $this->prepareScenario();
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTemp("/media"));
         $crawler = new Scanner();

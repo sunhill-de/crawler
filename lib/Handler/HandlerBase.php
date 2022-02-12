@@ -3,7 +3,7 @@
 namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Str;
-use Sunhill\Crawler\Descriptor;
+use Sunhill\Crawler\CrawlerDescriptor;
 
 abstract class HandlerBase
 {
@@ -20,47 +20,36 @@ abstract class HandlerBase
     
     public function error($message)
     {
-        $this->parent->error($message);
+        if (!is_null($this->parent)) {
+            $this->parent->error($message);
+        }
     }
     
     public function info($message)
     {
-        $this->parent->info($message);
+        if (!is_null($this->parent)) {
+            $this->parent->info($message);
+        }
     }
     
     public function verboseinfo($message)
     {
-        $this->parent->verboseinfo($message);
+        if (!is_null($this->parent)) {
+            $this->parent->verboseinfo($message);
+        }
     }
     
     public function debug($message)
     {
-        $this->parent->debug($message);
+        if (!is_null($this->parent)) {
+            $this->parent->debug($message);
+        }
     }
     
     public function fatal($message)
     {
-        $this->parent->fatal($message);    
-    }
-    
-    protected function createDir($path)
-    {
-        $this->debug("Dir '$path' does not exist. Creating it.");
-        $parts = explode("/",$path);
-        $dir = array_pop($parts);
-        if ($dir == "") {
-            $dir = array_pop($parts);
-        }
-        $parent = implode("/",$parts);
-        if (!file_exists($parent)) {
-            $this->debug("Parent dir '$parent' does not exist.");
-            $this->createDir($parent);
-        } else {
-            $this->debug("Parent dir '$parent' does exist. No need to create it.");
-        }
-        mkdir($path);
-        if (!file_exists($path)) {
-            $this->error("Couldn't create the target directory");
+        if (!is_null($this->parent)) {
+            $this->parent->fatal($message);
         }
     }
     
@@ -111,8 +100,30 @@ abstract class HandlerBase
         return $this->normalizeDir(Str::finish(pathinfo($path, PATHINFO_DIRNAME), DIRECTORY_SEPARATOR)).pathinfo($path, PATHINFO_BASENAME);
     }
     
-    abstract function process(Descriptor $descriptor);
+    /**
+     * Adds the given dir to the descriptor
+     * @param CrawlerDescriptor $descriptor
+     * @param string $pathname
+     */
+    protected function addDir(CrawlerDescriptor $descriptor,string $pathname)
+    {
+        $descriptor->addDirs[] = $pathname;    
+    }
     
-    abstract function matches(Descriptor $descriptor): Bool;
+    protected function addLink(CrawlerDescriptor $descriptor, string $input, $filename=null)
+    {
+        if (is_null($filename)) {
+            $filename = pathinfo($input,PATHINFO_BASENAME);
+            $pathname = Str::finish(pathinfo($input,PATHINFO_DIRNAME),DIRECTORY_SEPARATOR);
+        } else {
+            $pathname = Str::finish($input,DIRECTORY_SEPARATOR);
+        }
+        $this->addDir($descriptor,$pathname);
+        $descriptor->addLinks[] = $pathname.$filename;
+    }
+    
+    abstract function process(CrawlerDescriptor $descriptor);
+    
+    abstract function matches(CrawlerDescriptor $descriptor): Bool;
     
 }

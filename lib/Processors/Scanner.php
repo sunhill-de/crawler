@@ -6,14 +6,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-use Sunhill\Crawler\Descriptor;
+use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Handler\HandlerDBFile;
-use Sunhill\Crawler\Handler\HandlerFilesystem;
-use Sunhill\Crawler\Handler\HandlerLinks;
-use Sunhill\Crawler\Handler\HandlerSource;
-use Sunhill\Crawler\Handler\HandlerHash;
+use Sunhill\Crawler\Handler\HandlerDestination;
+use Sunhill\Crawler\Handler\HandlerDirs;
 use Sunhill\Crawler\Handler\HandlerFileStatus;
+use Sunhill\Crawler\Handler\HandlerHash;
+use Sunhill\Crawler\Handler\HandlerLinks;
 use Sunhill\Crawler\Handler\HandlerMime;
+use Sunhill\Crawler\Handler\HandlerMoveDestination;
+use Sunhill\Crawler\Handler\HandlerSource;
+use Sunhill\Crawler\Handler\HandlerDBSource;
 
 class Scanner extends CrawlerBase
 {
@@ -84,12 +87,15 @@ class Scanner extends CrawlerBase
         
         $handlers = [
             HandlerDBFile::class,            
-            HandlerFilesystem::class,
+            HandlerMoveDestination::class,
             HandlerSource::class,
             HandlerLinks::class,
             HandlerHash::class,
             HandlerFileStatus::class,
-            HandlerMime::class
+            HandlerMime::class,
+            HandlerDestination::class,
+            HandlerDirs::class,
+            HandlerDBSource::class,
         ];
         
         usort($handlers, function($a,$b) {
@@ -98,7 +104,7 @@ class Scanner extends CrawlerBase
             } else return ($a::$prio < $b::$prio)? -1 : 1;
         });
         
-        $descriptor = new Descriptor();
+        $descriptor = new CrawlerDescriptor();
         $descriptor->keep = $this->keep;
         $descriptor->source = $file;
         $descriptor->addLinks    = [];
