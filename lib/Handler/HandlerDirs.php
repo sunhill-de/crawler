@@ -41,6 +41,16 @@ class HandlerDirs extends HandlerBase
         }
     }
   
+    private function searchDir($path)
+    {
+        $result = DB::table('dirs')->where('full_path',$path)->first();
+        if ($result) {
+            return $result->id;
+        } else {
+            return 0;
+        }
+    }
+    
     private function createDir($path)
     {
         $parts = explode("/",$path);
@@ -48,6 +58,8 @@ class HandlerDirs extends HandlerBase
         if ($dir == "") {
             $dir = array_pop($parts);
         }
+        $name = $parts[count($parts)-1];
+        
         $parent = implode("/",$parts);
         if (!file_exists($parent)) {
             $this->debug("Parent dir '$parent' does not exist.");
@@ -55,15 +67,22 @@ class HandlerDirs extends HandlerBase
         } else {
             $this->debug("Parent dir '$parent' does exist. No need to create it.");
         }
-        $this->doCreateDir($path,$parent);
+        $this->doCreateDir($path,$parent,$name);
     }
      
-    private function doCreateDir($path, $parent)
+    private function doCreateDir($path, $parent,$name)
     {
         mkdir($path);
         if (!file_exists($path)) {
             $this->error("Couldn't create the target directory");
-        }        
+            return;
+        }
+        $media = $this->normalizeDir(config('crawler.media_dir'));
+        $len = strlen($media);
+        $plen = strlen($path);
+        $path = substr($path,$len-1);
+        $parent = substr($parent,$len-1);
+        DB::table('dirs')->insert(['full_path'=>$path,'name'=>$name,'parent_dir'=>$this->searchDir($parent)]);
     }
     
     function matches(CrawlerDescriptor $descriptor): Bool
