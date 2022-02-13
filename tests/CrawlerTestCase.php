@@ -22,6 +22,11 @@ class CrawlerTestCase extends TestCase
         return $this->temp.$subdir;
     }
     
+    protected function getTempDir()
+    {
+        return $this->getTemp();
+    }
+    
     protected function prepareFilesystem()
     {
         $this->temp = dirname(__FILE__)."/temp";
@@ -29,7 +34,7 @@ class CrawlerTestCase extends TestCase
         exec("rm -rf ".$this->getTemp("/*"));
         exec("mkdir ".$this->getTemp("/media"));
         exec("mkdir ".$this->getTemp("/scan"));
-        exec("cp -rf ".dirname(__FILE__)."/files/* ".$this->getTemp("/scan"));
+        exec("cp -rf ".dirname(__FILE__)."/files/scan/* ".$this->getTemp("/scan"));
     }
     
     public function prepareScenario()

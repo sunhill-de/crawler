@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Sunhill\Crawler\Managers\FileManager;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app->singleton(FileManager::class, function () { return new FileManager(); } );
+        $this->app->alias(FileManager::class,'filemanager');
     }
 
     /**
