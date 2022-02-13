@@ -3,6 +3,7 @@
 namespace Sunhill\Crawler\Handler;
 
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Facades\FileManager;
@@ -83,7 +84,7 @@ class HandlerDirs extends HandlerBase
         $plen = strlen($path);
         $path = substr($path,$len-1);
         $parent = substr($parent,$len-1);
-        DB::table('dirs')->insert(['full_path'=>$path,'name'=>$name,'parent_dir'=>$this->searchDir($parent)]);
+        DB::table('dirs')->insert(['full_path'=>Str::finish($path,"/"),'name'=>$name,'parent_dir'=>$this->searchDir($parent)]);
     }
     
     function matches(CrawlerDescriptor $descriptor): Bool
