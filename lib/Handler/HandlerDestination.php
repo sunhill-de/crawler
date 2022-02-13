@@ -5,6 +5,7 @@ namespace Sunhill\Crawler\Handler;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Facades\FileManager;
 
 /**
  * Handles the entries in the database
@@ -18,7 +19,7 @@ class HandlerDestination extends HandlerBase
 
     function process(CrawlerDescriptor $descriptor)
     {
-        $descriptor->targetDir = $this->normalizeDir("/originals/".
+        $descriptor->targetDir = FileManager::normalizeDir("/originals/".
                                   $descriptor->hash[0]."/".
                                   $descriptor->hash[1]."/".
                                   $descriptor->hash[2]."/");

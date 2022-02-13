@@ -5,6 +5,7 @@ namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Facades\FileManager;
 
 /**
  * Handles the entries in the database
@@ -32,7 +33,7 @@ class HandlerDirs extends HandlerBase
     
     private function addFSDir(string $dir) 
     {
-        $completePath = $this->normalizeDir(config('crawler.media_dir').DIRECTORY_SEPARATOR.$dir);
+        $completePath = FileManager::normalizeDir(config('crawler.media_dir').DIRECTORY_SEPARATOR.$dir);
         if (file_exists($completePath)) {
             $this->debug("The dir '$completePath' already exists. Nothing to do.");
         } else {
@@ -72,12 +73,12 @@ class HandlerDirs extends HandlerBase
      
     private function doCreateDir($path, $parent,$name)
     {
-        mkdir($path);
+        FileManager::createDir($path);
         if (!file_exists($path)) {
             $this->error("Couldn't create the target directory");
             return;
         }
-        $media = $this->normalizeDir(config('crawler.media_dir'));
+        $media = FileManager::normalizeDir(config('crawler.media_dir'));
         $len = strlen($media);
         $plen = strlen($path);
         $path = substr($path,$len-1);

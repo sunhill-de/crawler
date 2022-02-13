@@ -54,12 +54,7 @@ abstract class HandlerBase
         }
     }
     
-    public function getRelativeDir(string $link_dir, string $target_dir): string
-    {
-        $this->info("Deprecated method getRelativeDir");
-        return FileManager::getRelativeDir($link_dir,$target_dir);
-    }
-    
+    /*
     protected function normalizeDir($path)
     {
         $this->info("Deprecated method normalizeDir");
@@ -71,6 +66,7 @@ abstract class HandlerBase
         $this->info("Deprecated method normalizeFile");
         return FileManager::normalizeFile($path);
     }
+    */
     
     /**
      * Adds the given dir to the descriptor

@@ -162,25 +162,25 @@ class FileManagerTest extends SunhillScenarioTestCase
             'links' => [
                 'linka'
             ]
-        ], FileManager::get_entries($tmpdir . '/test', true));
+        ], FileManager::getEntries($tmpdir . '/test', true));
     }
     
     // Tests if a file is in a dir
     public function testFileInDir()
     {
         $tmpdir = $this->getTempDir();
-        $this->assertTrue(FileManager::file_in_dir($tmpdir . '/test/testa.txt', $tmpdir . '/test'),'File_in_dir 1');
-        $this->assertTrue(FileManager::file_in_dir($tmpdir . '/test/testa.txt', $tmpdir . '/test/'),'File_in_dir 2');
-        $this->assertFalse(FileManager::file_in_dir($tmpdir . '/media/testa.txt', $tmpdir . '/test'),'File_in_dir 3');
+        $this->assertTrue(FileManager::fileInDir($tmpdir . '/test/testa.txt', $tmpdir . '/test'),'File_in_dir 1');
+        $this->assertTrue(FileManager::fileInDir($tmpdir . '/test/testa.txt', $tmpdir . '/test/'),'File_in_dir 2');
+        $this->assertFalse(FileManager::fileInDir($tmpdir . '/media/testa.txt', $tmpdir . '/test'),'File_in_dir 3');
     }
     
     // Tests if a dir is in a dir
     public function testDirInDir()
     {
         $tmpdir = $this->getTempDir();
-        $this->assertTrue(FileManager::dir_in_dir($tmpdir . '/test/a', $tmpdir . '/test'));
-        $this->assertTrue(FileManager::dir_in_dir($tmpdir . '/test/a/', $tmpdir . '/test/'));
-        $this->assertFalse(FileManager::dir_in_dir($tmpdir . '/media/', $tmpdir . '/test'));
+        $this->assertTrue(FileManager::dirInDir($tmpdir . '/test/a', $tmpdir . '/test'));
+        $this->assertTrue(FileManager::dirInDir($tmpdir . '/test/a/', $tmpdir . '/test/'));
+        $this->assertFalse(FileManager::dirInDir($tmpdir . '/media/', $tmpdir . '/test'));
     }
     
     /**
@@ -193,7 +193,7 @@ class FileManagerTest extends SunhillScenarioTestCase
         $dest = str_replace('__TEMP__',$this->getTempDir(),$dest);
         $additional_pos = str_replace('__TEMP__',$this->getTempDir(),$additional_pos);
         $additional_neg = str_replace('__TEMP__',$this->getTempDir(),$additional_neg);
-        FileManager::rename_dir($source, $dest);
+        FileManager::renameDir($source, $dest);
         $this->assertTrue(file_exists($dest));
         $this->assertFalse(file_exists($source));
         if (! empty($additional_pos)) {
@@ -249,33 +249,33 @@ class FileManagerTest extends SunhillScenarioTestCase
     public function testRenameDirBothSame()
     {
         $tmpdir = $this->getTempDir();
-        FileManager::rename_dir($tmpdir . '/test/c/d', $tmpdir . '/test/c/d');
+        FileManager::renameDir($tmpdir . '/test/c/d', $tmpdir . '/test/c/d');
         $this->assertTrue(file_exists($tmpdir . '/test/c/d'));
     }
     
     public function testEraseDir()
     {
         $tmpdir = $this->getTempDir();
-        FileManager::erase_dir($tmpdir . '/test/c/d');
+        FileManager::eraseDir($tmpdir . '/test/c/d');
         $this->assertFalse(file_exists($tmpdir . '/test/c/d'));
     }
     
     public function testEraseNotEmptyDir() {
         $this->expectException(FileManagerException::class);
         $tmpdir = $this->getTempDir();
-        FileManager::erase_dir($tmpdir . '/test/c');
+        FileManager::eraseDir($tmpdir . '/test/c');
         $this->assertFalse(file_exists($tmpdir . '/test/c'));        
     }
     
     public function testEraseNotEmptyDirRecursive() {
         $tmpdir = $this->getTempDir();
-        FileManager::erase_dir($tmpdir . '/test/c',true);
+        FileManager::eraseDir($tmpdir . '/test/c',true);
         $this->assertFalse(file_exists($tmpdir . '/test/c'));
     }
     
     public function testCreateDir() {
         $tmpdir = $this->getTempDir();
-        FileManager::create_dir($tmpdir . '/test/c/newdir');
+        FileManager::createDir($tmpdir . '/test/c/newdir');
         $this->assertTrue(file_exists($tmpdir . '/test/c/newdir'));        
     }
     
@@ -286,7 +286,7 @@ class FileManagerTest extends SunhillScenarioTestCase
      */
     public function testEffectiveDir($test, $expect)
     {
-        $this->assertEquals($expect, FileManager::get_effective_dir($test));
+        $this->assertEquals($expect, FileManager::normalizeDir($test));
     }
     
     public function EffectiveDirProvider()
@@ -316,7 +316,7 @@ class FileManagerTest extends SunhillScenarioTestCase
      */
     public function testGetRelativeDir($source, $target, $expect)
     {
-        $this->assertEquals($expect, FileManager::get_relative_dir($source, $target));
+        $this->assertEquals($expect, FileManager::getRelativeDir($source, $target));
     }
     
     public function GetRelativeProvider()
@@ -364,16 +364,16 @@ class FileManagerTest extends SunhillScenarioTestCase
     public function testLinkExists()
     {
         $tmpdir = $this->getTempDir();
-        $this->assertTrue(FileManager::link_exists($tmpdir . '/test/linka'));
-        $this->assertFalse(FileManager::link_exists($tmpdir . '/test/nonexisting'));
+        $this->assertTrue(FileManager::linkExists($tmpdir . '/test/linka'));
+        $this->assertFalse(FileManager::linkExists($tmpdir . '/test/nonexisting'));
     }
     
     // Tests if a links points to an existing target
     public function testLinkTargetExists()
     {
         $tmpdir = $this->getTempDir();
-        $this->assertTrue(FileManager::link_exists($tmpdir . '/test/linka'));
-        $this->assertFalse(FileManager::link_exists($tmpdir . '/test/a/linka'));
+        $this->assertTrue(FileManager::linkExists($tmpdir . '/test/linka'));
+        $this->assertFalse(FileManager::linkExists($tmpdir . '/test/a/linka'));
     }
     
     // Tests if a link is relative or absolute

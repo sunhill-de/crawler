@@ -78,15 +78,7 @@ class FileManager {
        $test = $this->getAbsolutePath($test); 
        return file_exists($test) && is_dir($test);
     }
- 
-    /**
-     * @deprecated alias for dirReadable()
-     */
-    public function dir_readable(string $test)
-    {
-       return $this->dirReadable($test);
-    }
- 
+  
     /**
      * Tests if a directory is existing and readable
      *
@@ -99,15 +91,7 @@ class FileManager {
        $test = $this->getAbsolutePath($test);
        return $this->dirExists($test) && (is_readable($test));
     }
-    
-    /**
-     * @deprecated alias for dirWritable()
-     */
-    public function dir_writable(string $test)
-    {
-      return $this->dirWritable($test);
-    }
- 
+     
     /**
      * Tests if a directory is existing and writable
      *
@@ -121,14 +105,6 @@ class FileManager {
        return $this->dirExists($test) && (is_writable($test));
     }
     
-    /**
-     * @deprecated alias for getSubdirectories()
-     */
-     public function get_subdirectories(string $dir)
-     {
-        return $this->getSubdirectories($dir);
-     }
- 
     /**
      * Returns the subdirectories of the given directory
      *
@@ -155,14 +131,6 @@ class FileManager {
     }
   
     /**
-     * @deprecated alias for getFiles()
-     */
-    public function get_files(string $dir)
-    {
-       return $this->getFiles($dir);
-    }
- 
-    /**
      * Returns the files of the given directory
      *
      * @param string $dir
@@ -185,16 +153,6 @@ class FileManager {
             }
         }
         return $result;
-    }
-    
-    /**
-     * @deprecated Use getLinks()
-     * @param string $dir
-     * @return unknown
-     */
-    public function get_links(string $dir)
-    {
-       return $this->getLinks($dir);
     }
     
     /**
@@ -221,17 +179,6 @@ class FileManager {
             }
         }
         return $result;
-    }
-    
-    /**
-     * @deprecated use getEntries()
-     * @param string $dir
-     * @param bool $group
-     * @return unknown
-     */
-    public function get_entries(string $dir, bool $group = false)
-    {
-        return $this->getEntries($dir,$group);
     }
     
     /**
@@ -288,17 +235,6 @@ class FileManager {
     }
     
     /**
-     * @deprecated Use fileInDir()
-     * @param string $file
-     * @param string $dir
-     * @return boolean
-     */
-    public function file_in_dir(string $file,string $dir)
-    {
-        return $this->fileInDir($file,$dir);    
-    }
-    
-    /**
      * Tests if $file is in $dir or one of its subdirs
      *
      * @param string $file
@@ -317,17 +253,6 @@ class FileManager {
     }
     
     /**
-     * @deprecated Use dirInDir()
-     * @param string $file
-     * @param string $dir
-     * @return unknown
-     */
-    public function dir_in_dir(string $file, string $dir)
-    {
-        return $this->dirInDir($file,$dir);
-    }
-    
-    /**
      * Tests if $file is in $dir or one of its subdirs
      *
      * @param string $file
@@ -340,17 +265,6 @@ class FileManager {
         $dir = $this->getAbsolutePath($dir);
         
         return (strpos(Str::finish($file, DIRECTORY_SEPARATOR), Str::finish($dir, DIRECTORY_SEPARATOR)) === 0);
-    }
-    
-    /**
-     * @deprecated Use renameDir()
-     * @param string $source
-     * @param string $dest
-     * @return unknown
-     */
-    public function rename_dir(string $source, string $dest)
-    {
-        return $this->renameDir($source,$dest);
     }
     
     /**
@@ -402,17 +316,6 @@ class FileManager {
     }
     
     /**
-     * @deprecated Use eraseDir()
-     * @param string $path
-     * @param bool $recursive
-     * @return unknown
-     */
-    public function erase_dir(string $path,bool $recursive=false)
-    {
-        return $this->eraseDir($path,$recursive);
-    }
-    
-    /**
      * Erases the passed dir
      * @param string $path
      * @throws FileManagerException
@@ -450,17 +353,6 @@ class FileManager {
     }
     
     /**
-     * @deprecated use createDir()
-     * @param string $path
-     * @param bool $ignore_existing
-     * @return unknown
-     */
-    public function create_dir(string $path,bool $ignore_existing=false)
-    {
-        return $this->createDir($path,$ignore_existing);
-    }
-    
-    /**
      * Creates a new directory
      * @param string $path Directory to create
      * @param bool $ignore_existing if true and the directory already exsists dont raise an exception
@@ -477,17 +369,6 @@ class FileManager {
             throw new FileManagerException(__("The directory ':path' already exists.",['path'=>$path]));            
         }
         mkdir($path);
-    }
-    
-    /**
-     * @deprecated Use createDirRecursive()
-     * @param string $path
-     * @param bool $ignore_existing
-     * @return unknown
-     */
-    public function create_dir_recursive(string $path,bool $ignore_existing=false)
-    {
-        return $this->createDirRecursive($path,$ignore_existing);    
     }
     
     /**
@@ -552,16 +433,6 @@ class FileManager {
     }
 
     /**
-     * @deprecated Use getRelativeDir
-     * @param unknown $link_dir
-     * @param unknown $target_dir
-     */
-    public function get_relative_dir($link_dir, $target_dir)
-    {
-        return $this->getRelativeDir($link_dir,$target_dir);
-    }
-    
-    /**
      * Returns the relative dir between $linkdir and $target_dir
      * @param unknown $link_dir
      * @param unknown $target_dir
@@ -586,17 +457,6 @@ class FileManager {
     }
 
     /**
-     * @deprecated Use dirEquals()
-     * @param string $dir1
-     * @param string $dir2
-     * @return unknown
-     */
-    public function dirs_equal(string $dir1,string $dir2)
-    {
-        return $this->dirsEqual($dir1,$dir2);    
-    }
-    
-    /**
      * Checks if both passed dirs are the same and respect trailing slashes
      * @param string $dir1
      * @param string $dir2
@@ -617,16 +477,6 @@ class FileManager {
     }
 
     /**
-     * @deprecated Use linkExists()
-     * @param string $test
-     * @return unknown
-     */
-    public function link_exists(string $test)
-    {
-        return $this->linkExists($test);    
-    }
-    
-    /**
      * Tests if $test is existing and a link
      *
      * @param string $test
@@ -637,16 +487,6 @@ class FileManager {
         $test = $this->getAbsolutePath($test);
         
         return file_exists($test) && is_link($test);
-    }
-    
-    /**
-     * @deprecated Use linkTargetExists()
-     * @param unknown $test
-     * @return unknown
-     */
-    public function link_target_exists($test)
-    {
-        return $this->linkTargetExists($test);
     }
     
     /**
@@ -722,7 +562,8 @@ class FileManager {
         } else if (! $this->entryExists($target)) {
             throw new FileManagerException(__("The target ':target' does not exist.",['target'=>$target]));
         }
-        if (! symlink($target, $link) || (! file_exists($link))) {
+        exec("ln -s '".$target."' '".$link."'");
+        if (! file_exists($link)) {
             throw new FileManagerException(__("Linking of ':link' to ':target' failed.",['link'=>$link,'target'=>$target]));
         }        
     }
@@ -766,16 +607,6 @@ class FileManager {
         return $this->fileExists($test) && (is_writable($test));
     }
 
-    /**
-     * Cleans the file path (Removes .. and .)
-     * @param string $file
-     * @return string
-     */
-    public function normalize_file(string $file) 
-    {
-        return $this->normalizeFile($file);
-    }
-    
     /**
      * Alias for $this->normalize_file()
      * @param string $file
@@ -845,7 +676,7 @@ class FileManager {
         }
         if (file_exists($source)) {
             throw new FileManagerException(__("Couldn't move ':source' to ':dest'.",['source'=>$source,'dest'=>$dest]));
-            unlink($dest);
+          //  unlink($dest);
         }
     }
        

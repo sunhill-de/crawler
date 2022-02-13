@@ -4,6 +4,7 @@ namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Facades\FileManager;
 
 /**
  * Checks if the file exists and if its readable respective writeable
@@ -17,7 +18,7 @@ class HandlerFileStatus extends HandlerBase
     
     function process(CrawlerDescriptor $descriptor)
     {
-        if ($descriptor->fileExists = file_exists($descriptor->source)) {            
+        if ($descriptor->fileExists = FileManager::entryExists($descriptor->source)) {            
             $descriptor->fileReadable = is_readable($descriptor->source);
             $descriptor->fileWriteable = is_writeable($descriptor->source);
             if (is_dir($descriptor->source)) {

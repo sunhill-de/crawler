@@ -4,6 +4,7 @@ namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Facades\FileManager;
 
 /**
  * Handles the entries in the database
@@ -23,9 +24,9 @@ class HandlerDBSource extends HandlerBase
     protected function handleSource(CrawlerDescriptor $descriptor)
     {
         if ($descriptor->source[0] == ".") {
-            $file = $this->normalizeFile(getcwd()."/".$descriptor->source);
+            $file = FileManager::normalizeFile(getcwd()."/".$descriptor->source);
         } else {
-            $file = $this->normalizeFile($descriptor->source);
+            $file = FileManager::normalizeFile($descriptor->source);
         }
         
         if (!($result = DB::table("sources")->where("file_id",$descriptor->fileID)->where("source",$file)->first()))

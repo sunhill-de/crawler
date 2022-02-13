@@ -36,24 +36,24 @@ class HandlerLinks extends HandlerBase
     
     private function addFSLink($descriptor,$link)
     {
-        $destination = $this->normalizeFile(config('crawler.media_dir')."/".$link);
-        $target = $this->normalizeFile(config('crawler.media_dir')."/".$descriptor->destination);       
+        $destination = FileManager::normalizeFile(config('crawler.media_dir')."/".$link);
+        $target = FileManager::normalizeFile(config('crawler.media_dir')."/".$descriptor->destination);       
         $destination_dir = pathinfo($destination,PATHINFO_DIRNAME);
         $target_dir = pathinfo($target,PATHINFO_DIRNAME);
         $relative = FileManager::getRelativeDir($destination_dir,$target_dir);
         $relative_target = $relative.pathinfo($target,PATHINFO_BASENAME);
         
-        if (!file_exists($destination_dir)) {
+        if (!FileManager::dirExists($destination_dir)) {
             throw new \Exception("The expected dir '$destination_dir' does not exist.");
         }
-        if (file_exists($destination)) {
+        if (FileManager::LinkExists($destination)) {
             $this->error("The destination '$destination' already exists.");
             return;
         } 
-        if (!file_exists($destination_dir.'/'.$relative_target)) {
+        if (!FileManager::fileExists($destination_dir.'/'.$relative_target)) {
             $this->error("The target '".$destination_dir.'/'.$relative_target."' does not exist.");
         } else {
-            exec("ln -s '$relative_target' '$destination'");
+            FileManager::createLink($destination,$relative_target);
         }        
     }
     
