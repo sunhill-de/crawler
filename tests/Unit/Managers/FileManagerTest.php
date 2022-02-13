@@ -6,6 +6,7 @@ use Sunhill\Crawler\Facades\FileManager;
 use Sunhill\Crawler\Managers\FileManagerException;
 use Tests\CreatesApplication;
 use Tests\Scenarios\FilesystemScenario;
+use Illuminate\Support\Facades\Config;
 
 class FileManagerTest extends SunhillScenarioTestCase
 {
@@ -17,15 +18,14 @@ class FileManagerTest extends SunhillScenarioTestCase
         return FilesystemScenario::class;
     }
 
-    public function getTempDir(): String
+    public function setUp(): void
     {
-        return dirname(__FILE__).'/../../temp/';    
+        parent::setUp();
+        Config::set("crawler.media_dir",$this->getTempDir());
     }
     
     public function testMediaDir() 
     {
-        FileManager::setMediaDir($this->getTempDir());
-        $test = $this->getTempDir();
         $this->assertEquals($this->getTempDir(),FileManager::getMediaDir());
     }
     
@@ -33,7 +33,6 @@ class FileManagerTest extends SunhillScenarioTestCase
      * @dataProvider GetAbolutePathProvider
      */
     public function testGetAbsolutePath($test,$expect) {
-        FileManager::setMediaDir($this->getTempDir());
         $expect = str_replace('__TEMP__',$this->getTempDir(),$expect);
         $test = str_replace('__TEMP__',$this->getTempDir(),$test);
         $this->assertEquals($expect,FileManager::getAbsolutePath($test));
@@ -381,22 +380,22 @@ class FileManagerTest extends SunhillScenarioTestCase
     public function testLinkIsRelative()
     {
         $tmpdir = $this->getTempDir();
-        $this->assertTrue(FileManager::link_is_relative($tmpdir . '/test/a/linkb'));
-        $this->assertFalse(FileManager::link_is_relative($tmpdir . '/test/linka'));
+        $this->assertTrue(FileManager::linkIsRelative($tmpdir . '/test/a/linkb'));
+        $this->assertFalse(FileManager::linkIsRelative($tmpdir . '/test/linka'));
     }
     
     // Tests removing a link
     public function testRemoveLink()
     {
         $tmpdir = $this->getTempDir();
-        FileManager::remove_link($tmpdir . '/test/linka');
+        FileManager::removeLink($tmpdir . '/test/linka');
         $this->assertFalse(file_exists($tmpdir . '/test/linka'));
     }
     
     // Tests creating a link
     public function testCreateLink()
     {
-        $tmpdir = FileManager::get_effective_dir($this->getTempDir());
+        $tmpdir = FileManager::normalizeDir($this->getTempDir());
         FileManager::createLink($tmpdir.'test/linknew', $tmpdir.'test/testa.txt');
         $this->assertEquals('TestA', file_get_contents($tmpdir . 'test/linknew'));
     }
@@ -406,14 +405,14 @@ class FileManagerTest extends SunhillScenarioTestCase
     {
         $this->expectException(FileManagerException::class);
         $tmpdir = $this->getTempDir();
-        FileManager::create_link($tmpdir . '/test/linknew', $tmpdir . '/test/nonexisting.txt');
+        FileManager::createLink($tmpdir . '/test/linknew', $tmpdir . '/test/nonexisting.txt');
     }
     
     // Tests creating a link
     public function testCreateLinkRelative()
     {
         $tmpdir = $this->getTempDir();
-        FileManager::create_link($tmpdir . '/test/a/linknew', '../testa.txt');
+        FileManager::createLink($tmpdir . '/test/a/linknew', '../testa.txt');
         $this->assertEquals('TestA', file_get_contents($tmpdir . '/test/a/linknew'));
     }
     
@@ -422,40 +421,40 @@ class FileManagerTest extends SunhillScenarioTestCase
     {
         $this->expectException(FileManagerException::class);
         $tmpdir = $this->getTempDir();
-        FileManager::create_link($tmpdir . '/test/a/linknew', '../nonexisting.txt');
+        FileManager::createLink($tmpdir . '/test/a/linknew', '../nonexisting.txt');
     }
     
     // Tests if file exists
     public function testFileExists()
     {
         $tmpdir = $this->getTempDir();
-        $this->assertTrue(FileManager::file_exists($tmpdir . '/test/testa.txt'));
-        $this->assertFalse(FileManager::file_exists($tmpdir . '/test/nonexisting.txt'));
-        $this->assertFalse(FileManager::file_exists($tmpdir . '/test/a'));
-        $this->assertFalse(FileManager::file_exists($tmpdir . '/test/linka'));
+        $this->assertTrue(FileManager::fileExists($tmpdir . '/test/testa.txt'));
+        $this->assertFalse(FileManager::fileExists($tmpdir . '/test/nonexisting.txt'));
+        $this->assertFalse(FileManager::fileExists($tmpdir . '/test/a'));
+        $this->assertFalse(FileManager::fileExists($tmpdir . '/test/linka'));
     }
     
     // Tests if file is readable
     public function testFileReadable()
     {
         $tmpdir = $this->getTempDir();
-        $this->assertTrue(FileManager::file_readable($tmpdir . '/test/testa.txt'));
-        $this->assertFalse(FileManager::file_readable('/etc/shadow'));
+        $this->assertTrue(FileManager::fileReadable($tmpdir . '/test/testa.txt'));
+        $this->assertFalse(FileManager::fileReadable('/etc/shadow'));
     }
     
     // Tests if file is writable
     public function testFileWritable()
     {
         $tmpdir = $this->getTempDir();
-        $this->assertTrue(FileManager::file_writable($tmpdir . '/test/testa.txt'));
-        $this->assertFalse(FileManager::file_writable('/etc/passwd'));
+        $this->assertTrue(FileManager::fileWritable($tmpdir . '/test/testa.txt'));
+        $this->assertFalse(FileManager::fileWritable('/etc/passwd'));
     }
     
     // Tests deleting of a file
     public function testDeleteFile()
     {
         $tmpdir = $this->getTempDir();
-        FileManager::delete_file($tmpdir . '/test/testa.txt');
+        FileManager::deleteFile($tmpdir . '/test/testa.txt');
         $this->assertFalse(file_exists($tmpdir . '/test/testa.txt'));
     }
     
@@ -463,7 +462,7 @@ class FileManagerTest extends SunhillScenarioTestCase
     public function testCopyFile()
     {
         $tmpdir = $this->getTempDir();
-        FileManager::copy_file($tmpdir . '/test/testa.txt', $tmpdir . '/test/filecopy.txt');
+        FileManager::copyFile($tmpdir . '/test/testa.txt', $tmpdir . '/test/filecopy.txt');
         $this->assertTrue(file_exists($tmpdir . '/test/testa.txt'));
         $this->assertTrue(file_exists($tmpdir . '/test/filecopy.txt'));
     }
@@ -473,7 +472,7 @@ class FileManagerTest extends SunhillScenarioTestCase
     {
         $this->expectException(FileManagerException::class);
         $tmpdir = $this->getTempDir();
-        FileManager::copy_file($tmpdir . '/test/testa.txt', $tmpdir . '/test/testb.txt');
+        FileManager::copyFile($tmpdir . '/test/testa.txt', $tmpdir . '/test/testb.txt');
     }
     
     // Tests copying of a file with missing source
@@ -481,14 +480,14 @@ class FileManagerTest extends SunhillScenarioTestCase
     {
         $this->expectException(FileManagerException::class);
         $tmpdir = $this->getTempDir();
-        FileManager::copy_file($tmpdir . '/test/nonexisting.txt', $tmpdir . '/test/filecopy.txt');
+        FileManager::copyFile($tmpdir . '/test/nonexisting.txt', $tmpdir . '/test/filecopy.txt');
     }
     
     // Tests moving of a file
     public function testMoveFile()
     {
         $tmpdir = $this->getTempDir();
-        FileManager::move_file($tmpdir . '/test/testa.txt', $tmpdir . '/test/filecopy.txt');
+        FileManager::moveFile($tmpdir . '/test/testa.txt', $tmpdir . '/test/filecopy.txt');
         $this->assertFalse(file_exists($tmpdir . '/test/testa.txt'));
         $this->assertTrue(file_exists($tmpdir . '/test/filecopy.txt'));
     }
@@ -498,7 +497,7 @@ class FileManagerTest extends SunhillScenarioTestCase
     {
         $this->expectException(FileManagerException::class);
         $tmpdir = $this->getTempDir();
-        FileManager::move_file($tmpdir . '/test/testa.txt', $tmpdir . '/test/testb.txt');
+        FileManager::moveFile($tmpdir . '/test/testa.txt', $tmpdir . '/test/testb.txt');
     }
     
     // Tests moving of a file with missing source
@@ -506,7 +505,7 @@ class FileManagerTest extends SunhillScenarioTestCase
     {
         $this->expectException(FileManagerException::class);
         $tmpdir = $this->getTempDir();
-        FileManager::move_file($tmpdir . '/test/nonexisting.txt', $tmpdir . '/test/filecopy.txt');
+        FileManager::moveFile($tmpdir . '/test/nonexisting.txt', $tmpdir . '/test/filecopy.txt');
     }
     
     // Test if two files are equal
@@ -514,8 +513,8 @@ class FileManagerTest extends SunhillScenarioTestCase
     {
         $tmpdir = $this->getTempDir();
         exec("cp $tmpdir/test/testa.txt $tmpdir/test/filecopy.txt");
-        $this->assertTrue(FileManager::files_equal($tmpdir . '/test/testa.txt', $tmpdir . '/test/filecopy.txt'));
-        $this->assertFalse(FileManager::files_equal($tmpdir . '/test/testa.txt', $tmpdir . '/test/testb.txt'));
+        $this->assertTrue(FileManager::filesEqual($tmpdir . '/test/testa.txt', $tmpdir . '/test/filecopy.txt'));
+        $this->assertFalse(FileManager::filesEqual($tmpdir . '/test/testa.txt', $tmpdir . '/test/testb.txt'));
     }
         
 }

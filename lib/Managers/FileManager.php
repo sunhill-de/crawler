@@ -32,36 +32,11 @@ class FileManager {
     private $mime_associations = [];
     
     /**
-     * @deprecated Alias for setMediaDir()
-     */
-    public function set_media_dir(string $path) 
-    {
-        $this->setMediaDir($path);
-    }
-    
-    /**
-     * Sets the (absolute) base path of the media directory root
-     * @param $path The absolute path of the media directory root
-     */
-    public function setMediaDir(string $path): void 
-    {
-        $this->media_dir = $this->normalizeDir($path);    
-    }
- 
-    /**
-     * @deprecated Alias for getMediaDir()
-     */
-    public function get_media_dir() 
-    {
-      return $this->getMediaDir();
-    }
-
-    /**
      * Returns the current root for the media directory
      */
     public function getMediaDir() 
     {
-        return $this->media_dir;
+        return config('crawler.media_dir');
     }
  
     /**
@@ -74,18 +49,10 @@ class FileManager {
        if ($path[0] == DIRECTORY_SEPARATOR) {
            return $path;
        } else {
-           return $this->media_dir.$path;
+           return Str::finish($this->getMediaDir(),DIRECTORY_SEPARATOR).$path;
        } 
     }
- 
-    /**
-     * @deprecated Alias for entryExists
-     */
-    public function entry_exists(string $test)
-    {
-       return $this->entryExists($test);
-    }
- 
+  
     /**
      * Tests, if an directory entry exists (could be a file, directory or link)
      * Is just and capsulation of file_exists
@@ -98,15 +65,7 @@ class FileManager {
     {
         return file_exists($this->getAbsolutePath($test));
     }
-    
-    /**
-     * @deprecated alias for dirExists()
-     */
-    public function dir_exists(string $test)
-    {
-      return $this->dirExists($test);
-    }
- 
+     
     /**
      * Tests if an directory exists and is really a directory
      *
@@ -675,7 +634,7 @@ class FileManager {
      */
     public function linkExists(string $test): bool
     {
-        $test = $this->getAbsoultePath($test);
+        $test = $this->getAbsolutePath($test);
         
         return file_exists($test) && is_link($test);
     }
@@ -698,21 +657,11 @@ class FileManager {
      */
     public function linkTargetExists(string $test): bool
     {
-        $test = $this->getAbsoultePath($test);
+        $test = $this->getAbsolutePath($test);
         
         return $this->linkExists($test) && file_exists(readlink($test));
     }
 
-    /**
-     * @deprecated Use linkIsRelative()
-     * @param string $test
-     * @return unknown
-     */
-    public function link_is_relative(string $test)
-    {
-        return $this->linkIsRelative($test);    
-    }
-    
     /**
      * Tests if $test is an absolute or relative link
      *
@@ -722,23 +671,12 @@ class FileManager {
      */
     public function linkIsRelative(string $test): bool
     {
-        $link = $this->getAbsoultePath($link);
+        $test = $this->getAbsolutePath($test);
         
         if (! $this->linkExists($test)) {
             throw new FileManagerException(__("The given link ':test' does not exist.",['test'=>$test]));
         }
         return (strpos(readlink($test), '..'.DIRECTORY_SEPARATOR) !== false);
-    }
-
-    /**
-     * @deprecated Use removeLink()
-     * @param string $link
-     * @param boolean $force
-     * @return unknown
-     */
-    public function remove_link(string $link, $force = false)
-    {
-        return $this->removeLink($link,$force);    
     }
     
     /**
@@ -749,7 +687,7 @@ class FileManager {
      */
     public function removeLink(string $link, bool $force = false): bool
     {
-        $link = $this->getAbsoultePath($link);
+        $link = $this->getAbsolutePath($link);
         
         if (! $force) {
             if (! $this->linkExists($link)) {
@@ -759,20 +697,9 @@ class FileManager {
         if (! unlink($link) || (file_exists($link))) {
             throw new FileManagerException(__("Deletion of ':link' failed.",['link'=>$link]));
         }
+        return true;
     }
-    
-    /**
-     * Creates a link 'link' to target
-     * @deprecated Use createLink() instead
-     * @param string $link
-     * @param string $target
-     * @throws FileManagerException
-     */
-    public function create_link(string $link, string $target)
-    {
-        $this->createLink($link,$target);
-    }
-    
+        
     /**
      * Creates a link 'link' to target
      *
@@ -801,16 +728,6 @@ class FileManager {
     }
     
     /**
-     * @deprecated Use fileExists()
-     * @param string $test
-     * @return unknown
-     */
-    public function file_exists(string $test)
-    {
-        return $this->fileExists($test);    
-    }
-    
-    /**
      * Tests if $test is existing and a file
      *
      * @param string $test
@@ -818,19 +735,9 @@ class FileManager {
      */
     public function fileExists(string $test): bool
     {
-        $test = $this->getAbsoultePath($test);
+        $test = $this->getAbsolutePath($test);
         
         return (file_exists($test) && is_file($test) && ! is_link($test));    
-    }
-    
-    /**
-     * @deprecated use fileReadable()
-     * @param string $test
-     * @return unknown
-     */
-    public function file_readable(string $test)
-    {
-        return $this->fileReadable($test);
     }
     
     /**
@@ -841,21 +748,11 @@ class FileManager {
      */
     public function fileReadable(string $test): bool
     {
-        $test = $this->getAbsoultePath($test);
+        $test = $this->getAbsolutePath($test);
         
         return $this->fileExists($test) && (is_readable($test));
     }
 
-    /**
-     * @deprecated Use fileWritable()
-     * @param string $test
-     * @return unknown
-     */
-    public function file_writable(string $test)
-    {
-        return $this->fileWritable($test);
-    }
-    
     /**
      * Tests if $test is existing,a file and writable
      *
@@ -864,7 +761,7 @@ class FileManager {
      */
     public function fileWritable(string $test): bool
     {
-        $test = $this->getAbsoultePath($test);
+        $test = $this->getAbsolutePath($test);
         
         return $this->fileExists($test) && (is_writable($test));
     }
@@ -889,41 +786,20 @@ class FileManager {
     }
     
     /**
-     * @deprecated Use deleteFile()
-     * @param string $file
-     * @return unknown
-     */
-    public function delete_file(string $file)
-    {
-        return $this->deleteFile($file);    
-    }
-    
-    /**
      * Deletes the given file
      * @param string $file
      * @throws FileManagerException
      */
     public function deleteFile(string $file): void
     {
-        if (! $this->file_writable($file)) {
+        if (! $this->fileWritable($file)) {
             throw new FileManagerException(__("The target ':file' does not exist or is not deletable.",['file'=>$file]));
         }
         if (! unlink($file) || file_exists($file)) {
             throw new FileManagerException(__("Deleting of ':file' failed.",['file'=>$file]));
         }
     }
-    
-    /**
-     * @deprecated use copyFile()
-     * @param string $source
-     * @param string $dest
-     * @return unknown
-     */
-    public function copy_file(string $source, string $dest)
-    {
-        return $this->copyFile($source,$dest);    
-    }
-    
+        
     /**
      * Copies the file from source to dest
      * @param string $source
@@ -932,13 +808,13 @@ class FileManager {
      */
     public function copyFile(string $source, string $dest): void
     {
-        $source = $this->getAbsoultePath($source);
-        $dest = $this->getAbsoultePath($dest);
+        $source = $this->getAbsolutePath($source);
+        $dest = $this->getAbsolutePath($dest);
                 
-        if (! $this->file_exists($source)) {
+        if (! $this->fileExists($source)) {
             throw new FileManagerException(__("The source ':source' does not exists.",['source'=>$source]));
         }
-        if ($this->file_exists($dest)) {
+        if ($this->fileExists($dest)) {
             throw new FileManagerException(__("The destination ':dest' exists.",['dest'=>$dest]));
         }
         if (! copy($source, $dest) || ! file_exists($dest)) {
@@ -947,17 +823,6 @@ class FileManager {
     }
 
     /**
-     * @deprecated Use moveFile()
-     * @param string $source
-     * @param string $dest
-     * @return unknown
-     */
-    public function move_file(string $source,string $dest)
-    {
-        return $this->moveFile($source,$dest);    
-    }
-    
-    /**
      * Moves the file from source to dest
      * @param string $source
      * @param string $dest
@@ -965,8 +830,8 @@ class FileManager {
      */
     public function moveFile(string $source, string $dest): void
     {
-        $source = $this->getAbsoultePath($source);
-        $dest = $this->getAbsoultePath($dest);
+        $source = $this->getAbsolutePath($source);
+        $dest = $this->getAbsolutePath($dest);
         
         if (! $this->fileExists($source)) {
             throw new FileManagerException(__("The source ':source' does not exists.",['source'=>$source,'dest'=>$dest]));
@@ -983,19 +848,7 @@ class FileManager {
             unlink($dest);
         }
     }
-    
-    /**
-     * @deprecated Use filesEqual()
-     * @param string $test1
-     * @param string $test2
-     * @param int $paranoia
-     * @return unknown
-     */
-    public function files_equal(string $test1,string $test2,int $paranoia = 2)
-    {
-        return $this->filesEqual($test1,$test2,$paranoia);    
-    }
-    
+       
     /**
      * Returns if the two files $test1 and $test2 are equal
      *
@@ -1008,15 +861,6 @@ class FileManager {
     public function filesEqual(string $test1, string $test2, int $paranoia = 2): bool
     {
         return md5_file($test1) === md5_file($test2);
-    }
-
-    /**
-     * Tests, if the given file is inside the media directory (true) or outside (false)
-     * @param string $file
-     * @return boolean
-     */
-    public function file_in_media(string $file) {
-        return $this->file_in_dir($file,$this->media_dir);   
     }
  
     /**
@@ -1091,7 +935,7 @@ class FileManager {
      * @param $path string The location of the file or a link to a file
      * @return file A file object 
      */
-    private function ResolvePath(string $path) {
+    private function resolvePath(string $path) {
         $path = $this->normalizeFile($path);
         if (strpos($path,$this->get_media_dir()) === false) {
             $path = $this->get_media_dir().DIRECTORY_SEPARATOR.$path;
