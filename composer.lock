@@ -2360,12 +2360,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sunhill-de/basic.git",
-                "reference": "c7516757566cf142fe724d1d2058c685695737fb"
+                "reference": "3da43d997cbe8aee9134e0a4be09ed5e5dc21343"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sunhill-de/basic/zipball/c7516757566cf142fe724d1d2058c685695737fb",
-                "reference": "c7516757566cf142fe724d1d2058c685695737fb",
+                "url": "https://api.github.com/repos/sunhill-de/basic/zipball/3da43d997cbe8aee9134e0a4be09ed5e5dc21343",
+                "reference": "3da43d997cbe8aee9134e0a4be09ed5e5dc21343",
                 "shasum": ""
             },
             "default-branch": true,
@@ -2402,7 +2402,7 @@
                 "source": "https://github.com/sunhill-de/basic/tree/main",
                 "issues": "https://github.com/sunhill-de/basic/issues"
             },
-            "time": "2022-02-09T12:34:35+00:00"
+            "time": "2022-02-13T16:07:46+00:00"
         },
         {
             "name": "sunhill/orm",
@@ -3033,12 +3033,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Mbstring\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [

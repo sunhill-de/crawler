@@ -56,6 +56,7 @@ return [
     'providers' => [
         App\Providers\AppServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
+        Sunhill\Basic\SunhillBasicServiceProvider::class,
     ],
 
 ];
