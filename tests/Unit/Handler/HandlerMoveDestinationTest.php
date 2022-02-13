@@ -16,55 +16,55 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
     public function testCopyFile()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->source = dirname(__FILE__).'/../../temp/A.txt';
+        $descriptor->source = $this->getTempDir().'A.txt';
         $descriptor->targetDir = '/subdir/';
         $descriptor->hash = 'abc';
         $descriptor->ext = 'txt';
         $descriptor->keep = true;
         $descriptor->fileWriteable = true;
         $descriptor->fileInDatabase = false;
-        Config::set("crawler.media_dir",dirname(__FILE__).'/../../temp');
+        Config::set("crawler.media_dir",$this->getTempDir());
         $test = new HandlerMoveDestination();
         $test->process($descriptor);
         
-        $this->assertTrue(file_exists(dirname(__FILE__).'/../../temp/subdir/abc.txt'));        
-        $this->assertTrue(file_exists(dirname(__FILE__).'/../../temp/A.txt'));
+        $this->assertTrue(file_exists($this->getTempDir().'subdir/abc.txt'));        
+        $this->assertTrue(file_exists($this->getTempDir().'A.txt'));
     }
     
     public function testMoveFile()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->source = dirname(__FILE__).'/../../temp/A.txt';
+        $descriptor->source = $this->getTempDir().'A.txt';
         $descriptor->targetDir = '/subdir/';
         $descriptor->hash = 'abc';
         $descriptor->ext = 'txt';
         $descriptor->keep = false;
         $descriptor->fileWriteable = true;
         $descriptor->fileInDatabase = false;
-        Config::set("crawler.media_dir",dirname(__FILE__).'/../../temp');
+        Config::set("crawler.media_dir",$this->getTempDir());
         $test = new HandlerMoveDestination();
         $test->process($descriptor);
         
-        $this->assertTrue(file_exists(dirname(__FILE__).'/../../temp/subdir/abc.txt'));
-        $this->assertFalse(file_exists(dirname(__FILE__).'/../../temp/A.txt'));
+        $this->assertTrue(file_exists($this->getTempDir().'subdir/abc.txt'));
+        $this->assertFalse(file_exists($this->getTempDir().'A.txt'));
     }
     
     public function testMoveFileUnwriteable()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->source = dirname(__FILE__).'/../../temp/A.txt';
+        $descriptor->source = $this->getTempDir().'A.txt';
         $descriptor->targetDir = '/subdir/';
         $descriptor->hash = 'abc';
         $descriptor->ext = 'txt';
         $descriptor->keep = false;
         $descriptor->fileWriteable = false;
         $descriptor->fileInDatabase = false;
-        Config::set("crawler.media_dir",dirname(__FILE__).'/../../temp');
+        Config::set("crawler.media_dir",$this->getTempDir());
         $test = new HandlerMoveDestination();
         $test->process($descriptor);
         
-        $this->assertTrue(file_exists(dirname(__FILE__).'/../../temp/subdir/abc.txt'));
-        $this->assertFalse(file_exists(dirname(__FILE__).'/../../temp/A.txt'));
+        $this->assertTrue(file_exists($this->getTempDir().'subdir/abc.txt'));
+        $this->assertFalse(file_exists($this->getTempDir().'A.txt'));
     }
     
     protected function GetScenarioClass()
