@@ -569,9 +569,9 @@ class FileManager {
      */
     public function getRelativeDir(string $link_dir, string $target_dir): string
     {
-        $source = explode(DIRECTORY_SEPARATOR, $link_dir);
+        $source = explode(DIRECTORY_SEPARATOR, Str::finish($link_dir,DIRECTORY_SEPARATOR));
         array_pop($source); // Trailing /
-        $dest = explode(DIRECTORY_SEPARATOR, $target_dir);
+        $dest = explode(DIRECTORY_SEPARATOR, Str::finish($target_dir,DIRECTORY_SEPARATOR));
         array_pop($dest);
         $i = 0;
         while (($i < count($source) && ($i < count($dest)) && ($source[$i] == $dest[$i]))) {

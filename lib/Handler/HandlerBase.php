@@ -4,6 +4,7 @@ namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Str;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Facades\FileManager;
 
 abstract class HandlerBase
 {
@@ -55,49 +56,20 @@ abstract class HandlerBase
     
     public function getRelativeDir(string $link_dir, string $target_dir): string
     {
-        $link_dir = Str::finish($link_dir,"/");
-        $target_dir = Str::finish($target_dir,"/");
-        $source = explode(DIRECTORY_SEPARATOR, $link_dir);
-        array_pop($source); // Trailing /
-        $dest = explode(DIRECTORY_SEPARATOR, $target_dir);
-        array_pop($dest);
-        $i = 0;
-        while (($i < count($source) && ($i < count($dest)) && ($source[$i] == $dest[$i]))) {
-            $i ++;
-        }
-        $result = str_repeat('..'.DIRECTORY_SEPARATOR, count($source) - $i);
-        while ($i < count($dest)) {
-            $result .= $dest[$i] . DIRECTORY_SEPARATOR;
-            $i ++;
-        }
-        return $result;
+        $this->info("Deprecated method getRelativeDir");
+        return FileManager::getRelativeDir($link_dir,$target_dir);
     }
     
     protected function normalizeDir($path)
     {
-        $leading_slash = (substr($path, 0, 1) == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : '';
-        $path = str_replace(array(
-            DIRECTORY_SEPARATOR,
-            '\\'
-        ), DIRECTORY_SEPARATOR, $path);
-        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
-        $absolutes = array();
-        foreach ($parts as $part) {
-            if ('.' == $part)
-                continue;
-                if ('..' == $part) {
-                    array_pop($absolutes);
-                } else {
-                    $absolutes[] = $part;
-                }
-        }
-        $return = $leading_slash . implode(DIRECTORY_SEPARATOR, $absolutes);
-        return (substr($return, - 1) == DIRECTORY_SEPARATOR) ? $return : $return . DIRECTORY_SEPARATOR;
+        $this->info("Deprecated method normalizeDir");
+        return FileManager::normalizeDir($path);
     }
     
     protected function normalizeFile($path)
     {
-        return $this->normalizeDir(Str::finish(pathinfo($path, PATHINFO_DIRNAME), DIRECTORY_SEPARATOR)).pathinfo($path, PATHINFO_BASENAME);
+        $this->info("Deprecated method normalizeFile");
+        return FileManager::normalizeFile($path);
     }
     
     /**

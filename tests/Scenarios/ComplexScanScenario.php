@@ -75,7 +75,7 @@ class ComplexScanScenario extends ScenarioBase
     
     public function __construct()
     {
-        $this->setTarget(dirname(__FILE__).'/../temp');
-        exec("rm -rf ".dirname(__FILE__).'/../temp/*');
+        $this->setTarget(storage_path('temp/'));
+        exec("rm -rf ".storage_path('temp/').'*');
     }
 }

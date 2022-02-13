@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Facades\FileManager;
 use Sunhill\Crawler\Handler\HandlerLinks;
 use Sunhill\Basic\Tests\SunhillScenarioTestCase;
 use Tests\CreatesApplication;
@@ -14,11 +15,6 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     
     use CreatesApplication;
     
-    protected function getTemp($subpath="")
-    {
-        return dirname(__FILE__).'/../temp'.$subpath;   
-    }
-    
     protected function GetScenarioClass()
     {
         return SimpleScanScenario::class;
@@ -26,16 +22,15 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     
     public function testScenarioSane()
     {
-        $this->assertTrue(file_exists($this->getTemp("/media")));
-        $this->assertTrue(file_exists($this->getTemp("/scan")));
+        $this->assertTrue(file_exists($this->getTempDir()."media/"));
+        $this->assertTrue(file_exists($this->getTempDir()."scan/"));
     }
     
     private function executeCrawler()
     {
-        $this->temp = dirname(__FILE__)."/../temp";
-        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        Config::set("crawler.media_dir",$this->getTempDir()."/media");
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,false,100, null, null);
+        $crawler->scan(null,$this->getTempDir()."scan/",false,true,false,false,100, null, null);
     }
     
     /**
@@ -44,7 +39,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testSuccessfulExecution()
     {
         $this->executeCrawler();    
-        $this->assertTrue(file_exists($this->getTemp("/media/originals/3/2/0")));
+        $this->assertTrue(file_exists($this->getTempDir()."media/originals/3/2/0/"));
         $this->skipRebuild();
     }
 
@@ -53,10 +48,9 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
      */
     public function testTargetMoved()
     {
-        $this->temp = dirname(__FILE__)."/../temp";
-        $destination = $this->getTemp("/media/originals/6/d/c/")."6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt";
+        $destination = $this->getTempDir()."media/originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt";
         $this->assertTrue(file_exists($destination),"Destination '$destination' does not exist");
-        $this->assertFalse(file_exists($this->getTemp("/scan/")."A.txt"),"Original still exists.");
+        $this->assertFalse(file_exists($this->getTempDir()."scan/"."A.txt"),"Original still exists.");
         $this->assertEquals("A",file_get_contents($destination),"Content of destination not as expected.");
         $this->skipRebuild();
     }
@@ -69,7 +63,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testLinkCreated($link,$content)
     {
         $this->temp = dirname(__FILE__)."/../temp";
-        $expectation = $this->normalizeDir($this->getTemp().$link);
+        $expectation = $this->normalizeDir($this->getTempDir().$link);
         $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
         $this->assertEquals($content,file_get_contents($expectation),"The link has not the expected content");        
     }
@@ -87,53 +81,35 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
      */
     public function testSourceLinkCreated()
     {
-        $this->temp = dirname(__FILE__)."/../temp";
-        $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/"))."A.txt";
+        $expectation = $this->normalizeDir($this->getTempDir()."/media/sources/all/".$this->getTempDir()."/scan/")."A.txt";
         $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
         $this->assertEquals("A",file_get_contents($expectation),"The link has not the expected content");        
         
-        $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/"))."B.txt";
+        $expectation = $this->normalizeDir($this->getTempDir()."/media/sources/all/".$this->getTempDir()."/scan/")."B.txt";
         $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
         $this->assertEquals("B",file_get_contents($expectation),"The link has not the expected content");
         
-        $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/"))."C.TXT";
+        $expectation = $this->normalizeDir($this->getTempDir()."/media/sources/all/".$this->getTempDir()."/scan/")."C.TXT";
         $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
         $this->assertEquals("C",file_get_contents($expectation),"The link has not the expected content");
         
-        $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/"))."D.TXT";
+        $expectation = $this->normalizeDir($this->getTempDir()."/media/sources/all/".$this->getTempDir()."/scan/")."D.TXT";
         $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
         $this->assertEquals("D",file_get_contents($expectation),"The link has not the expected content");
         
-        $expectation = $this->normalizeDir($this->getTemp("/media/sources/all").$this->getTemp("/scan/subdir/"))."AnotherA.txt";
+        $expectation = $this->normalizeDir($this->getTempDir()."/media/sources/all/".$this->getTempDir()."/scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($expectation),"The expected link does not exist.");
         $this->assertEquals("A",file_get_contents($expectation),"The link has not the expected content");
         
         
         $this->skipRebuild();
     }
-    
-    protected function normalizeDir($path)
+
+    function normalizeDir($dir)
     {
-        $leading_slash = (substr($path, 0, 1) == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : '';
-        $path = str_replace(array(
-            DIRECTORY_SEPARATOR,
-            '\\'
-        ), DIRECTORY_SEPARATOR, $path);
-        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
-        $absolutes = array();
-        foreach ($parts as $part) {
-            if ('.' == $part)
-                continue;
-                if ('..' == $part) {
-                    array_pop($absolutes);
-                } else {
-                    $absolutes[] = $part;
-                }
-        }
-        $return = $leading_slash . implode(DIRECTORY_SEPARATOR, $absolutes);
-        return (substr($return, - 1) == DIRECTORY_SEPARATOR) ? $return : $return . DIRECTORY_SEPARATOR;
+        return FileManager::normalizeDir($dir);    
     }
- 
+    
     /**
      * @depends testScenarioSane
      */
@@ -149,72 +125,66 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     
     public function testSync()
     {
-        $this->temp = dirname(__FILE__)."/../temp";
-        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        Config::set("crawler.media_dir",$this->getTempDir()."media/");
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan/A.txt"),true,true,false,false,0, null, null);
+        $crawler->scan(null,$this->getTempDir()."scan/A.txt",true,true,false,false,0, null, null);
  
-        $this->assertTrue(file_exists($this->getTemp("/scan/A.txt")));
+        $this->assertTrue(file_exists($this->getTempDir()."scan/A.txt"));
     }
     
     public function testNoSync()
     {
-        $this->temp = dirname(__FILE__)."/../temp";
-        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        Config::set("crawler.media_dir",$this->getTempDir()."media/");
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan/A.txt"),false,true,false,false,0, null, null);
+        $crawler->scan(null,$this->getTempDir()."scan/A.txt",false,true,false,false,0, null, null);
         
-        $this->assertFalse(file_exists($this->getTemp("/scan/A.txt")));
+        $this->assertFalse(file_exists($this->getTempDir()."/scan/A.txt"));
     }
     
     public function testRecursive()
     {
-        $this->temp = dirname(__FILE__)."/../temp";
-        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        Config::set("crawler.media_dir",$this->getTempDir()."media/");
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,false,0, null, null);
+        $crawler->scan(null,$this->getTempDir()."scan/",false,true,false,false,0, null, null);
     
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
         
     }
     
     public function testNoRecursive()
     {
-        $this->temp = dirname(__FILE__)."/../temp";
-        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        Config::set("crawler.media_dir",$this->getTempDir()."media/");
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan"),false,false,false,false,0, null, null);
+        $crawler->scan(null,$this->getTempDir()."scan/",false,false,false,false,0, null, null);
         
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/subdir/")."AnotherA.txt";
         $this->assertFalse(file_exists($search));
         
     }
     
     public function testSkipDuplicates()
     {
-        $this->temp = dirname(__FILE__)."/../temp";
-        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        Config::set("crawler.media_dir",$this->getTempDir()."/media");
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan"),false,true,true,false,0, null, null);
+        $crawler->scan(null,$this->getTempDir()."scan/",false,true,true,false,0, null, null);
         
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/")."A.txt";
+        $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/")."A.txt";
         $this->assertFalse(file_exists($search));
         
     }
     
     public function testNoSkipDuplicates()
     {
-        $this->temp = dirname(__FILE__)."/../temp";
-        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        Config::set("crawler.media_dir",$this->getTempDir()."media/");
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,false,0, null, null);
+        $crawler->scan(null,$this->getTempDir()."scan/",false,true,false,false,0, null, null);
         
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $search = $this->normalizeDir($this->getTempDir()."/media/sources/all".$this->getTempDir()."/scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/")."A.txt";
+        $search = $this->normalizeDir($this->getTempDir()."/media/sources/all".$this->getTempDir()."/scan/")."A.txt";
         $this->assertTrue(file_exists($search));
         
     }
@@ -222,27 +192,26 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testIgnoreSource()
     {
         $this->temp = dirname(__FILE__)."/../temp";
-        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        Config::set("crawler.media_dir",$this->getTempDir()."/media");
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,true,0, null, null);
+        $crawler->scan(null,$this->getTempDir()."/scan",false,true,false,true,0, null, null);
         
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $search = $this->normalizeDir($this->getTempDir()."/media/sources/all".$this->getTempDir()."/scan/subdir/")."AnotherA.txt";
         $this->assertFalse(file_exists($search));
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/")."A.txt";
+        $search = $this->normalizeDir($this->getTempDir()."/media/sources/all".$this->getTempDir()."/scan/")."A.txt";
         $this->assertFalse(file_exists($search));
         
     }
     
     public function testNoIgnoreSource()
     {
-        $this->temp = dirname(__FILE__)."/../temp";
-        Config::set("crawler.media_dir",$this->getTemp("/media"));
+        Config::set("crawler.media_dir",$this->getTempDir()."media/");
         $crawler = new Scanner();
-        $crawler->scan(null,$this->getTemp("/scan"),false,true,false,false,0, null, null);
+        $crawler->scan(null,$this->getTempDir()."scan/",false,true,false,false,0, null, null);
         
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/subdir/")."AnotherA.txt";
+        $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
-        $search = $this->normalizeDir($this->getTemp()."/media/sources/all".$this->getTemp()."/scan/")."A.txt";
+        $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/")."A.txt";
         $this->assertTrue(file_exists($search));        
     }
     

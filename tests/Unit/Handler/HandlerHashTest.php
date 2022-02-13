@@ -22,9 +22,9 @@ class HandlerHashTest extends SunhillScenarioTestCase
     public function testScanNewFile()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->source = dirname(__FILE__).'/../../temp/scan/B.txt';
+        $descriptor->source = $this->getTempDir().'scan/B.txt';
         
-        Config::set("crawler.media_dir",dirname(__FILE__).'/../../temp/media');
+        Config::set("crawler.media_dir",$this->getTempDir()."media/");
         $test = new HandlerHash();
         $test->process($descriptor);
         
@@ -36,9 +36,9 @@ class HandlerHashTest extends SunhillScenarioTestCase
     public function testScanKnownFile()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->source = dirname(__FILE__).'/../../temp/scan/A.txt';
+        $descriptor->source = $this->getTempDir().'scan/A.txt';
         
-        Config::set("crawler.media_dir",dirname(__FILE__).'/../../temp/media');
+        Config::set("crawler.media_dir",$this->getTempDir()."media/");
         $test = new HandlerHash();
         $test->process($descriptor);
         

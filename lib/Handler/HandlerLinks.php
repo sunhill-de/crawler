@@ -5,6 +5,7 @@ namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Facades\FileManager;
 
 /**
  * Handles the entries in the database
@@ -39,7 +40,7 @@ class HandlerLinks extends HandlerBase
         $target = $this->normalizeFile(config('crawler.media_dir')."/".$descriptor->destination);       
         $destination_dir = pathinfo($destination,PATHINFO_DIRNAME);
         $target_dir = pathinfo($target,PATHINFO_DIRNAME);
-        $relative = $this->getRelativeDir($destination_dir,$target_dir);
+        $relative = FileManager::getRelativeDir($destination_dir,$target_dir);
         $relative_target = $relative.pathinfo($target,PATHINFO_BASENAME);
         
         if (!file_exists($destination_dir)) {

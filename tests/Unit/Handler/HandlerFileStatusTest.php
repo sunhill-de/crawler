@@ -3,17 +3,26 @@
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+use Sunhill\Basic\Tests\SunhillScenarioTestCase;
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Handler\HandlerFileStatus;
 use Tests\CrawlerTestCase;
+use Tests\CreatesApplication;
+use Tests\Scenarios\SimpleScanScenario;
 
-class HandlerFileStatusTest extends CrawlerTestCase
+class HandlerFileStatusTest extends SunhillScenarioTestCase
 {
  
+    use CreatesApplication;
+    
+    protected function GetScenarioClass()
+    {
+        return SimpleScanScenario::class;
+    }
+    
     public function testDirectory()
     {
-        $this->prepareFilesystem();
-        $temp = $this->getTemp();
+        $temp = $this->getTempDir();
         
         $descriptor = new CrawlerDescriptor();
         $descriptor->source = $temp.'/scan';
@@ -29,8 +38,7 @@ class HandlerFileStatusTest extends CrawlerTestCase
     
     public function testFile()
     {
-        $this->prepareFilesystem();
-        $temp = $this->getTemp();
+        $temp = $this->getTempDir();
         
         $descriptor = new CrawlerDescriptor();
         $descriptor->source = $temp.'/scan/A.txt';
@@ -46,8 +54,7 @@ class HandlerFileStatusTest extends CrawlerTestCase
     
     public function testUnwriteableFile()
     {
-        $this->prepareFilesystem();
-        $temp = $this->getTemp();
+        $temp = $this->getTempDir();
         chmod($temp."/scan/A.txt",0555);
         
         $descriptor = new CrawlerDescriptor();
@@ -64,8 +71,7 @@ class HandlerFileStatusTest extends CrawlerTestCase
     
     public function testUnreadableFile()
     {
-        $this->prepareFilesystem();
-        $temp = $this->getTemp();
+        $temp = $this->getTempDir();
         
         $descriptor = new CrawlerDescriptor();
         $descriptor->source = "/etc/shadow"; // Better not run as root

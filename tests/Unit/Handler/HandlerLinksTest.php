@@ -25,12 +25,12 @@ class HandlerLinksTest extends SunhillScenarioTestCase
         $descriptor->addLinks = ['/source/a.txt'];
         $descriptor->removeLinks = [];
         
-        Config::set("crawler.media_dir",dirname(__FILE__).'/../../temp/media');
+        Config::set("crawler.media_dir",$this->getTempDir().'media/');
         $test = new HandlerLinks();
         $test->process($descriptor);
 
-        $this->assertTrue(file_exists(dirname(__FILE__).'/../../temp/media/source/a.txt'));
-        $this->assertEquals("A",file_get_contents(dirname(__FILE__).'/../../temp/media/source/a.txt'));
+        $this->assertTrue(file_exists($this->getTempDir().'/media/source/a.txt'));
+        $this->assertEquals("A",file_get_contents($this->getTempDir().'/media/source/a.txt'));
     }
     
 }
