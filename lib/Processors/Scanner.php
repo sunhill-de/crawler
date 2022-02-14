@@ -25,6 +25,8 @@ class Scanner extends CrawlerBase
     
     protected $ignore_source;
     
+    protected $erase_empty;
+    
     protected $tags;
     
     protected $associations;
@@ -37,7 +39,8 @@ class Scanner extends CrawlerBase
      * @param unknown $verbosity
      */
     public function scan($command,string $target,bool $keep,bool $recursive = true, 
-                         bool $skip = false, bool $ignore_source = false, int $verbosity,$tags = null,$assocations = null) 
+                         bool $skip = false, bool $ignore_source = false, bool $erase_empty, 
+                         int $verbosity,$tags = null,$assocations = null) 
     {
         $this->verbosity = $verbosity;
         $this->command = $command;
@@ -46,6 +49,7 @@ class Scanner extends CrawlerBase
         $this->ignore_source = $ignore_source;
         $this->tags = $tags;
         $this->associations = $assocations;
+        $this->erase_empty = $erase_empty;
         
         if (!file_exists($target)) {
             $this->error("The file/directory $target does not exist.");
@@ -116,6 +120,7 @@ class Scanner extends CrawlerBase
         $descriptor->ignore_source = $this->ignore_source;
         $descriptor->tags = $this->tags;
         $descriptor->associations = $this->associations;
+        $descriptor->erase_empty = $this->erase_empty;
         
         foreach ($handlers as $handler) {
             $handlerObject = new $handler($this,$descriptor);
