@@ -83,6 +83,9 @@ class Scanner extends CrawlerBase
             } 
         }
         $dir->close();
+        if ($this->erase_empty) {
+            FileManager::eraseDirIfEmpty($target);
+        }    
     }
     
     protected function handleFile($file)
