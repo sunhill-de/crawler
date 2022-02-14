@@ -477,6 +477,43 @@ class FileManager {
     }
 
     /**
+     * Checks if the given dir is empty or not
+     * @param $path The dir to test
+     * @return bool True if it is empty or false
+     */
+    public function dirEmpty(string $path): bool
+    {
+        $path = $this->normalizeDir($path);
+        if (!isDir($path)) {
+            throw FileManagerException("'$path' is not a dir.");
+        }
+        $dir = dir($path);
+        while (false !== ($entry = $dir->read())) {
+            if (($entry == '.') || ($entry == '..')) {
+                continue;
+            }
+            $dir->close();
+            return false;            
+        }
+        $dir->close();
+        return true;
+    }
+    
+    /**
+     * Checks if the given dir is empty: If yes, it deletes it
+     * @param $path The dir to test
+     * @return bool True if it is empty and eraseDir did work or false if not empty or eraseDir didn't work
+     */
+    public function eraseDirIfEmpty(string $path): bool
+    {
+        if (!$this->dirEmpty($path)) {
+            return false;
+        } else {
+            return $this->eraseDir($path);
+        }    
+    }
+    
+    /**
      * Tests if $test is existing and a link
      *
      * @param string $test
