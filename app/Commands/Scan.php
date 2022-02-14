@@ -17,7 +17,7 @@ class Scan extends Command
      *
      * @var string
      */
-    protected $signature = 'scan {target} {--s|sync} {--S|no-sync} {--r|recursive} {--R|no-recursive} {--K|skip-duplicates} {--k|no-skip-duplicates} {--P|suppress-source} {--p|no-suppress-source} {--tags=} {--associations=}';
+    protected $signature = 'scan {target} {--s|sync} {--S|no-sync} {--r|recursive} {--R|no-recursive} {--K|skip-duplicates} {--k|no-skip-duplicates} {--P|suppress-source} {--p|no-suppress-source} {--e|erase-empty-dirs} {--tags=} {--associations=}';
 
     /**
      * The description of the command.
@@ -41,6 +41,7 @@ class Scan extends Command
             $this->getSkipDuplicates(),
             $this->getSuppressSource(),
             $this->getOutput()->getVerbosity(),
+            $this->getOption('erase-empty-dirs'),           
             $this->getTags(),
             $this->getAssociations());
     }
