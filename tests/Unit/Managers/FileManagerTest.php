@@ -360,6 +360,13 @@ class FileManagerTest extends SunhillScenarioTestCase
         ];
     }
     
+    public function testDirectoryEmpty()
+    {
+        $this->assertTrue(FileManager::dirEmpty($this->getTempDir().'/test/b');        
+        $this->assertFalse(FileManager::dirEmpty($this->getTempDir().'/subdir');        
+        $this->assertFalse(FileManager::dirEmpty($this->getTempDir().'/test/a');        
+    }
+
     // Tests if a link exists
     public function testLinkExists()
     {
@@ -516,5 +523,5 @@ class FileManagerTest extends SunhillScenarioTestCase
         $this->assertTrue(FileManager::filesEqual($tmpdir . '/test/testa.txt', $tmpdir . '/test/filecopy.txt'));
         $this->assertFalse(FileManager::filesEqual($tmpdir . '/test/testa.txt', $tmpdir . '/test/testb.txt'));
     }
-        
+    
 }
