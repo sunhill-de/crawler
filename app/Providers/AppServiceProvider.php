@@ -18,6 +18,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(FileManager::class, function () { return new FileManager(); } );
         $this->app->alias(FileManager::class,'filemanager');
+        $this->app->singleton(Utils::class, function () { return new Utils(); } );
+        $this->app->alias(Utils::class,'utils');
         Checks::installChecker(CheckFileDatabase::class);
     }
 
