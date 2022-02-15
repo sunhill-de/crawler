@@ -26,11 +26,14 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
         $this->assertTrue(file_exists($this->getTempDir()."scan/"));
     }
     
-    private function executeCrawler()
+    private function executeCrawler(string $params="")
     {
         Config::set("crawler.media_dir",$this->getTempDir()."/media");
+        return $this->artisan("scan '".$this->getTempDir()."scan/');
+        /*
         $crawler = new Scanner();
         $crawler->scan(null,$this->getTempDir()."scan/",false,true,false,false,100, null, null);
+        */
     }
     
     /**
@@ -121,6 +124,8 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
         $this->assertDatabaseHas('files',['hash' => 'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec']);
         
         $this->assertDatabaseHas('mime',['mime' => 'application/octet-stream']);
+        
+        $this->assertDatabaseHas('dirs',['fullpath' => 'media/originals/6/d/c/']);
     }
     
     public function testSync()
