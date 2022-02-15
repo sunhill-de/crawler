@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Sunhill\Crawler\Managers\FileManager;
+use Sunhill\Crawler\Managers\Utils;
 use Sunhill\Basic\Facades\Checks;
 use Sunhill\Crawler\Checks\CheckFileDatabase;
 
