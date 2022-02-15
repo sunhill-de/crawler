@@ -21,7 +21,7 @@ use Sunhill\Files\Facades\MediaFiles;
  * @author lokal
  *        
  */
-class dir extends fileobject
+class Dir extends fileobject
 {
     public static $table_name = 'dirs';
     
