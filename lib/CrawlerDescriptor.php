@@ -42,4 +42,24 @@ class CrawlerDescriptor extends Descriptor
     {
         return $this->source;
     }
+    
+    public function stateIs($state): Bool
+    {
+        if (is_array($state)) {
+            return in_array($this->state,$state);
+        } else {
+            return $this->state == $state;
+        }    
+    }
+    
+    public function isRegular(): Bool
+    {
+        return $this->stateIs('regular');
+    }
+    
+    public function isToKeep(): Bool
+    {
+        return $this->stateIs(['regular','converted_from','alterated_from']);
+    }
+    
 }
