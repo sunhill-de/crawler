@@ -41,13 +41,15 @@ class HandlerHash extends HandlerBase
             $descriptor->mdate  = $result->mdate;
             $descriptor->mimeID = $result->mime;
             $descriptor->mime   = $this->lookUpMime($result->mime); 
-            $descriptor->ext    = $result->ext;            
+            $descriptor->ext    = $result->ext;
+            $descriptor->state  = $result->state;
             $this->verboseinfo(" Hash already in database");
             return true;
         } else {
             $descriptor->size  = filesize($descriptor->source);
             $descriptor->cdate = filectime($descriptor->source);
             $descriptor->mdate = filemtime($descriptor->source);
+            $descriptor->state = 'regular';
             $this->verboseinfo(" Hash not in database");
             return false;
         }
