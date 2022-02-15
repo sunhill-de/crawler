@@ -19,36 +19,41 @@ class HandlerMoveDestination extends HandlerBase
  
     function process(CrawlerDescriptor $descriptor)
     {
-        $destination = FileManager::normalizeDir(config('crawler.media_dir').DIRECTORY_SEPARATOR.$descriptor->targetDir)."/".$descriptor->hash.".".$descriptor->ext;
-        
-        if ($descriptor->alreadyInDatabase() && !$descriptor->keep) {
-            unlink($descriptor->source);
-            return;
-        }
-        
-        if (FileManager::fileExists($destination)) {
-            $this->error("File '$destination' already exists in originals. Aborting.");
-            $descriptor->stop = true;
-            return;
-        }
-        
-        
-        if ($descriptor->keep) {
-            FileManager::copyFile($descriptor->source,$destination);
-        } else {
-            try {
-                   FileManager::moveFile($descriptor->source,$destination);
-            } catch (\Exception $e) {
-                   $this->error("File could not be moved.");
+        if ($descriptor->fileIsToKeep()) {
+
+            $destination = FileManager::normalizeDir(config('crawler.media_dir').DIRECTORY_SEPARATOR.$descriptor->targetDir)."/".$descriptor->hash.".".$descriptor->ext;
+
+            if ($descriptor->alreadyInDatabase() && !$descriptor->keep) {
+                unlink($descriptor->source);
+                return;
             }
-        }
-        
-      //  $descriptor->destination = $destination;
+
+            if (FileManager::fileExists($destination)) {
+                $this->error("File '$destination' already exists in originals. Aborting.");
+                $descriptor->stop = true;
+                return;
+            }
+
+
+            if ($descriptor->keep) {
+                FileManager::copyFile($descriptor->source,$destination);
+            } else {
+                try {
+                       FileManager::moveFile($descriptor->source,$destination);
+                } catch (\Exception $e) {
+                       $this->error("File could not be moved.");
+                }
+            }
+
+          //  $descriptor->destination = $destination;
+        }  else if ($descriptor->keep) {
+            unlink($descriptor->source);
+        }    
     }
     
     function matches(CrawlerDescriptor $descriptor): Bool
     {
-        return $descriptor->fileProcessable();
+        return $descriptor->fileProcessable() && !$descriptor->stateIs('ignored');
     }
     
     
