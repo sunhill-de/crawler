@@ -484,7 +484,7 @@ class FileManager {
     public function dirEmpty(string $path): bool
     {
         $path = $this->normalizeDir($path);
-        if (!isDir($path)) {
+        if (!is_dir($path)) {
             throw FileManagerException("'$path' is not a dir.");
         }
         $dir = dir($path);
