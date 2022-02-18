@@ -17,7 +17,7 @@ class Scan extends Command
      *
      * @var string
      */
-    protected $signature = 'scan {target} {--s|sync} {--S|no-sync} {--r|recursive} {--R|no-recursive} {--K|skip-duplicates} {--k|no-skip-duplicates} {--P|suppress-source} {--p|no-suppress-source} {--e|erase-empty-dirs} {--tags=} {--associations=}';
+    protected $signature = 'scan {target} {--s|sync} {--S|no-sync} {--r|recursive} {--R|no-recursive} {--K|skip-duplicates} {--k|no-skip-duplicates} {--P|suppress-source} {--p|no-suppress-source} {--e|erase-empty-dirs} {--E|no-erase-empty-dirs} {--tags=} {--associations=}';
 
     /**
      * The description of the command.
@@ -33,19 +33,23 @@ class Scan extends Command
      */
     public function handle()
     {
-        $scanner = new Scanner();
-        $scanner->scan($this,
-            $this->argument("target"),
+        $scanner = new Scanner($this,
             $this->getSync(),
             $this->getRecursive(),
             $this->getSkipDuplicates(),
             $this->getSuppressSource(),
             $this->getOutput()->getVerbosity(),
-            $this->option('erase-empty-dirs'),           
+            $this->getEraseEmptyDirs(),
             $this->getTags(),
             $this->getAssociations());
+        $scanner->scan($this->argument("target"));
     }
 
+    protected function getEraseEmptyDirs()
+    {
+        return $this->getSwitch('erase-empty-dirs','no-erase-empty-dirs',true);
+    }
+    
     /**
      * Define the command's schedule.
      *
