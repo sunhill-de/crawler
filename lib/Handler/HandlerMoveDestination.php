@@ -19,7 +19,7 @@ class HandlerMoveDestination extends HandlerBase
  
     function process(CrawlerDescriptor $descriptor)
     {
-        if ($descriptor->fileIsToKeep()) {
+        if ($descriptor->isToKeep()) {
 
             $destination = FileManager::normalizeDir(config('crawler.media_dir').DIRECTORY_SEPARATOR.$descriptor->targetDir)."/".$descriptor->hash.".".$descriptor->ext;
 

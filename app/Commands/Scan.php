@@ -3,7 +3,7 @@
 namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Lib\Processors\Scanner;
+use Sunhill\Crawler\Processors\Scanner;
 use LaravelZero\Framework\Commands\Command;
 use App\Commands\CrawlerCommand;
 
