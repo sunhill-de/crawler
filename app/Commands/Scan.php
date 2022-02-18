@@ -41,7 +41,7 @@ class Scan extends Command
             $this->getSkipDuplicates(),
             $this->getSuppressSource(),
             $this->getOutput()->getVerbosity(),
-            $this->getOption('erase-empty-dirs'),           
+            $this->option('erase-empty-dirs'),           
             $this->getTags(),
             $this->getAssociations());
     }
