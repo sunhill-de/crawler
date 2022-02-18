@@ -1,5 +1,3 @@
- lines (10 sloc)  212 Bytes
-   
 <?php
 
 namespace Sunhill\Crawler\Facades;
