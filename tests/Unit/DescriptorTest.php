@@ -1,13 +1,16 @@
 <?php
 namespace Sunhill\Crawler\Tests\Unit;
 
-use Sunhill\Basic\Tests\TestCase;
+use Sunhill\Basic\Tests\SunhillTestCase;
 use Sunhill\Basic\Utils\DescriptorException;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Tests\CreatesApplication;
 
-class DescriptorTest extends TestCase
+class DescriptorTest extends SunhillTestCase
 {
   
+      use CreatesApplication;
+      
       /**
        * @dataProvider HelperProvider
        */
