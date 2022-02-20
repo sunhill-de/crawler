@@ -1,3 +1,5 @@
+<?php 
+
 namespace Sunhill\Crawler\Facades;
 
 use Illuminate\Support\Facades\Facade;
