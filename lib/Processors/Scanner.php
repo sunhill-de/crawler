@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Facades\FileManager;
 use Sunhill\Crawler\Handler\HandlerDBFile;
 use Sunhill\Crawler\Handler\HandlerDestination;
 use Sunhill\Crawler\Handler\HandlerDirs;
@@ -69,4 +70,19 @@ class Scanner extends CrawlerBase
         }    
     }
     
+    protected function getHandlers()
+    {
+        return [
+            HandlerDBFile::class,
+            HandlerMoveDestination::class,
+            HandlerSource::class,
+            HandlerLinks::class,
+            HandlerHash::class,
+            HandlerFileStatus::class,
+            HandlerMime::class,
+            HandlerDestination::class,
+            HandlerDirs::class,
+            HandlerDBSource::class,
+        ];
+    }
 }

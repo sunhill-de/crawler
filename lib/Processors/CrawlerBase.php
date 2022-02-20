@@ -6,14 +6,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-use Sunhill\Crawler\Handler\HandlerDB;
-use Sunhill\Crawler\Handler\HandlerFilesystem;
-use Sunhill\Crawler\Handler\HandlerLinks;
-use Sunhill\Crawler\Handler\HandlerSource;
-use Sunhill\Crawler\Handler\HandlerHash;
-use Sunhill\Crawler\Handler\HandlerFileStatus;
+use Sunhill\Crawler\CrawlerDescriptor;
 
-class CrawlerBase 
+abstract class CrawlerBase 
 {
     
     protected $command;
@@ -35,7 +30,7 @@ class CrawlerBase
         $this->info("Entering directory '$target'");    
     }
     
-    protected function enterDir($target)
+    protected function leaveDir($target)
     {
         $this->info("Leaving directory '$target'");    
     }
@@ -73,22 +68,13 @@ class CrawlerBase
     {
     }
     
+    abstract protected function getHandlers();
+    
     protected function handleFile($file)
     {
         $this->info("Processing file '$file'");
         
-        $handlers = [
-            HandlerDBFile::class,            
-            HandlerMoveDestination::class,
-            HandlerSource::class,
-            HandlerLinks::class,
-            HandlerHash::class,
-            HandlerFileStatus::class,
-            HandlerMime::class,
-            HandlerDestination::class,
-            HandlerDirs::class,
-            HandlerDBSource::class,
-        ];
+        $handlers = $this->getHandlers();
         
         usort($handlers, function($a,$b) {
             if ($a::$prio == $b::$prio) {
