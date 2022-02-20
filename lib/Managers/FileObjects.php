@@ -2,6 +2,8 @@
 
 namespace Sunhill\Crawler\Managers;
 
+use Illuminate\Support\Facades\DB;
+
 class FileObjects 
 {
  
