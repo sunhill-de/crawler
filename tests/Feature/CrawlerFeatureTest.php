@@ -167,11 +167,8 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testSkipDuplicates()
     {
         Config::set("crawler.media_dir",$this->getTempDir()."/media");
-        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --s");
-        
-        $crawler = new Scanner();
-        $crawler->scan(null,$this->getTempDir()."scan/",false,true,true,false,0, null, null);
-        
+        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --skip-duplicates");
+                
         $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
         $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/")."A.txt";
@@ -182,8 +179,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testNoSkipDuplicates()
     {
         Config::set("crawler.media_dir",$this->getTempDir()."media/");
-        $crawler = new Scanner();
-        $crawler->scan(null,$this->getTempDir()."scan/",false,true,false,false,0, null, null);
+        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --no-skip-duplicates");
         
         $search = $this->normalizeDir($this->getTempDir()."/media/sources/all".$this->getTempDir()."/scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
@@ -196,8 +192,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     {
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTempDir()."/media");
-        $crawler = new Scanner();
-        $crawler->scan(null,$this->getTempDir()."/scan",false,true,false,true,0, null, null);
+        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --suppress-source");
         
         $search = $this->normalizeDir($this->getTempDir()."/media/sources/all".$this->getTempDir()."/scan/subdir/")."AnotherA.txt";
         $this->assertFalse(file_exists($search));
@@ -209,8 +204,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testNoIgnoreSource()
     {
         Config::set("crawler.media_dir",$this->getTempDir()."media/");
-        $crawler = new Scanner();
-        $crawler->scan(null,$this->getTempDir()."scan/",false,true,false,false,0, null, null);
+        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --no-suppress-source");
         
         $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
