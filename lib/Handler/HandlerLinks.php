@@ -31,6 +31,7 @@ class HandlerLinks extends HandlerBase
     {
         foreach ($descriptor->addLinks as $link) {
             $this->addFSLink($descriptor,$link);
+            $this->addDBLink($descriptor,$link);
         }            
     }
     
@@ -55,6 +56,16 @@ class HandlerLinks extends HandlerBase
         } else {
             FileManager::createLink($destination,$relative_target);
         }        
+    }
+    
+    private function addDBLink($descriptor,$link)
+    {
+        DB::table('dirs')->insert([
+            'full_path'=>FileManager::normalizeFile($link),
+            'name'=>pathinfo($link,PATHINFO_FILENAME),
+            'parent_dir'=>FileObjects::searchDir(pathinfo($link,PATHINFO_DIRNAME)),
+            'target'=>$descriptor->fileID,
+            'ext'=>pathinfo($link,PATHINFO_EXT)]);
     }
     
     private function removeLinks($descriptor)

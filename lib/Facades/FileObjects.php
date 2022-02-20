@@ -1,13 +1,11 @@
-<?php
-
 namespace Sunhill\Crawler\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Utils extends Facade
+class FileObjects extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'utils';
+        return 'fileobjects';
     }
 }
