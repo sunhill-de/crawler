@@ -30,10 +30,17 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     {
         Config::set("crawler.media_dir",$this->getTempDir()."/media");
         return $this->artisan("scan '".$this->getTempDir()."scan/");
+<<<<<<< HEAD
         /*
         $crawler = new Scanner();
         $crawler->scan(null,$this->getTempDir()."scan/",false,true,false,false,100, null, null);
         */
+=======
+        
+        //$crawler = new Scanner();
+        //$crawler->scan(null,$this->getTempDir()."scan/",false,true,false,false,100, null, null);
+        
+>>>>>>> main
     }
     
     /**
