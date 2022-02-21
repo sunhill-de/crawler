@@ -29,7 +29,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     private function executeCrawler(string $params="")
     {
         Config::set("crawler.media_dir",$this->getTempDir()."/media");
-        return $this->artisan("scan '".$this->getTempDir()."scan/");
+        return $this->artisan("scan '".$this->getTempDir()."scan/'");
     }
     
     /**
@@ -121,7 +121,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
         
         $this->assertDatabaseHas('mime',['mime' => 'application/octet-stream']);
         
-        $this->assertDatabaseHas('dirs',['fullpath' => 'media/originals/6/d/c/']);
+        $this->assertDatabaseHas('dirs',['full_path' => '/originals/6/d/c/']);
     }
     
     public function testSync()
@@ -143,7 +143,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testRecursive()
     {
         Config::set("crawler.media_dir",$this->getTempDir()."media/");
-        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --recursive");
+        $this->artisan("scan '".$this->getTempDir()."scan/' --recursive");
     
         $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
@@ -153,7 +153,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testNoRecursive()
     {
         Config::set("crawler.media_dir",$this->getTempDir()."media/");
-        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --no-recursive");
+        $this->artisan("scan '".$this->getTempDir()."scan/' --no-recursive");
         
         $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/subdir/")."AnotherA.txt";
         $this->assertFalse(file_exists($search));
@@ -163,7 +163,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testSkipDuplicates()
     {
         Config::set("crawler.media_dir",$this->getTempDir()."/media");
-        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --skip-duplicates");
+        $this->artisan("scan '".$this->getTempDir()."scan/' --skip-duplicates");
                 
         $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
@@ -175,7 +175,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testNoSkipDuplicates()
     {
         Config::set("crawler.media_dir",$this->getTempDir()."media/");
-        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --no-skip-duplicates");
+        $this->artisan("scan '".$this->getTempDir()."scan/' --no-skip-duplicates");
         
         $search = $this->normalizeDir($this->getTempDir()."/media/sources/all".$this->getTempDir()."/scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
@@ -188,7 +188,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     {
         $this->temp = dirname(__FILE__)."/../temp";
         Config::set("crawler.media_dir",$this->getTempDir()."/media");
-        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --suppress-source");
+        $this->artisan("scan '".$this->getTempDir()."scan/' --suppress-source");
         
         $search = $this->normalizeDir($this->getTempDir()."/media/sources/all".$this->getTempDir()."/scan/subdir/")."AnotherA.txt";
         $this->assertFalse(file_exists($search));
@@ -200,7 +200,7 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
     public function testNoIgnoreSource()
     {
         Config::set("crawler.media_dir",$this->getTempDir()."media/");
-        $this->artisan("scan '".$this->getTempDir()."scan/A.txt' --no-suppress-source");
+        $this->artisan("scan '".$this->getTempDir()."scan/' --no-suppress-source");
         
         $search = $this->normalizeDir($this->getTempDir()."media/sources/all/".$this->getTempDir()."scan/subdir/")."AnotherA.txt";
         $this->assertTrue(file_exists($search));
