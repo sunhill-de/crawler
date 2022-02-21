@@ -509,7 +509,8 @@ class FileManager {
         if (!$this->dirEmpty($path)) {
             return false;
         } else {
-            return $this->eraseDir($path);
+            $this->eraseDir($path);
+            return true;
         }    
     }
     
