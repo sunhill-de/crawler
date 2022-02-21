@@ -16,7 +16,7 @@ class DescriptorTest extends SunhillTestCase
        */
       public function testHelpers($fields,$method,$expect)
       {
-        if ($expect == 'except') {  
+        if ($expect === 'except') {  
           $this->expectException(DescriptorException::class);  
         }
         $test = new CrawlerDescriptor();
@@ -25,8 +25,7 @@ class DescriptorTest extends SunhillTestCase
               $test->$key = $value;
             }
         }
-        $this->assertEquals($expect,$test->$method);
-          $a = $test->alreadyInDatabase();
+        $this->assertEquals($expect,$test->$method());
       }
   
       public function HelperProvider()
