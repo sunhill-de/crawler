@@ -18,6 +18,7 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
         $descriptor = new CrawlerDescriptor();
         $descriptor->source = $this->getTempDir().'A.txt';
         $descriptor->targetDir = '/subdir/';
+        $descriptor->state = 'regular';
         $descriptor->hash = 'abc';
         $descriptor->ext = 'txt';
         $descriptor->keep = true;
@@ -38,6 +39,7 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
         $descriptor->targetDir = '/subdir/';
         $descriptor->hash = 'abc';
         $descriptor->ext = 'txt';
+        $descriptor->state = 'regular';
         $descriptor->keep = false;
         $descriptor->fileWriteable = true;
         $descriptor->fileInDatabase = false;
@@ -51,10 +53,12 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
     
     public function testMoveFileUnwriteable()
     {
+        chmod($this->getTempDir().'A.txt',0444);
         $descriptor = new CrawlerDescriptor();
         $descriptor->source = $this->getTempDir().'A.txt';
-        $descriptor->targetDir = '/subdir/';
+        $descriptor->targetDir = 'subdir/';
         $descriptor->hash = 'abc';
+        $descriptor->state = 'regular';
         $descriptor->ext = 'txt';
         $descriptor->keep = false;
         $descriptor->fileWriteable = false;
