@@ -24,6 +24,7 @@ class HandlerLinksTest extends SunhillScenarioTestCase
         $descriptor->destination = 'originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt';
         $descriptor->addLinks = ['/source/a.txt'];
         $descriptor->removeLinks = [];
+        $descriptor->fileID = 10;
         
         Config::set("crawler.media_dir",$this->getTempDir().'media/');
         $test = new HandlerLinks();
