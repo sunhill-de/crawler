@@ -3,6 +3,7 @@
 namespace Sunhill\Crawler;
 
 use Sunhill\Basic\Utils\Descriptor;
+use Sunhill\Basic\Utils\DescriptorException;
 
 class CrawlerDescriptor extends Descriptor
 {
@@ -12,7 +13,15 @@ class CrawlerDescriptor extends Descriptor
         parent::__construct();
         $this->stop              = false;
     }
-        
+
+    protected function getParam(string $name)
+    {
+        if (!$this->isDefined($name)) {
+            throw new DescriptorException("The field to read '$name' is not defined");
+        }
+        return $this->$name;
+    }
+    
     public function alreadyInDatabase(): Bool
     {
          return $this->fileInDatabase;  
