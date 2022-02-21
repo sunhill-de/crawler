@@ -7,4 +7,5 @@
 /tests/temp
 *~
 /storage
-composer.lock
+/composer.lock
+
