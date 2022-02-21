@@ -68,6 +68,11 @@ abstract class HandlerBase
     }
     */
     
+    protected function getMediaDir() 
+    {
+        return config('crawler.media_dir');
+    }
+    
     /**
      * Adds the given dir to the descriptor
      * @param CrawlerDescriptor $descriptor
