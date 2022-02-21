@@ -31,6 +31,15 @@ class CrawlerDescriptor extends Descriptor
         }
     }
     
+    public function alreadyInStorage(): Bool
+    {
+        if ($this->isDefined('fileInStorage')) {
+            return $this->fileInStorage;
+        } else {
+            throw new DescriptorException("fileInStorage not set.");
+        }
+    }
+    
     public function fileReadable(): Bool
     {
         return $this->fileReadable;
