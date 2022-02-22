@@ -33,12 +33,22 @@ class CrawlerDescriptor extends Descriptor
     
     public function fileReadable(): Bool
     {
-        return $this->fileReadable;
+        if ($this->isDefined('filestate') && $this->filestate->isDefined('readable'))
+        {
+            return $this->filestate->readable;
+        } else {
+            throw new DescriptorException("filestate or filestate->readable not set.");
+        }
     }
 
     public function fileWriteable(): Bool
     {
-        return $this->fileWriteable;    
+        if ($this->isDefined('filestate') && $this->filestate->isDefined('writeable'))
+        {
+            return $this->filestate->writeable;
+        } else {
+            throw new DescriptorException("filestate or filestate->writeable not set.");
+        }
     }
     
     public function fileProcessable(): Bool
