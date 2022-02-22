@@ -30,10 +30,10 @@ class HandlerFileStatusTest extends SunhillScenarioTestCase
         $test = new HandlerFileStatus(null);
         $test->process($descriptor);
         
-        $this->assertTrue($descriptor->fileExists);
-        $this->assertTrue($descriptor->fileReadable);
-        $this->assertTrue($descriptor->fileWriteable);
-        $this->assertEquals('directory',$descriptor->type);
+        $this->assertTrue($descriptor->filestate->exists);
+        $this->assertTrue($descriptor->filestate->readable);
+        $this->assertTrue($descriptor->filestate->writeable);
+        $this->assertEquals('directory',$descriptor->filestate->type);
     }
     
     public function testFile()
@@ -46,10 +46,10 @@ class HandlerFileStatusTest extends SunhillScenarioTestCase
         $test = new HandlerFileStatus(null);
         $test->process($descriptor);
         
-        $this->assertTrue($descriptor->fileExists);
-        $this->assertTrue($descriptor->fileReadable);
-        $this->assertTrue($descriptor->fileWriteable);
-        $this->assertEquals('file',$descriptor->type);
+        $this->assertTrue($descriptor->filestate->exists);
+        $this->assertTrue($descriptor->filestate->readable);
+        $this->assertTrue($descriptor->filestate->writeable);
+        $this->assertEquals('file',$descriptor->filestate->type);
     }
     
     public function testUnwriteableFile()
@@ -63,10 +63,10 @@ class HandlerFileStatusTest extends SunhillScenarioTestCase
         $test = new HandlerFileStatus(null);
         $test->process($descriptor);
         
-        $this->assertTrue($descriptor->fileExists);
-        $this->assertTrue($descriptor->fileReadable);
-        $this->assertFalse($descriptor->fileWriteable);
-        $this->assertEquals('file',$descriptor->type);
+        $this->assertTrue($descriptor->filestate->exists);
+        $this->assertTrue($descriptor->filestate->readable);
+        $this->assertFalse($descriptor->filestate->writeable);
+        $this->assertEquals('file',$descriptor->filestate->type);
     }
     
     public function testUnreadableFile()
@@ -79,10 +79,10 @@ class HandlerFileStatusTest extends SunhillScenarioTestCase
         $test = new HandlerFileStatus(null);
         $test->process($descriptor);
         
-        $this->assertTrue($descriptor->fileExists);
-        $this->assertFalse($descriptor->fileReadable);
-        $this->assertFalse($descriptor->fileWriteable);
-        $this->assertEquals('file',$descriptor->type);
+        $this->assertTrue($descriptor->filestate->exists);
+        $this->assertFalse($descriptor->filestate->readable);
+        $this->assertFalse($descriptor->filestate->writeable);
+        $this->assertEquals('file',$descriptor->filestate->type);
     }
     
     
