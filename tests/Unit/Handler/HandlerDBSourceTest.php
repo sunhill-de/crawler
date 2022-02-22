@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Handler\HandlerDBSource;
 use Tests\CrawlerTestCase;
+use Sunhill\Basic\Utils\Descriptor;
 
 class HandlerDBSourceTest extends CrawlerTestCase
 {
@@ -14,8 +15,9 @@ class HandlerDBSourceTest extends CrawlerTestCase
     {
         DB::table("sources")->truncate();
         $descriptor = new CrawlerDescriptor();
+        $descriptor->file = new Descriptor();
         $descriptor->source = '/some/dir/test.txt';
-        $descriptor->fileID = 1;
+        $descriptor->file->ID = 1;
         $descriptor->addLinks = [];
         $descriptor->addDirs = [];
         

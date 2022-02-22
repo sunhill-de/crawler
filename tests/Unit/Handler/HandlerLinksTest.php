@@ -7,6 +7,7 @@ use Sunhill\Crawler\Handler\HandlerLinks;
 use Sunhill\Basic\Tests\SunhillScenarioTestCase;
 use Tests\CreatesApplication;
 use Tests\Scenarios\ComplexScanScenario;
+use Sunhill\Basic\Utils\Descriptor;
 
 class HandlerLinksTest extends SunhillScenarioTestCase
 {
@@ -21,10 +22,13 @@ class HandlerLinksTest extends SunhillScenarioTestCase
     public function testDummy()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->destination = 'originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt';
+        $descriptor->file = new Descriptor();
+        $descriptor->target = new Descriptor();
+        
+        $descriptor->target->path = 'originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt';
         $descriptor->addLinks = ['/source/a.txt'];
         $descriptor->removeLinks = [];
-        $descriptor->fileID = 10;
+        $descriptor->file->ID = 10;
         
         Config::set("crawler.media_dir",$this->getTempDir().'media/');
         $test = new HandlerLinks();

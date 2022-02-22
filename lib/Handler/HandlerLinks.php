@@ -39,7 +39,7 @@ class HandlerLinks extends HandlerBase
     private function addFSLink($descriptor,$link)
     {
         $destination = FileManager::normalizeFile(config('crawler.media_dir')."/".$link);
-        $target = FileManager::normalizeFile(config('crawler.media_dir')."/".$descriptor->destination);       
+        $target = FileManager::normalizeFile(config('crawler.media_dir')."/".$descriptor->target->path);       
         $destination_dir = pathinfo($destination,PATHINFO_DIRNAME);
         $target_dir = pathinfo($target,PATHINFO_DIRNAME);
         $relative = FileManager::getRelativeDir($destination_dir,$target_dir);
@@ -65,7 +65,7 @@ class HandlerLinks extends HandlerBase
             'full_path'=>FileManager::normalizeFile($link),
             'name'=>pathinfo($link,PATHINFO_FILENAME),
             'parent_dir'=>FileObjects::searchDirID(pathinfo($link,PATHINFO_DIRNAME)),
-            'target'=>$descriptor->fileID,
+            'target'=>$descriptor->file->ID,
             'ext'=>pathinfo($link,PATHINFO_EXTENSION)]);
     }
     

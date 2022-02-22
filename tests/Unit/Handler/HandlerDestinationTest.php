@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Handler\HandlerDestination;
 use Tests\CrawlerTestCase;
+use Sunhill\Basic\Utils\Descriptor;
 
 class HandlerDestinationTest extends CrawlerTestCase
 {
@@ -13,9 +14,12 @@ class HandlerDestinationTest extends CrawlerTestCase
     public function testDestination()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->hash = 'abc';
-        $descriptor->fileInDatabase = true;
-        $descriptor->ext = 'txt';
+        $descriptor->file = new Descriptor();
+        $descriptor->dbstate = new Descriptor();
+        
+        $descriptor->file->hash = 'abc';
+        $descriptor->dbstate->wasInDatabase = true;
+        $descriptor->file->ext = 'txt';
         
         Config::set("crawler.media_dir",dirname(__FILE__).'/../../temp');
         $test = new HandlerDestination();

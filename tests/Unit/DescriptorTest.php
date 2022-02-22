@@ -22,6 +22,9 @@ class DescriptorTest extends SunhillTestCase
         }
         $test = new CrawlerDescriptor();
         $test->filestate = new Descriptor();
+        $test->file = new Descriptor();
+        $test->dbstate = new Descriptor();
+        $test->target = new Descriptor();
         if (is_array($fields)) {
             foreach ($fields as $key => $value) {
                 if (strpos($key,'->')) {
@@ -39,7 +42,7 @@ class DescriptorTest extends SunhillTestCase
       {
         return [
           [null,'alreadyInDatabase','except'],
-          [['fileInDatabase'=>true],'alreadyInDatabase',true],
+          [['dbstate->wasInDatabase'=>true],'alreadyInDatabase',true],
           [['filestate->readable'=>true],'fileProcessable',true], 
         ];
       }

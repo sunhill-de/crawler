@@ -29,9 +29,9 @@ class HandlerDBSource extends HandlerBase
             $file = FileManager::normalizeFile($descriptor->source);
         }
         
-        if (!($result = DB::table("sources")->where("file_id",$descriptor->fileID)->where("source",$file)->first()))
+        if (!($result = DB::table("sources")->where("file_id",$descriptor->file->ID)->where("source",$file)->first()))
         {
-            DB::table("sources")->insert(["file_id"=>$descriptor->fileID,"source"=>$file,"host"=>gethostname()]);
+            DB::table("sources")->insert(["file_id"=>$descriptor->file->ID,"source"=>$file,"host"=>gethostname()]);
         }
     }
     

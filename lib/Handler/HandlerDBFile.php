@@ -19,15 +19,18 @@ class HandlerDBFile extends HandlerBase
     {
         DB::table("files")->insert(
             [
-                'hash'=>$descriptor->hash,
-                'ext'=>$descriptor->ext,
-                'size'=>$descriptor->size,
-                'mime'=>$descriptor->mimeID,
-                'cdate'=>date("Y-m-d H:i:s",$descriptor->cdate),
-                'mdate'=>date("Y-m-d H:i:s",$descriptor->mdate)
+                'hash'=>$descriptor->file->hash,
+                'ext'=>$descriptor->file->ext,
+                'size'=>$descriptor->file->size,
+                'mime'=>$descriptor->file->mimeID,
+                'cdate'=>date("Y-m-d H:i:s",$descriptor->file->cdate),
+                'mdate'=>date("Y-m-d H:i:s",$descriptor->file->mdate)
             ]);
-        $descriptor->fileID = DB::getPdo()->lastInsertId();
-        $this->verboseinfo("File added to Database. ID is '".$descriptor->fileID."'");
+        $descriptor->file->ID = DB::getPdo()->lastInsertId();
+        $descriptor->dbstate->id = $descriptor->file->ID;
+        $descriptor->dbstate->isInDatabase = true;
+        
+        $this->verboseinfo("File added to Database. ID is '".$descriptor->file->ID."'");
     }
 
     function matches(CrawlerDescriptor $descriptor): Bool

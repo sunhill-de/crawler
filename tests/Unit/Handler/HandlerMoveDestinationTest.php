@@ -7,6 +7,7 @@ use Sunhill\Crawler\Handler\HandlerMoveDestination;
 use Sunhill\Basic\Tests\SunhillScenarioTestCase;
 use Tests\CreatesApplication;
 use Tests\Scenarios\FilesystemScenario;
+use Sunhill\Basic\Utils\Descriptor;
 
 class HandlerMoveDestinationTest extends SunhillScenarioTestCase
 {
@@ -16,6 +17,9 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
     public function testCopyFile()
     {
         $descriptor = new CrawlerDescriptor();
+        $descriptor->file = new Descriptor();
+        $descriptor->target = new Descriptor();
+        
         $descriptor->source = $this->getTempDir().'A.txt';
         $descriptor->targetDir = '/subdir/';
         $descriptor->state = 'regular';

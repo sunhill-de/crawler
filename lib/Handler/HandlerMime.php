@@ -30,9 +30,9 @@ class HandlerMime extends HandlerBase
     function process(CrawlerDescriptor $descriptor)
     {
         $this->verboseinfo("  Detecting mime");
-        $descriptor->mime = $this->detectMime($descriptor->source);
-        $descriptor->mimeID = $this->getMime($descriptor->mime);
-        $descriptor->ext = $this->getExt($descriptor->source);
+        $descriptor->file->mime = $this->detectMime($descriptor->source);
+        $descriptor->file->mimeID = $this->getMime($descriptor->file->mime);
+        $descriptor->file->ext = $this->getExt($descriptor->source);
     }
 
     protected function getExt(string $file): String

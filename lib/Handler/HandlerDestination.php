@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Facades\FileManager;
+use Sunhill\Basic\Utils\Descriptor;
 
 /**
  * Handles the entries in the database
@@ -19,15 +20,19 @@ class HandlerDestination extends HandlerBase
 
     function process(CrawlerDescriptor $descriptor)
     {
-        $descriptor->targetDir = FileManager::normalizeDir("/originals/".
-                                  $descriptor->hash[0]."/".
-                                  $descriptor->hash[1]."/".
-                                  $descriptor->hash[2]."/");
-        if (!$descriptor->alreadyInDatabase()) {
-          $descriptor->addDirs[] = $descriptor->targetDir;
+        if (!$descriptor->isDefined('target')) {
+            $descriptor->target = new Descriptor();
         }
-        $descriptor->destination = $descriptor->targetDir.$descriptor->hash.'.'.$descriptor->ext;
-        $this->debug("Target dir is calulated to '".$descriptor->targetDir."'");
+        $descriptor->target->dir = FileManager::normalizeDir("/originals/".
+                                  $descriptor->file->hash[0]."/".
+                                  $descriptor->file->hash[1]."/".
+                                  $descriptor->file->hash[2]."/");
+        
+        $descriptor->target->path = $descriptor->target->dir.$descriptor->file->hash.'.'.$descriptor->file->ext;
+        if (!$descriptor->alreadyInDatabase()) {
+          $descriptor->addDirs[] = $descriptor->target->dir;
+        }
+        $this->debug("Target dir is calulated to '".$descriptor->target->dir."'");
     }
     
     function matches(CrawlerDescriptor $descriptor): Bool

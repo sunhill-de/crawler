@@ -24,10 +24,10 @@ class CrawlerDescriptor extends Descriptor
     
     public function alreadyInDatabase(): Bool
     {
-        if ($this->isDefined('fileInDatabase')) {
-            return $this->fileInDatabase;
+        if ($this->isDefined('dbstate') && $this->dbstate->isDefined('wasInDatabase')) {
+            return $this->dbstate->wasInDatabase;
         } else {
-            throw new DescriptorException("fileInDatabase not set.");           
+            throw new DescriptorException("dbstate or dbstate->wasInDatabase not set.");           
         }
     }
     

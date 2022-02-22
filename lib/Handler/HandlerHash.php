@@ -4,6 +4,7 @@ namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Basic\Utils\Descriptor;
 
 /**
  * Calculates the hash of the file and checks if this hash is already in the Database
@@ -17,46 +18,52 @@ class HandlerHash extends HandlerBase
     
     function process(CrawlerDescriptor $descriptor)
     {
-        $descriptor->hash = sha1_file($descriptor->source);        
-        $this->verboseinfo("  Hash is '".$descriptor->hash."'");
-        
-        if ($id = $this->searchHash($descriptor->hash,$descriptor)) {
-            $descriptor->fileID = $id;
-            $descriptor->fileInDatabase = true;
-        } else {
-            $descriptor->fileID = false;
-            $descriptor->fileInDatabase = false;
+        if (!$descriptor->isDefined('file')) {
+            $descriptor->file = new Descriptor();
         }
-        $this->verboseinfo("  Size is '".$descriptor->size."'");
-        $this->verboseinfo("  ctime is '".$descriptor->cdate."'");
-        $this->verboseinfo("  mdate is '".$descriptor->mdate."'");
+        if (!$descriptor->isDefined('dbstate')) {
+            $descriptor->dbstate = new Descriptor();
+        }
+        $descriptor->file->hash = sha1_file($descriptor->source);        
+        $this->verboseinfo("  Hash is '".$descriptor->file->hash."'");
+        
+        if ($id = $this->searchHash($descriptor->file->hash,$descriptor)) {
+            $descriptor->file->ID = $id;
+            $descriptor->dbstate->isInDatabase = true;
+            $descriptor->dbstate->wasInDatabase = true;
+            $descriptor->dbstate->id = $id;
+        } else {
+            $descriptor->file->ID = false;
+            $descriptor->dbstate->isInDatabase = false;
+            $descriptor->dbstate->wasInDatabase = false;
+            $descriptor->dbstate->id = false;
+        }
+        $this->verboseinfo("  Size is '".$descriptor->file->size."'");
+        $this->verboseinfo("  ctime is '".$descriptor->file->cdate."'");
+        $this->verboseinfo("  mdate is '".$descriptor->file->mdate."'");
         
     }
 
     protected function searchHash($hash,$descriptor)
     {
         if ($result = DB::table("files")->where("hash",$hash)->first()) {
-            $descriptor->size   = $result->size;
-            $descriptor->cdate  = $result->cdate;
-            $descriptor->mdate  = $result->mdate;
-            $descriptor->mimeID = $result->mime;
-            $descriptor->mime   = $this->lookUpMime($result->mime); 
-            $descriptor->ext    = $result->ext;
-            $descriptor->state  = $result->state;
+            $descriptor->file->size   = $result->size;
+            $descriptor->file->cdate  = $result->cdate;
+            $descriptor->file->mdate  = $result->mdate;
+            $descriptor->file->mimeID = $result->mime;
+            $descriptor->file->mime   = $this->lookUpMime($result->mime); 
+            $descriptor->file->ext    = $result->ext;
+            $descriptor->file->state  = $result->state;
             $this->verboseinfo(" Hash already in database");
             return true;
         } else {
-            $descriptor->size  = filesize($descriptor->source);
-            $descriptor->cdate = filectime($descriptor->source);
-            $descriptor->mdate = filemtime($descriptor->source);
-            $descriptor->state = 'regular';
+            $descriptor->file->size  = filesize($descriptor->source);
+            $descriptor->file->cdate = filectime($descriptor->source);
+            $descriptor->file->mdate = filemtime($descriptor->source);
+            $descriptor->file->state = 'regular';
             $this->verboseinfo(" Hash not in database");
             return false;
         }
-        $descriptor->targetDir = $this->normalizeDir("/originals/".
-                                        $descriptor->hash[0]."/".
-                                        $descriptor->hash[1]."/".
-                                        $descriptor->hash[2]."/");
     }
 
     private function lookUpMime($mimeid): String
