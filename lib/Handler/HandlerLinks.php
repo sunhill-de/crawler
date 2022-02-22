@@ -64,7 +64,7 @@ class HandlerLinks extends HandlerBase
         DB::table('links')->insert([
             'full_path'=>FileManager::normalizeFile($link),
             'name'=>pathinfo($link,PATHINFO_FILENAME),
-            'parent_dir'=>FileObjects::searchDir(pathinfo($link,PATHINFO_DIRNAME)),
+            'parent_dir'=>FileObjects::searchDirID(pathinfo($link,PATHINFO_DIRNAME)),
             'target'=>$descriptor->fileID,
             'ext'=>pathinfo($link,PATHINFO_EXTENSION)]);
     }
