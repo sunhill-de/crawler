@@ -27,7 +27,7 @@ class HandlerFileStatus extends HandlerBase
             $descriptor->filestate->writeable = is_writeable($descriptor->source);
             $descriptor->filestate->currentLocation = $descriptor->source;
             $descriptor->filestate->originalLocation = $descriptor->source;
-            $descriptor->filestate->fileInMedia = FileManager::fileInDir($descriptor->source,FileManager::getMediaDir()); 
+            $descriptor->filestate->inMedia = FileManager::fileInDir($descriptor->source,FileManager::getMediaDir()); 
             
             if (is_dir($descriptor->source)) {
                 $descriptor->filestate->type = 'directory';

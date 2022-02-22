@@ -8,7 +8,7 @@ use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Handler\HandlerFileStatus;
 use Tests\CrawlerTestCase;
 use Tests\CreatesApplication;
-use Tests\Scenarios\SimpleScanScenario;
+use Tests\Scenarios\ComplexScanScenario;
 
 class HandlerFileStatusTest extends SunhillScenarioTestCase
 {
@@ -17,7 +17,7 @@ class HandlerFileStatusTest extends SunhillScenarioTestCase
     
     protected function GetScenarioClass()
     {
-        return SimpleScanScenario::class;
+        return ComplexScanScenario::class;
     }
     
     public function testDirectory()
@@ -85,5 +85,32 @@ class HandlerFileStatusTest extends SunhillScenarioTestCase
         $this->assertEquals('file',$descriptor->filestate->type);
     }
     
+    public function testInMedia()
+    {
+        $temp = $this->getTempDir();
+        Config::set("crawler.media_dir",$this->getTempDir().'/media');
+
+        $descriptor = new CrawlerDescriptor();
+        $descriptor->source = $temp.'/scan'; // Better not run as root
+
+        $test = new HandlerFileStatus(null);
+        $test->process($descriptor);
+        
+        $this->assertFalse($descriptor->filestate->inMedia);
+    }
+    
+    public function testNotInMedia()
+    {
+        $temp = $this->getTempDir();
+        Config::set("crawler.media_dir",$this->getTempDir().'/media');
+        
+        $descriptor = new CrawlerDescriptor();
+        $descriptor->source = $temp.'/media/originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt'; // Better not run as root
+        
+        $test = new HandlerFileStatus(null);
+        $test->process($descriptor);
+        
+        $this->assertTrue($descriptor->filestate->inMedia);
+    }
     
 }
