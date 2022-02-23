@@ -85,4 +85,15 @@ class CrawlerDescriptor extends Descriptor
         return $this->stateIs(['regular','converted_from','alterated_from']);
     }
     
+    public function fileWasInDatabase() 
+    {
+        if ($this->isDefined('dbstate') && $this->dbstate->isDefined('wasInDatabase'))
+        {
+            return $this->dbstate->wasInDatabase;
+        } else {
+            throw new DescriptorException("dbstate or dbstate->wasInDatabase not set.");
+        }
+    }
+    
+   
 }
