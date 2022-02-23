@@ -69,9 +69,9 @@ class CrawlerDescriptor extends Descriptor
     public function stateIs($state): Bool
     {
         if (is_array($state)) {
-            return in_array($this->state,$state);
+            return in_array($this->file->state,$state);
         } else {
-            return $this->state == $state;
+            return $this->file->state == $state;
         }    
     }
     
