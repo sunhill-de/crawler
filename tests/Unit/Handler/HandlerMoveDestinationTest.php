@@ -19,15 +19,17 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
         $descriptor = new CrawlerDescriptor();
         $descriptor->file = new Descriptor();
         $descriptor->target = new Descriptor();
+        $descriptor->dbstate = new Descriptor();
         
         $descriptor->source = $this->getTempDir().'A.txt';
-        $descriptor->targetDir = '/subdir/';
-        $descriptor->state = 'regular';
-        $descriptor->hash = 'abc';
-        $descriptor->ext = 'txt';
+        $descriptor->target->dir = '/subdir/';
+        $descriptor->file->state = 'regular';
+        $descriptor->file->hash = 'abc';
+        $descriptor->file->ext = 'txt';
         $descriptor->keep = true;
-        $descriptor->fileWriteable = true;
-        $descriptor->fileInDatabase = false;
+        $descriptor->filestate->writeable = true;
+        $descriptor->dbstate->wasInDatabase = false;
+        
         Config::set("crawler.media_dir",$this->getTempDir());
         $test = new HandlerMoveDestination();
         $test->process($descriptor);
@@ -39,14 +41,18 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
     public function testMoveFile()
     {
         $descriptor = new CrawlerDescriptor();
+        $descriptor->file = new Descriptor();
+        $descriptor->target = new Descriptor();
+        $descriptor->dbstate = new Descriptor();
+        
         $descriptor->source = $this->getTempDir().'A.txt';
-        $descriptor->targetDir = '/subdir/';
-        $descriptor->hash = 'abc';
-        $descriptor->ext = 'txt';
-        $descriptor->state = 'regular';
+        $descriptor->target->dir = '/subdir/';
+        $descriptor->file->hash = 'abc';
+        $descriptor->file->ext = 'txt';
+        $descriptor->file->state = 'regular';
         $descriptor->keep = false;
-        $descriptor->fileWriteable = true;
-        $descriptor->fileInDatabase = false;
+        $descriptor->filestate->writeable = true;
+        $descriptor->dbstate->wasInDatabase = false;
         Config::set("crawler.media_dir",$this->getTempDir());
         $test = new HandlerMoveDestination();
         $test->process($descriptor);
@@ -59,14 +65,19 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
     {
         chmod($this->getTempDir().'A.txt',0444);
         $descriptor = new CrawlerDescriptor();
+        $descriptor->file = new Descriptor();
+        $descriptor->target = new Descriptor();
+        $descriptor->dbstate = new Descriptor();
+        
         $descriptor->source = $this->getTempDir().'A.txt';
-        $descriptor->targetDir = 'subdir/';
-        $descriptor->hash = 'abc';
-        $descriptor->state = 'regular';
-        $descriptor->ext = 'txt';
+        $descriptor->target->dir = 'subdir/';
+        $descriptor->file->hash = 'abc';
+        $descriptor->file->state = 'regular';
+        $descriptor->file->ext = 'txt';
         $descriptor->keep = false;
-        $descriptor->fileWriteable = false;
-        $descriptor->fileInDatabase = false;
+        $descriptor->filestate->writeable = false;
+        $descriptor->dbstate->wasInDatabase = false;
+        
         Config::set("crawler.media_dir",$this->getTempDir());
         $test = new HandlerMoveDestination();
         $test->process($descriptor);

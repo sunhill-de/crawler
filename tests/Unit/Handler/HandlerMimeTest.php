@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Handler\HandlerMime;
 use Tests\CrawlerTestCase;
+use Sunhill\Basic\Utils\Descriptor;
 
 class HandlerMimeTest extends CrawlerTestCase
 {
@@ -17,12 +18,15 @@ class HandlerMimeTest extends CrawlerTestCase
     {
         $descriptor = new CrawlerDescriptor();
         $descriptor->source = dirname(__FILE__).'/../..'.$file;
-        $descriptor->fileInDatabase = true;
+        $descriptor->file = new Descriptor();
+        $descriptor->dbstate = new Descriptor();
+        
+        $descriptor->dbstate->wasInDatabase = true;
         
         $test = new HandlerMime();
         $test->process($descriptor);
         
-        $this->assertEquals($expected,$descriptor->mime);
+        $this->assertEquals($expected,$descriptor->file->mime);
     }
     
     public function MimeProvider()
