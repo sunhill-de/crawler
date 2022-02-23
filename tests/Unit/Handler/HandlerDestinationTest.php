@@ -25,6 +25,6 @@ class HandlerDestinationTest extends CrawlerTestCase
         $test = new HandlerDestination();
         $test->process($descriptor);
         
-        $this->assertEquals("/originals/a/b/c/",$descriptor->targetDir);
+        $this->assertEquals("/originals/a/b/c/",$descriptor->target->dir);
     }
 }
