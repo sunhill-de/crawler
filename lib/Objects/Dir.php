@@ -34,9 +34,9 @@ class Dir extends fileobject
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::integer('max_files')
             ->set_default(0)
             ->set_description('How many files per directory are allowed (0=no limit)')

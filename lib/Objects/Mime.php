@@ -26,7 +26,7 @@ class Mime extends ORMObject {
     
     public static $table_name = 'mimes';
     public static $object_infos = [
-        'name'=>'mimes',       // A repetition of static:$object_name @todo see above
+        'name'=>'mime',       // A repetition of static:$object_name @todo see above
         'table'=>'mimes',     // A repitition of static:$table_name
         'name_s'=>'MIME Type',     // A human readable name in singular
         'name_p'=>'MIME Types',    // A human readable name in plural
@@ -34,9 +34,9 @@ class Mime extends ORMObject {
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties() {
-        parent::setup_properties();
-        self::varchar('group')
+    protected static function setupProperties() {
+        parent::setupProperties();
+        self::varchar('mimegroup')
             ->set_description('The group of the MIME type')
             ->set_displayable(true)
             ->set_editable(false)
@@ -64,7 +64,7 @@ class Mime extends ORMObject {
     }
 
     public function calculate_mime() {
-        return $this->group."/".$this->item;
+        return $this->mimegroup."/".$this->item;
     }
         
 }

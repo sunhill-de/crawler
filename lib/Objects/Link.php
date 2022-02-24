@@ -36,9 +36,9 @@ class Link extends fileobject
         return $this->parent_dir->full_path.$this->name.'.'.$this->ext;
     }
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::object('target')
             ->set_allowed_objects(['file'])
             ->set_default(null)

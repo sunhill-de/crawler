@@ -38,9 +38,9 @@ class File extends fileobject {
         'options'=>0,           // Reserved for later purposes
     ];
 
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::object('reference')
             ->set_allowed_objects(['file'])
             ->set_default(null)
@@ -49,14 +49,14 @@ class File extends fileobject {
             ->set_editable(true)
             ->set_groupeditable(false);
         self::varchar('sha1_hash')
-            ->set_maxlen(40)
+            ->setMaxLen(40)
             ->searchable()
             ->set_description('SHA1-Hash of the whole file.')
             ->set_displayable(true)
             ->set_editable(false)
             ->set_groupeditable(false);
         self::varchar('md5_hash')
-            ->set_maxlen(32)
+            ->setMaxLen(32)
             ->searchable()
             ->set_description('The md5 hash of the whole file')
             ->set_displayable(true)
@@ -81,7 +81,7 @@ class File extends fileobject {
             ->set_editable(false)
             ->set_groupeditable(false);            
         self::enum('type')
-            ->set_enum_values([
+            ->setEnumValues([
                 'regular',              // Normal file
                 'converted_to',         // This file war permanently converted to another file (this file isn't existing anymore but is not deleted)
                 'deleted',              // This file was deleted (not converted)

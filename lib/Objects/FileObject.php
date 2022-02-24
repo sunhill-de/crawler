@@ -22,7 +22,7 @@ use Sunhill\Crawler\Facades\FileManager;
  * @author lokal
  *        
  */
-abstract class FileObject extends ORMObject {
+class FileObject extends ORMObject {
     
     public static $table_name = 'fileobjects';
     public static $object_infos = [
@@ -34,8 +34,8 @@ abstract class FileObject extends ORMObject {
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties() {
-        parent::setup_properties();
+    protected static function setupProperties() {
+        parent::setupProperties();
         self::integer('fileobject_exists')
             ->set_default(1)
             ->set_description('Does this file object (still) exists?')

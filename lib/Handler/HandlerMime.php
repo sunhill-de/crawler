@@ -69,7 +69,7 @@ class HandlerMime extends HandlerBase
         }
         $result = new Mime();
         list($main,$sub) = explode('/',$mime);
-        $result->group = $main;
+        $result->mimegroup = $main;
         $result->item = $sub;
         $result->default_ext = '';
         $result->commit();
