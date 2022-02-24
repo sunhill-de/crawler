@@ -13,7 +13,8 @@
  */
 namespace Sunhill\Files\Objects;
 
-use Sunhill\ORM\Objects\oo_object;
+use Sunhill\ORM\Objects\ORMObject;
+use Sunhill\Crawler\Facades\FileManager;
 
 /**
  * Abstract base class for all other fileobjects (files, dirs and links)
@@ -21,7 +22,7 @@ use Sunhill\ORM\Objects\oo_object;
  * @author lokal
  *        
  */
-abstract class fileobject extends oo_object {
+abstract class FileObject extends ORMObject {
     
     public static $table_name = 'fileobjects';
     public static $object_infos = [

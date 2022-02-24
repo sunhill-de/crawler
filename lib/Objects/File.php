@@ -13,7 +13,7 @@
  */
 namespace Sunhill\Files\Objects;
 
-use Sunhill\Files\Facades\MediaFiles;
+use Sunhill\Crawler\Facades\FileManager;
 
 /**
  * The class for files. This class provides informations about a spcecific file. The file itself is not able

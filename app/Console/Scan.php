@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Commands;
+namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Sunhill\Crawler\Processors\Scanner;
-use LaravelZero\Framework\Commands\Command;
-use App\Commands\CrawlerCommand;
+use Illuminate\Console\Command;
+use App\Console\CrawlerCommand;
 
 class Scan extends Command
 {

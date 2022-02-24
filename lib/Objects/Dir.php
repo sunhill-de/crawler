@@ -13,7 +13,7 @@
  */
 namespace Sunhill\Files\Objects;
 
-use Sunhill\Files\Facades\MediaFiles;
+use Sunhill\Crawler\Facades\FileManager;
 
 /**
  * The class for dirs
@@ -56,26 +56,8 @@ class Dir extends fileobject
         if (!is_null($parent)) {
             return $this->parent_dir->full_path.$this->name.'/';
         } else {
-            return MediaFiles::get_media_dir().$this->name.'/';
+            return FileManager::getMediaDir().$this->name.'/';
         }
     }
     
-    public static function search_or_insert_dir(string $path) {
-        $path = MediaFiles::get_effective_dir($path);
-        $search = static::search()->where('full_path',$path)->load_if_exists();
-        if (is_null($search)) {
-            $parts = explode(DIRECTORY_SEPARATOR,$path);
-            array_pop($parts);
-            $dir = new dir();
-            $dir->name = array_pop($parts);
-            $parent_dir = implode(DIRECTORY_SEPARATOR,$parts);
-            if (!($parent_dir == MediaFiles::get_media_dir())) {
-                $dir->parent_dir = dir::search_or_insert_dir($parent_dir);
-            }
-            $dir->commit();
-            return $dir;
-        } else {
-            return $search;
-        }
-    }
 }
