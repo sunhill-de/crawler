@@ -11,7 +11,7 @@
  * Coverage: unknown
  * Dependencies: oo_object
  */
-namespace Sunhill\Files\Objects;
+namespace Sunhill\Crawler\Objects;
 
 use Sunhill\ORM\Objects\ORMObject;
 use Sunhill\Crawler\Facades\FileManager;

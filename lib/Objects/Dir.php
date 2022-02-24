@@ -11,7 +11,7 @@
  * Coverage: unknown
  * Dependencies: fileobject
  */
-namespace Sunhill\Files\Objects;
+namespace Sunhill\Crawler\Objects;
 
 use Sunhill\Crawler\Facades\FileManager;
 

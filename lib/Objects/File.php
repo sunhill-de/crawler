@@ -11,7 +11,7 @@
  * Coverage: unknown
  * Dependencies: fileobject
  */
-namespace Sunhill\Files\Objects;
+namespace Sunhill\Crawler\Objects;
 
 use Sunhill\Crawler\Facades\FileManager;
 
@@ -67,7 +67,8 @@ class File extends fileobject {
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true);
-        self::varchar('mime')
+        self::object('mime')
+            ->set_allowed_objects(['mime'])
             ->set_description('The mime type of this file')
             ->set_displayable(true)
             ->set_editable(false)

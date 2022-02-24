@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameMime extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class RenameMime extends Migration
      */
     public function up()
     {
-        Schema::rename('mime','old_mime');
+        Schema::rename('links','old_links');
+        
     }
 
     /**
@@ -23,6 +24,7 @@ class RenameMime extends Migration
      */
     public function down()
     {
-        Schema::rename('old_mime','mime');
+        Schema::rename('old_links','links');
+        
     }
-}
+};

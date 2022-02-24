@@ -9,6 +9,14 @@ use Sunhill\Crawler\Managers\Utils;
 use Sunhill\Crawler\Managers\FileObjects;
 use Sunhill\Basic\Facades\Checks;
 use Sunhill\Crawler\Checks\CheckFileDatabase;
+use Sunhill\ORM\Facades\Classes;
+
+use Sunhill\Crawler\Objects\FileObject;
+use Sunhill\Crawler\Objects\File;
+use Sunhill\Crawler\Objects\Dir;
+use Sunhill\Crawler\Objects\Link;
+use Sunhill\Crawler\Objects\Mime;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,6 +45,11 @@ class AppServiceProvider extends ServiceProvider
        $this->app->singleton(FileObjects::class, function () { return new FileObjects(); } );
        $this->app->alias(FileObjects::class,'fileobjects');
        Checks::installChecker(CheckFileDatabase::class);
-       //
+       
+       Classes::registerClass(FileObject::class);
+       Classes::registerClass(Dir::class);
+       Classes::registerClass(File::class);
+       Classes::registerClass(Link::class);
+       Classes::registerClass(Mime::class);
     }
 }

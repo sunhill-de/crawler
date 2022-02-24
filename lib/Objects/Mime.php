@@ -11,7 +11,7 @@
  * Coverage: unknown
  * Dependencies: oo_object
  */
-namespace Sunhill\Files\Objects;
+namespace Sunhill\Crawler\Objects;
 
 use Sunhill\ORM\Objects\ORMObject;
 use Sunhill\Crawler\Facades\FileManager;
@@ -22,7 +22,7 @@ use Sunhill\Crawler\Facades\FileManager;
  * @author lokal
  *        
  */
-abstract class Mime extends ORMObject {
+class Mime extends ORMObject {
     
     public static $table_name = 'mimes';
     public static $object_infos = [

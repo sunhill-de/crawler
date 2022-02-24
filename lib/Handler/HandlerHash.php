@@ -5,6 +5,7 @@ namespace Sunhill\Crawler\Handler;
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Basic\Utils\Descriptor;
+use Sunhill\Crawler\Objects\File;
 
 /**
  * Calculates the hash of the file and checks if this hash is already in the Database
@@ -18,22 +19,21 @@ class HandlerHash extends HandlerBase
     
     function process(CrawlerDescriptor $descriptor)
     {
-        if (!$descriptor->isDefined('file')) {
-            $descriptor->file = new Descriptor();
+        if (!$descriptor->isDefined('fileinfo')) {
+            $descriptor->fileinfo = new Descriptor();
         }
         if (!$descriptor->isDefined('dbstate')) {
             $descriptor->dbstate = new Descriptor();
         }
-        $descriptor->file->hash = sha1_file($descriptor->source);        
-        $this->verboseinfo("  Hash is '".$descriptor->file->hash."'");
+        $descriptor->fileinfo->hash = sha1_file($descriptor->source);        
+        $this->verboseinfo("  Hash is '".$descriptor->fileinfo->hash."'");
         
-        if ($id = $this->searchHash($descriptor->file->hash,$descriptor)) {
-            $descriptor->file->ID = $id;
+        if ($file = $this->searchHash($descriptor->fileinfo->hash,$descriptor)) {
+            $descriptor->file = $file;
             $descriptor->dbstate->isInDatabase = true;
             $descriptor->dbstate->wasInDatabase = true;
             $descriptor->dbstate->id = $id;
         } else {
-            $descriptor->file->ID = false;
             $descriptor->dbstate->isInDatabase = false;
             $descriptor->dbstate->wasInDatabase = false;
             $descriptor->dbstate->id = false;
@@ -46,7 +46,7 @@ class HandlerHash extends HandlerBase
 
     protected function searchHash($hash,$descriptor)
     {
-        if ($result = DB::table("files")->where("hash",$hash)->first()) {
+        if ($result = File::search()->where('hash','=',$hash)->loadIfExists()) {
             $descriptor->file->size   = $result->size;
             $descriptor->file->cdate  = $result->cdate;
             $descriptor->file->mdate  = $result->mdate;
