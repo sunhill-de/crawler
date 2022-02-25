@@ -9,7 +9,7 @@ use Sunhill\Basic\Tests\Scenario\ScenarioWithTables;
 
 class SimpleScanScenario extends ScenarioBase
 {
-    use ScenarioWithDirs,ScenarioWithFiles,ScenarioWithTables;
+    use ScenarioWithDirs,ScenarioWithFiles,ScenarioWithObjects;
     
     protected $Requirements = [
         'Dirs'=>[
@@ -18,7 +18,7 @@ class SimpleScanScenario extends ScenarioBase
         'Files'=>[
             'destructive'=>true,
         ],
-        'Tables'=>[
+        'Objects'=>[
             'destructive'=>true,
         ],
     ];
@@ -43,14 +43,14 @@ class SimpleScanScenario extends ScenarioBase
         ];    
     }
     
-    function GetTables() {
+    function GetObjects() {
         return [
             'files'=>[
-                ['id','hash','ext','size','mime','cdate','mdate'],
+                ['id','sha1_hash','ext','size','mime','cdate','mdate'],
                 [
                 ]
             ],
-            'mime'=>[
+            'mimes'=>[
                 ['id','mime'],
                 [
                 ]
