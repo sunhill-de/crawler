@@ -46,7 +46,7 @@ class HandlerHash extends HandlerBase
 
     protected function searchHash($hash,$descriptor)
     {
-        if ($result = File::search()->where('hash','=',$hash)->loadIfExists()) {
+        if ($result = File::search()->where('sha1_hash','=',$hash)->loadIfExists()) {
             $descriptor->file->size   = $result->size;
             $descriptor->file->cdate  = $result->cdate;
             $descriptor->file->mdate  = $result->mdate;
