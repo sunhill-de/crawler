@@ -56,7 +56,7 @@ class Dir extends fileobject
         if (!is_null($parent)) {
             return $this->parent_dir->full_path.$this->name.'/';
         } else {
-            return FileManager::getMediaDir().$this->name.'/';
+            return $this->name.'/';
         }
     }
     
