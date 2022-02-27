@@ -23,12 +23,14 @@ class HandlerDestination extends HandlerBase
         if (!$descriptor->isDefined('target')) {
             $descriptor->target = new Descriptor();
         }
-        $descriptor->target->dir = FileManager::normalizeDir("/originals/".
-                                  $descriptor->file->hash[0]."/".
-                                  $descriptor->file->hash[1]."/".
-                                  $descriptor->file->hash[2]."/");
+        $hash = $descriptor->file->sha1_hash;
         
-        $descriptor->target->path = $descriptor->target->dir.$descriptor->file->hash.'.'.$descriptor->file->ext;
+        $descriptor->target->dir = FileManager::normalizeDir("/originals/".
+                                  $hash[0]."/".
+                                  $hash[1]."/".
+                                  $hash[2]."/");
+        
+        $descriptor->target->path = $descriptor->target->dir.$descriptor->file->sha1_hash.'.'.$descriptor->file->ext;
         if (!$descriptor->alreadyInDatabase()) {
           $descriptor->addDirs[] = $descriptor->target->dir;
         }
