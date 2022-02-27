@@ -32,50 +32,25 @@ class HandlerHash extends HandlerBase
             $descriptor->file = $file;
             $descriptor->dbstate->isInDatabase = true;
             $descriptor->dbstate->wasInDatabase = true;
-            $descriptor->dbstate->id = $id;
+            $descriptor->dbstate->id = $file->getID();
         } else {
             $descriptor->dbstate->isInDatabase = false;
             $descriptor->dbstate->wasInDatabase = false;
             $descriptor->dbstate->id = false;
-        }
-        $this->verboseinfo("  Size is '".$descriptor->file->size."'");
-        $this->verboseinfo("  ctime is '".$descriptor->file->cdate."'");
-        $this->verboseinfo("  mdate is '".$descriptor->file->mdate."'");
-        
+        }        
     }
 
     protected function searchHash($hash,$descriptor)
     {
         if ($result = File::search()->where('sha1_hash','=',$hash)->loadIfExists()) {
-            $descriptor->file->size   = $result->size;
-            $descriptor->file->cdate  = $result->cdate;
-            $descriptor->file->mdate  = $result->mdate;
-            $descriptor->file->mimeID = $result->mime;
-            $descriptor->file->mime   = $this->lookUpMime($result->mime); 
-            $descriptor->file->ext    = $result->ext;
-            $descriptor->file->state  = $result->state;
             $this->verboseinfo(" Hash already in database");
-            return true;
+            return $result;
         } else {
-            $descriptor->file->size  = filesize($descriptor->source);
-            $descriptor->file->cdate = filectime($descriptor->source);
-            $descriptor->file->mdate = filemtime($descriptor->source);
-            $descriptor->file->state = 'regular';
             $this->verboseinfo(" Hash not in database");
             return false;
         }
     }
 
-    private function lookUpMime($mimeid): String
-    {
-        if ($result = DB::table('mime')->where('id',$mimeid)->first()) {
-            return $result->mime;        
-        } else {
-            $this->error("Mime with ID '$mimeid'was not found in DB.");
-            return "unknown mime";
-        }
-    }
-    
     function matches(CrawlerDescriptor $descriptor): Bool
     {
         return $descriptor->fileReadable();
