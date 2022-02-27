@@ -120,4 +120,14 @@ class File extends fileobject {
             ->set_groupeditable(false);
     }
     
+    function calculate_full_path()
+    {
+        if (is_null($this->parent_dir)) {
+            return $this->sha1_hash.'.'.$this->ext;       
+        } else {
+            return $this->parent_dir->full_path.'.'.$this->sha1_hash.'.'.$this->ext;
+            
+        }
+    }
+    
 }
