@@ -18,7 +18,7 @@ use Sunhill\ORM\Tests\Scenario\ScenarioWithRegistration;
 
 class ComplexScanScenario extends ScenarioBase
 {
-    use ScenarioWithDirs,ScenarioWithFiles,ScenarioWithObjects,ScenarioWithRegistration;
+    use ScenarioWithDirs,ScenarioWithFiles,ScenarioWithObjects; 
     
     protected $Requirements = [
         'Dirs'=>[
@@ -34,27 +34,6 @@ class ComplexScanScenario extends ScenarioBase
             'destructive'=>true,
         ]
     ];
-    
-    public function SetupBeforeTestsObjects()
-    {
-        Classes::flushClasses();
-        Classes::registerClass(FileObject::class);
-        Classes::registerClass(Dir::class);
-        Classes::registerClass(File::class);
-        Classes::registerClass(Link::class);
-        Classes::registerClass(Mime::class);
-    }
-    
-    
-    public function GetRegistration(): Array {
-        return [
-            FileObject::class,
-            Dir::class,
-            File::class,
-            Link::class,
-            Mime::class,
-            ];
-    }
     
     protected function getDirs()
     {
@@ -90,13 +69,22 @@ class ComplexScanScenario extends ScenarioBase
                     'mime'=>['application','octet-stream']
                 ]
             ],
-/*            'files'=>[
-                ['sha1_hash','ext','size','mime','cdate','mdate'],
+            'Dir'=>[
+                ['name','parent_dir'],
                 [
-                    ['6dcd4ce23d88e2ee9568ba546c007c63d9131c1b','txt',1,'=>mime','2022-02-11 00:00:00','2022-02-11 00:00:00'],
+                    'originals'=>['originals',null],
+                    'd6'=>['6','=>originals'],
+                    'dd'=>['d','=>d6'],
+                    'dc'=>['c','=>dd'],
                 ]
             ],
-            'sources'=>[
+            'File'=>[
+                ['sha1_hash','ext','size','mime','created','changed','parent_dir'],
+                [
+                    'file'=>['6dcd4ce23d88e2ee9568ba546c007c63d9131c1b','txt',1,'=>mime','2022-02-11 00:00:00','2022-02-11 00:00:00','=>dc'],
+                ]
+            ],
+            /*'sources'=>[
                 ['file_id','source','host'],
                 [
                     [1,'/some/source','somehost']
