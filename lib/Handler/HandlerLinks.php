@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Facades\FileManager;
 use Sunhill\Crawler\Facades\FileObjects;
+use Sunhill\Crawler\Objects\Link;
 
 /**
  * Handles the entries in the database
@@ -61,12 +62,12 @@ class HandlerLinks extends HandlerBase
     
     private function addDBLink($descriptor,$link)
     {
-        DB::table('links')->insert([
-            'full_path'=>FileManager::normalizeFile($link),
-            'name'=>pathinfo($link,PATHINFO_FILENAME),
-            'parent_dir'=>FileObjects::searchDirID(pathinfo($link,PATHINFO_DIRNAME)),
-            'target'=>$descriptor->file->ID,
-            'ext'=>pathinfo($link,PATHINFO_EXTENSION)]);
+        $link_obj = new Link();
+        $link_obj->name = pathinfo($link,PATHINFO_FILENAME);
+        $link_obj->ext = pathinfo($link,PATHINFO_EXTENSION);
+        $link_obj->parent_dir = FileObjects::searchDir(pathinfo($link,PATHINFO_DIRNAME));
+        $link_obj->target = $descriptor->file;
+        $link_obj->commit();
     }
     
     private function removeLinks($descriptor)
