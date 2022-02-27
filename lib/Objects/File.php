@@ -30,7 +30,7 @@ class File extends fileobject {
     public static $table_name = 'files';
 
     public static $object_infos = [
-        'name'=>'file',       // A repetition of static:$object_name @todo see above
+        'name'=>'File',       // A repetition of static:$object_name @todo see above
         'table'=>'files',     // A repitition of static:$table_name
         'name_s' => 'file',
         'name_p' => 'files',

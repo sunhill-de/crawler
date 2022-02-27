@@ -7,10 +7,18 @@ use Sunhill\Basic\Tests\Scenario\ScenarioWithDirs;
 use Sunhill\Basic\Tests\Scenario\ScenarioWithFiles;
 use Sunhill\Basic\Tests\Scenario\ScenarioWithTables;
 use Sunhill\Basic\Tests\Scenario\ScenarioWithLinks;
+use Sunhill\Crawler\Objects\Dir;
+use Sunhill\Crawler\Objects\File;
+use Sunhill\Crawler\Objects\FileObject;
+use Sunhill\Crawler\Objects\Link;
+use Sunhill\Crawler\Objects\Mime;
+use Sunhill\ORM\Facades\Classes;
+use Sunhill\ORM\Tests\Scenario\ScenarioWithObjects;
+use Sunhill\ORM\Tests\Scenario\ScenarioWithRegistration;
 
 class ComplexScanScenario extends ScenarioBase
 {
-    use ScenarioWithDirs,ScenarioWithFiles,ScenarioWithTables;
+    use ScenarioWithDirs,ScenarioWithFiles,ScenarioWithObjects,ScenarioWithRegistration;
     
     protected $Requirements = [
         'Dirs'=>[
@@ -19,10 +27,34 @@ class ComplexScanScenario extends ScenarioBase
         'Files'=>[
             'destructive'=>true,
         ],
-        'Tables'=>[
+        'Objects'=>[
             'destructive'=>true,
         ],
+        'Registration'=>[
+            'destructive'=>true,
+        ]
     ];
+    
+    public function SetupBeforeTestsObjects()
+    {
+        Classes::flushClasses();
+        Classes::registerClass(FileObject::class);
+        Classes::registerClass(Dir::class);
+        Classes::registerClass(File::class);
+        Classes::registerClass(Link::class);
+        Classes::registerClass(Mime::class);
+    }
+    
+    
+    public function GetRegistration(): Array {
+        return [
+            FileObject::class,
+            Dir::class,
+            File::class,
+            Link::class,
+            Mime::class,
+            ];
+    }
     
     protected function getDirs()
     {
@@ -50,18 +82,18 @@ class ComplexScanScenario extends ScenarioBase
         ];    
     }
     
-    function GetTables() {
+    function GetObjects() {
         return [
-            'files'=>[
-                ['id','hash','ext','size','mime','cdate','mdate'],
+            'Mime'=>[
+                ['mimegroup','item'],
                 [
-                    [1,'6dcd4ce23d88e2ee9568ba546c007c63d9131c1b','txt',1,1,'2022-02-11 00:00:00','2022-02-11 00:00:00'],
+                    'mime'=>['application','octet-stream']
                 ]
             ],
-            'mime'=>[
-                ['id','mime'],
+/*            'files'=>[
+                ['sha1_hash','ext','size','mime','cdate','mdate'],
                 [
-                    [1,'application/octet-stream']
+                    ['6dcd4ce23d88e2ee9568ba546c007c63d9131c1b','txt',1,'=>mime','2022-02-11 00:00:00','2022-02-11 00:00:00'],
                 ]
             ],
             'sources'=>[
@@ -69,8 +101,8 @@ class ComplexScanScenario extends ScenarioBase
                 [
                     [1,'/some/source','somehost']
                 ]
-            ]
-        ];
+            ]*/
+        ]; 
     }
     
     public function __construct()

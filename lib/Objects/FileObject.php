@@ -26,7 +26,7 @@ class FileObject extends ORMObject {
     
     public static $table_name = 'fileobjects';
     public static $object_infos = [
-        'name'=>'fileobject',       // A repetition of static:$object_name @todo see above
+        'name'=>'FileObject',       // A repetition of static:$object_name @todo see above
         'table'=>'fileobjects',     // A repitition of static:$table_name
         'name_s'=>'file object',     // A human readable name in singular
         'name_p'=>'file objects',    // A human readable name in plural

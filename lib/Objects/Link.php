@@ -24,7 +24,7 @@ class Link extends fileobject
     public static $table_name = 'links';
     
     public static $object_infos = [
-        'name'=>'link',       // A repetition of static:$object_name @todo see above
+        'name'=>'Link',       // A repetition of static:$object_name @todo see above
         'table'=>'links',     // A repitition of static:$table_name
         'name_s' => 'link',
         'name_p' => 'links',
