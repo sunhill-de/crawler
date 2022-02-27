@@ -84,6 +84,12 @@ class ComplexScanScenario extends ScenarioBase
                     'file'=>['6dcd4ce23d88e2ee9568ba546c007c63d9131c1b','txt',1,'=>mime','2022-02-11 00:00:00','2022-02-11 00:00:00','=>dc'],
                 ]
             ],
+            'Links'=>[
+                ['file','parent_dir','name'],
+                [
+                       
+                ]
+            ]
             /*'sources'=>[
                 ['file_id','source','host'],
                 [
