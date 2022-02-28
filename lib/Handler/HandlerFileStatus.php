@@ -10,7 +10,9 @@ use Sunhill\Basic\Utils\Descriptor;
 /**
  * Checks if the file exists and if its readable respective writeable
  * @author klaus
- *
+ * Depends: nother
+ * Modifies: filestate
+ * Condition: none
  */
 class HandlerFileStatus extends HandlerBase
 {
