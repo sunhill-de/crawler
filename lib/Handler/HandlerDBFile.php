@@ -17,25 +17,16 @@ class HandlerDBFile extends HandlerBase
  
     function process(CrawlerDescriptor $descriptor)
     {
-        DB::table("files")->insert(
-            [
-                'hash'=>$descriptor->file->hash,
-                'ext'=>$descriptor->file->ext,
-                'size'=>$descriptor->file->size,
-                'mime'=>$descriptor->file->mimeID,
-                'cdate'=>date("Y-m-d H:i:s",$descriptor->file->cdate),
-                'mdate'=>date("Y-m-d H:i:s",$descriptor->file->mdate)
-            ]);
-        $descriptor->file->ID = DB::getPdo()->lastInsertId();
-        $descriptor->dbstate->id = $descriptor->file->ID;
+        $descriptor->file->commit();
+        $descriptor->dbstate->id = $descriptor->file->getID();
         $descriptor->dbstate->isInDatabase = true;
         
-        $this->verboseinfo("File added to Database. ID is '".$descriptor->file->ID."'");
+        $this->verboseinfo("File added to Database. ID is '".$descriptor->dbstate->id."'");
     }
 
     function matches(CrawlerDescriptor $descriptor): Bool
     {
-        return $descriptor->fileReadable() && !$descriptor->alreadyInDatabase();
+        return $descriptor->fileReadable();
     }
     
     

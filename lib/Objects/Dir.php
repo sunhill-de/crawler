@@ -26,7 +26,7 @@ class Dir extends fileobject
     public static $table_name = 'dirs';
     
     public static $object_infos = [
-        'name'=>'dir',       // A repetition of static:$object_name @todo see above
+        'name'=>'Dir',       // A repetition of static:$object_name @todo see above
         'table'=>'dirs',     // A repitition of static:$table_name
         'name_s' => 'directory',
         'name_p' => 'directories',

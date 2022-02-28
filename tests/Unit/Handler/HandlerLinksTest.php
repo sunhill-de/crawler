@@ -3,12 +3,14 @@
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Facades\FileObjects;
 use Sunhill\Crawler\Handler\HandlerLinks;
 use Sunhill\Basic\Tests\SunhillScenarioTestCase;
 use Tests\CreatesApplication;
 use Tests\Scenarios\ComplexScanScenario;
 use Sunhill\Basic\Utils\Descriptor;
 use Sunhill\Crawler\Objects\File;
+use Sunhill\ORM\Facades\Objects;
 
 class HandlerLinksTest extends SunhillScenarioTestCase
 {
@@ -26,10 +28,11 @@ class HandlerLinksTest extends SunhillScenarioTestCase
         $descriptor->file = new File();
         $descriptor->target = new Descriptor();
         
+        FileObjects::searchOrInsertDir('/source/');
         $descriptor->target->path = 'originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt';
         $descriptor->addLinks = ['/source/a.txt'];
         $descriptor->removeLinks = [];
-        $descriptor->file->ID = 10;
+        $descriptor->file = File::search()->where('sha1_hash','=','6dcd4ce23d88e2ee9568ba546c007c63d9131c1b')->loadIfExists();
         
         Config::set("crawler.media_dir",$this->getTempDir().'media/');
         $test = new HandlerLinks();

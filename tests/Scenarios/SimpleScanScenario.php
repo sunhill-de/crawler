@@ -6,6 +6,13 @@ use Sunhill\Basic\Tests\Scenario\ScenarioBase;
 use Sunhill\Basic\Tests\Scenario\ScenarioWithDirs;
 use Sunhill\Basic\Tests\Scenario\ScenarioWithFiles;
 use Sunhill\Basic\Tests\Scenario\ScenarioWithTables;
+use Sunhill\Crawler\Objects\Dir;
+use Sunhill\Crawler\Objects\File;
+use Sunhill\Crawler\Objects\FileObject;
+use Sunhill\Crawler\Objects\Link;
+use Sunhill\Crawler\Objects\Mime;
+use Sunhill\ORM\Facades\Classes;
+use Sunhill\ORM\Tests\Scenario\ScenarioWithObjects;
 
 class SimpleScanScenario extends ScenarioBase
 {
@@ -23,6 +30,17 @@ class SimpleScanScenario extends ScenarioBase
         ],
     ];
     
+    public function SetupBeforeTestsObjects() 
+    {
+        Classes::flushClasses();
+        Classes::registerClass(FileObject::class);
+        Classes::registerClass(Dir::class);
+        Classes::registerClass(File::class);
+        Classes::registerClass(Link::class);
+        Classes::registerClass(Mime::class);
+    }
+
+
     protected function getDirs()
     {
         return [
@@ -46,22 +64,17 @@ class SimpleScanScenario extends ScenarioBase
     function GetObjects() {
         return [
             'files'=>[
-                ['id','sha1_hash','ext','size','mime','cdate','mdate'],
+                ['sha1_hash','ext','size','mime','cdate','mdate'],
                 [
                 ]
             ],
             'mimes'=>[
-                ['id','mime'],
-                [
-                ]
-            ],
-            'sources'=>[
-                ['file_id','source','host'],
+                ['mime'],
                 [
                 ]
             ],
             'dirs'=>[
-                ['id','full_path','name','parent_dir'],
+                ['full_path','name','parent_dir'],
                 []
             ]
         ];

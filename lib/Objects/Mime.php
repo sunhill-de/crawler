@@ -26,7 +26,7 @@ class Mime extends ORMObject {
     
     public static $table_name = 'mimes';
     public static $object_infos = [
-        'name'=>'mime',       // A repetition of static:$object_name @todo see above
+        'name'=>'Mime',       // A repetition of static:$object_name @todo see above
         'table'=>'mimes',     // A repitition of static:$table_name
         'name_s'=>'MIME Type',     // A human readable name in singular
         'name_p'=>'MIME Types',    // A human readable name in plural

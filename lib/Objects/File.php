@@ -30,7 +30,7 @@ class File extends fileobject {
     public static $table_name = 'files';
 
     public static $object_infos = [
-        'name'=>'file',       // A repetition of static:$object_name @todo see above
+        'name'=>'File',       // A repetition of static:$object_name @todo see above
         'table'=>'files',     // A repitition of static:$table_name
         'name_s' => 'file',
         'name_p' => 'files',
@@ -118,6 +118,16 @@ class File extends fileobject {
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false);
+    }
+    
+    function calculate_full_path()
+    {
+        if (is_null($this->parent_dir)) {
+            return $this->sha1_hash.'.'.$this->ext;       
+        } else {
+            return $this->parent_dir->full_path.'.'.$this->sha1_hash.'.'.$this->ext;
+            
+        }
     }
     
 }

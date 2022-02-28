@@ -29,8 +29,7 @@ class HandlerHashTest extends SunhillScenarioTestCase
         $test->process($descriptor);
         
         $this->assertFalse($descriptor->alreadyInDatabase());
-        $this->assertEquals("ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec",$descriptor->file->hash);
-        $this->assertEquals(1,$descriptor->file->size);
+        $this->assertEquals("ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec",$descriptor->fileinfo->hash);
     }
 
     public function testScanKnownFile()
@@ -43,7 +42,7 @@ class HandlerHashTest extends SunhillScenarioTestCase
         $test->process($descriptor);
         
         $this->assertTrue($descriptor->alreadyInDatabase());
-        $this->assertEquals("6dcd4ce23d88e2ee9568ba546c007c63d9131c1b",$descriptor->file->hash);
+        $this->assertEquals("6dcd4ce23d88e2ee9568ba546c007c63d9131c1b",$descriptor->fileinfo->hash);
         $this->assertEquals(1,$descriptor->file->size);
         $this->assertEquals("txt",$descriptor->file->ext);
     }

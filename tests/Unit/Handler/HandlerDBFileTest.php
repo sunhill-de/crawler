@@ -7,6 +7,7 @@ use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Handler\HandlerDBFile;
 use Tests\CrawlerTestCase;
 use Sunhill\Basic\Utils\Descriptor;
+use Sunhill\Crawler\Objects\File;
 
 class HandlerDBFileTest extends CrawlerTestCase
 {
@@ -14,15 +15,14 @@ class HandlerDBFileTest extends CrawlerTestCase
     public function testInsertion()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->file = new Descriptor();
+        $descriptor->file = new File();
         $descriptor->dbstate = new Descriptor();
         
-        $descriptor->file->hash = 'ABC';
+        $descriptor->file->sha1_hash = 'ABC';
         $descriptor->file->ext = 'txt';
         $descriptor->file->size = 10;
-        $descriptor->file->mimeID = 1;
-        $descriptor->file->cdate = mktime(10,11,12,2,1,2003);
-        $descriptor->file->mdate = mktime(10,11,12,2,1,2003);
+        $descriptor->file->created = mktime(10,11,12,2,1,2003);
+        $descriptor->file->changed = mktime(10,11,12,2,1,2003);
         
         DB::table("files")->truncate();
         
@@ -30,7 +30,7 @@ class HandlerDBFileTest extends CrawlerTestCase
         $test->process($descriptor);
         
         $this->assertDatabaseCount("files",1);
-        $this->assertDatabaseHas("files",["hash"=>"ABC","ext"=>"txt","size"=>10,"mime"=>1,"cdate"=>"2003-02-01 10:11:12","mdate"=>"2003-02-01 10:11:12"]);
-        $this->assertEquals(1,$descriptor->file->ID);
+        $this->assertDatabaseHas("files",["sha1_hash"=>"ABC","ext"=>"txt","size"=>10,"created"=>"2003-02-01 10:11:12","changed"=>"2003-02-01 10:11:12"]);
+        
     }
 }

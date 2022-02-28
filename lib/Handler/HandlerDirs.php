@@ -7,6 +7,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Facades\FileManager;
+use Sunhill\Crawler\Facades\FileObjects;
+use Sunhill\Crawler\Objects\Dir;
 
 /**
  * Handles the entries in the database
@@ -28,63 +30,64 @@ class HandlerDirs extends HandlerBase
     private function addDirs(CrawlerDescriptor $descriptor) 
     {
         foreach ($descriptor->addDirs as $dir) {
-            $this->addFSDir($dir);
+            $this->doAddDir($dir);
         }
     }
     
-    private function addFSDir(string $dir) 
+    private function doAddDir(string $dir) 
     {
-        $completePath = FileManager::normalizeDir(config('crawler.media_dir').DIRECTORY_SEPARATOR.$dir);
-        if (file_exists($completePath)) {
-            $this->debug("The dir '$completePath' already exists. Nothing to do.");
+        $media_path = FileObjects::normalizeMediaPath($dir);
+        $full_path = Str::finish(FileManager::normalizeDir(config('crawler.media_dir').DIRECTORY_SEPARATOR.$dir),DIRECTORY_SEPARATOR);
+
+        if (file_exists($full_path)) {
+            $this->debug("The dir '$full_path' already exists. Nothing to do.");           
         } else {
-            $this->debug("The dir '$completePath' doesn't exist. Creating it.");
-            $this->createDir($completePath);
+            $this->debug("The dir '$full_path' doesn't exist. Creating it.");            
+            $this->createDir($media_path,$full_path);
         }
     }
-  
-    private function searchDir($path)
+
+    /**
+     * Creates the dir on the disc and adds it to the database
+     * @param string $media_path
+     * @param string $full_path
+     */
+    private function createDir(string $media_path, string $full_path)
     {
-        $result = DB::table('dirs')->where('full_path',$path)->first();
-        if ($result) {
-            return $result->id;
-        } else {
-            return 0;
-        }
-    }
-    
-    private function createDir($path)
-    {
-        $parts = explode("/",$path);
-        $dir = array_pop($parts);
-        if ($dir == "") {
-            $dir = array_pop($parts);
-        }
-        $name = $parts[count($parts)-1];
+        $parts = explode(DIRECTORY_SEPARATOR,$full_path);
+        array_pop($parts); // ignore trailing slash
+        $dir = array_pop($parts);        
+        $parent_path = Str::finish(implode(DIRECTORY_SEPARATOR,$parts),DIRECTORY_SEPARATOR);
         
-        $parent = implode("/",$parts);
-        if (!file_exists($parent)) {
-            $this->debug("Parent dir '$parent' does not exist.");
-            $this->createDir($parent);
-        } else {
-            $this->debug("Parent dir '$parent' does exist. No need to create it.");
+        $this->addDir($parent_path);
+        // At this point is:
+        //  $dir the name of the directory
+        //  $parent_path the path of the parent directory
+        //  $full_path the full path of the directory (parent_path + dir)
+        //  The parent directory created an in the database
+        if ($this->createFSDir($full_path)) {
+            $this->createDBDir($parent_path, $name);
         }
-        $this->doCreateDir($path,$parent,$name);
     }
-     
-    private function doCreateDir($path, $parent,$name)
+    
+    private function createFSDir($path)
     {
         FileManager::createDir($path);
         if (!file_exists($path)) {
             $this->error("Couldn't create the target directory");
-            return;
+            return false;            
         }
-        $media = FileManager::normalizeDir(config('crawler.media_dir'));
-        $len = strlen($media);
-        $plen = strlen($path);
-        $path = substr($path,$len-1);
-        $parent = substr($parent,$len-1);
-        DB::table('dirs')->insert(['full_path'=>Str::finish($path,"/"),'name'=>$name,'parent_dir'=>$this->searchDir($parent)]);
+        return true;
+    }
+    
+    private function createDBDir($parent,$name)
+    {
+        $dir = new Dir();
+        $dir->parent_dir = FileObjects::searchOrInsertDir($parent);
+        $dir->name = $name;
+        $dir->fileobject_exsists = true;
+        $dir->fileobject_created = true;
+        $dir->commit();
     }
     
     function matches(CrawlerDescriptor $descriptor): Bool

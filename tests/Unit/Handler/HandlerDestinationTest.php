@@ -14,10 +14,10 @@ class HandlerDestinationTest extends CrawlerTestCase
     public function testDestination()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->file = new Descriptor();
+        $descriptor->file = new File();
         $descriptor->dbstate = new Descriptor();
         
-        $descriptor->file->hash = 'abc';
+        $descriptor->file->sha1_hash = 'abc';
         $descriptor->dbstate->wasInDatabase = true;
         $descriptor->file->ext = 'txt';
         
