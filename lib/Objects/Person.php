@@ -56,6 +56,11 @@ class Person extends ORMObject
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false);
+        self::enum('sex')
+            ->set_enum_values(['male','female','divers'])
+            ->set_editable(true)
+            ->set_groupeditable(false)
+            ->set_description('Sex of this person.');
         self::arrayOfStrings('groups')
             ->set_description('What user groups is this person member of');
     }
