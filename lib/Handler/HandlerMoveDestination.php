@@ -22,7 +22,7 @@ class HandlerMoveDestination extends HandlerBase
         if ($descriptor->isToKeep()) {
 
             $destination = FileManager::normalizeDir(config('crawler.media_dir').DIRECTORY_SEPARATOR.$descriptor->target->dir)."/".
-                            $descriptor->file->hash.".".$descriptor->file->ext;
+                            $descriptor->file->sha1_hash.".".$descriptor->file->ext;
 
             if ($descriptor->alreadyInDatabase() && !$descriptor->keep) {
                 unlink($descriptor->source);
