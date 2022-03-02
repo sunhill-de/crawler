@@ -27,10 +27,13 @@ class HandlerCreateNewFile extends HandlerBase
                 $descriptor->file = new File();
                 break;
         }
-        $descriptor->file->size  = filesize($descriptor->source);
-        $descriptor->file->cdate = filectime($descriptor->source);
-        $descriptor->file->mdate = filemtime($descriptor->source);
-        $descriptor->file->state = 'regular';        
+        $descriptor->file->sha1_hash = $descriptor->fileinfo->hash;
+        $descriptor->file->md5_hash = md5_file($descriptor->getCurrentLocation());
+        $descriptor->file->size  = filesize($descriptor->getCurrentLocation());
+        $descriptor->file->created = filectime($descriptor->getCurrentLocation());
+        $descriptor->file->changed = filemtime($descriptor->getCurrentLocation());
+        $descriptor->file->ext = $descriptor->fileinfo->ext;
+        $descriptor->file->type = 'regular';        
     }
 
     function matches(CrawlerDescriptor $descriptor): Bool
