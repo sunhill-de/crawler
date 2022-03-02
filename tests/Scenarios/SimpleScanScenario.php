@@ -30,16 +30,6 @@ class SimpleScanScenario extends ScenarioBase
         ],
     ];
     
-    public function SetupBeforeTestsObjects() 
-    {
-        Classes::flushClasses();
-        Classes::registerClass(FileObject::class);
-        Classes::registerClass(Dir::class);
-        Classes::registerClass(File::class);
-        Classes::registerClass(Link::class);
-        Classes::registerClass(Mime::class);
-    }
-
 
     protected function getDirs()
     {
@@ -63,17 +53,17 @@ class SimpleScanScenario extends ScenarioBase
     
     function GetObjects() {
         return [
-            'files'=>[
+            'File'=>[
                 ['sha1_hash','ext','size','mime','cdate','mdate'],
                 [
                 ]
             ],
-            'mimes'=>[
+            'Mime'=>[
                 ['mime'],
                 [
                 ]
             ],
-            'dirs'=>[
+            'Dir'=>[
                 ['full_path','name','parent_dir'],
                 []
             ]
