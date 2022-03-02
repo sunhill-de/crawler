@@ -54,27 +54,31 @@ class HandlerDirs extends HandlerBase
      */
     private function createDir(string $media_path, string $full_path)
     {
-        $parts = explode(DIRECTORY_SEPARATOR,$full_path);
+        $parts = explode(DIRECTORY_SEPARATOR,$media_path);
         array_pop($parts); // ignore trailing slash
         $dir = array_pop($parts);        
         $parent_path = Str::finish(implode(DIRECTORY_SEPARATOR,$parts),DIRECTORY_SEPARATOR);
         
-        $this->addDir($parent_path);
+        $this->doAddDir($parent_path);
         // At this point is:
         //  $dir the name of the directory
         //  $parent_path the path of the parent directory
         //  $full_path the full path of the directory (parent_path + dir)
         //  The parent directory created an in the database
         if ($this->createFSDir($full_path)) {
-            $this->createDBDir($parent_path, $name);
+            $this->createDBDir($parent_path, $dir);
         }
     }
     
     private function createFSDir($path)
     {
-        FileManager::createDir($path);
+        try {
+            FileManager::createDir($path);
+        } catch (\Exception $e) {
+            $this->error("Failure while creating '$path'");
+        }
         if (!file_exists($path)) {
-            $this->error("Couldn't create the target directory");
+            $this->error("Couldn't create the target directory '$path'");
             return false;            
         }
         return true;
@@ -85,8 +89,8 @@ class HandlerDirs extends HandlerBase
         $dir = new Dir();
         $dir->parent_dir = FileObjects::searchOrInsertDir($parent);
         $dir->name = $name;
-        $dir->fileobject_exsists = true;
-        $dir->fileobject_created = true;
+    /*    $dir->fileobject_exists = 1;
+        $dir->fileobject_created = true; */
         $dir->commit();
     }
     
