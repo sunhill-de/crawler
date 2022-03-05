@@ -119,9 +119,9 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
         $this->assertDatabaseHas('files',['sha1_hash' => '50c9e8d5fc98727b4bbc93cf5d64a68db647f04f']);
         $this->assertDatabaseHas('files',['sha1_hash' => 'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec']);
         
-        $this->assertDatabaseHas('mimes',['mime' => 'application/octet-stream']);
+        $this->assertDatabaseHas('mimes',['mimegroup' => 'application','item'=>'octet-stream']);
         
-        $this->assertDatabaseHas('dirs',['name' => 'c']);
+        $this->assertDatabaseHas('fileobjects',['name' => 'c']);
     }
     
     public function testSync()
