@@ -11,9 +11,9 @@
  * Coverage: unknown
  * Dependencies: fileobject
  */
-namespace Sunhill\Files\Objects;
+namespace Sunhill\Crawler\Objects;
 
-use Sunhill\Files\Facades\MediaFiles;
+use Sunhill\Crawler\Facades\FileManager;
 
 /**
  * The class for files. This class provides informations about a spcecific file. The file itself is not able
@@ -30,7 +30,7 @@ class File extends fileobject {
     public static $table_name = 'files';
 
     public static $object_infos = [
-        'name'=>'file',       // A repetition of static:$object_name @todo see above
+        'name'=>'File',       // A repetition of static:$object_name @todo see above
         'table'=>'files',     // A repitition of static:$table_name
         'name_s' => 'file',
         'name_p' => 'files',
@@ -38,9 +38,9 @@ class File extends fileobject {
         'options'=>0,           // Reserved for later purposes
     ];
 
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::object('reference')
             ->set_allowed_objects(['file'])
             ->set_default(null)
@@ -49,14 +49,14 @@ class File extends fileobject {
             ->set_editable(true)
             ->set_groupeditable(false);
         self::varchar('sha1_hash')
-            ->set_maxlen(40)
+            ->setMaxLen(40)
             ->searchable()
             ->set_description('SHA1-Hash of the whole file.')
             ->set_displayable(true)
             ->set_editable(false)
             ->set_groupeditable(false);
         self::varchar('md5_hash')
-            ->set_maxlen(32)
+            ->setMaxLen(32)
             ->searchable()
             ->set_description('The md5 hash of the whole file')
             ->set_displayable(true)
@@ -67,7 +67,8 @@ class File extends fileobject {
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true);
-        self::varchar('mime')
+        self::object('mime')
+            ->set_allowed_objects(['mime'])
             ->set_description('The mime type of this file')
             ->set_displayable(true)
             ->set_editable(false)
@@ -80,7 +81,7 @@ class File extends fileobject {
             ->set_editable(false)
             ->set_groupeditable(false);            
         self::enum('type')
-            ->set_enum_values([
+            ->setEnumValues([
                 'regular',              // Normal file
                 'converted_to',         // This file war permanently converted to another file (this file isn't existing anymore but is not deleted)
                 'deleted',              // This file was deleted (not converted)
@@ -117,6 +118,16 @@ class File extends fileobject {
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false);
+    }
+    
+    function calculate_full_path()
+    {
+        if (is_null($this->parent_dir)) {
+            return $this->sha1_hash.'.'.$this->ext;       
+        } else {
+            return $this->parent_dir->full_path.'.'.$this->sha1_hash.'.'.$this->ext;
+            
+        }
     }
     
 }

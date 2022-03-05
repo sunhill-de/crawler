@@ -11,7 +11,14 @@ class CrawlerDescriptor extends Descriptor
     public function __construct()
     {
         parent::__construct();
-        $this->stop              = false;
+        $this->stop = false;
+        $this->filestate = new Descriptor();
+        $this->dbstate = new Descriptor();
+      
+        $this->addLinks    = [];
+        $this->removeLinks = [];
+        $this->addDirs     = [];
+        $this->removeDirs  = [];
     }
 
     protected function getParam(string $name)
@@ -69,7 +76,7 @@ class CrawlerDescriptor extends Descriptor
     public function stateIs($state): Bool
     {
         if (is_array($state)) {
-            return in_array($this->file->state,$state);
+            return in_array($this->file->type,$state);
         } else {
             return $this->file->state == $state;
         }    
@@ -95,5 +102,24 @@ class CrawlerDescriptor extends Descriptor
         }
     }
     
-   
+    public function getCurrentLocation(): string
+    {
+        if ($this->isDefined('filestate') && $this->filestate->isDefined('current_location')) {
+            return $this->filestate->current_location;
+        } else {    
+            return $this->source;
+        }
+    }
+    
+    public function setCurrentLocation(string $location)
+    {
+        $this->source = $location;
+    }
+    
+    public function setSource(string $location)
+    {
+        $this->source = $location;
+        $this->filestate->current_location = $location;
+        $this->filestate->original_location = $location;
+    }
 }

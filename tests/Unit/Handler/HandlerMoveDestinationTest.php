@@ -8,6 +8,7 @@ use Sunhill\Basic\Tests\SunhillScenarioTestCase;
 use Tests\CreatesApplication;
 use Tests\Scenarios\FilesystemScenario;
 use Sunhill\Basic\Utils\Descriptor;
+use Sunhill\Crawler\Objects\File;
 
 class HandlerMoveDestinationTest extends SunhillScenarioTestCase
 {
@@ -17,14 +18,14 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
     public function testCopyFile()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->file = new Descriptor();
+        $descriptor->file = new File();
         $descriptor->target = new Descriptor();
         $descriptor->dbstate = new Descriptor();
         
         $descriptor->source = $this->getTempDir().'A.txt';
         $descriptor->target->dir = '/subdir/';
-        $descriptor->file->state = 'regular';
-        $descriptor->file->hash = 'abc';
+        $descriptor->file->type = 'regular';
+        $descriptor->file->sha1_hash = 'abc';
         $descriptor->file->ext = 'txt';
         $descriptor->keep = true;
         $descriptor->filestate->writeable = true;
@@ -41,15 +42,15 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
     public function testMoveFile()
     {
         $descriptor = new CrawlerDescriptor();
-        $descriptor->file = new Descriptor();
+        $descriptor->file = new File();
         $descriptor->target = new Descriptor();
         $descriptor->dbstate = new Descriptor();
         
         $descriptor->source = $this->getTempDir().'A.txt';
         $descriptor->target->dir = '/subdir/';
-        $descriptor->file->hash = 'abc';
+        $descriptor->file->sha1_hash = 'abc';
         $descriptor->file->ext = 'txt';
-        $descriptor->file->state = 'regular';
+        $descriptor->file->type = 'regular';
         $descriptor->keep = false;
         $descriptor->filestate->writeable = true;
         $descriptor->dbstate->wasInDatabase = false;
@@ -65,14 +66,14 @@ class HandlerMoveDestinationTest extends SunhillScenarioTestCase
     {
         chmod($this->getTempDir().'A.txt',0444);
         $descriptor = new CrawlerDescriptor();
-        $descriptor->file = new Descriptor();
+        $descriptor->file = new File();
         $descriptor->target = new Descriptor();
         $descriptor->dbstate = new Descriptor();
         
         $descriptor->source = $this->getTempDir().'A.txt';
         $descriptor->target->dir = 'subdir/';
-        $descriptor->file->hash = 'abc';
-        $descriptor->file->state = 'regular';
+        $descriptor->file->sha1_hash = 'abc';
+        $descriptor->file->type = 'regular';
         $descriptor->file->ext = 'txt';
         $descriptor->keep = false;
         $descriptor->filestate->writeable = false;

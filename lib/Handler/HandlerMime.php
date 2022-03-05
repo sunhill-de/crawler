@@ -4,6 +4,7 @@ namespace Sunhill\Crawler\Handler;
 
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Objects\Mime;
 
 /**
  * Handles the entries in the database
@@ -30,9 +31,9 @@ class HandlerMime extends HandlerBase
     function process(CrawlerDescriptor $descriptor)
     {
         $this->verboseinfo("  Detecting mime");
-        $descriptor->file->mime = $this->detectMime($descriptor->source);
-        $descriptor->file->mimeID = $this->getMime($descriptor->file->mime);
-        $descriptor->file->ext = $this->getExt($descriptor->source);
+        $descriptor->fileinfo->mimeStr = $this->detectMime($descriptor->source);
+        $descriptor->fileinfo->mimeObj = $this->getMime($descriptor->fileinfo->mimeStr);
+        $descriptor->fileinfo->ext = $this->getExt($descriptor->source);
     }
 
     protected function getExt(string $file): String
@@ -60,16 +61,19 @@ class HandlerMime extends HandlerBase
         return $this->get_mime_type($source);
     }
     
-    protected function getMime(string $mime): Int
+    protected function getMime(string $mime): Mime
     {
-        $result = DB::table("mime")->where('mime',$mime)->first();
+        $result = Mime::search()->where('mime','=',$mime)->loadIfExists();
         if ($result) {
-            return $result->id;
+            return $result;
         }
-        DB::table("mime")->insert(["mime"=>$mime]);
-        $this->verboseinfo(" Mime added to database.");
-        
-        return DB::getPdo()->lastInsertId();
+        $result = new Mime();
+        list($main,$sub) = explode('/',$mime);
+        $result->mimegroup = $main;
+        $result->item = $sub;
+        $result->default_ext = '';
+        $result->commit();
+        return $result;
     }
 
     private function get_header(string $path)

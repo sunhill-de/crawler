@@ -114,14 +114,14 @@ class CrawlerFeatureTest extends SunhillScenarioTestCase
      */
     public function testDatabaseFilled()
     {
-        $this->assertDatabaseHas('files',['hash' => '6dcd4ce23d88e2ee9568ba546c007c63d9131c1b']);     
-        $this->assertDatabaseHas('files',['hash' => '32096c2e0eff33d844ee6d675407ace18289357d']);
-        $this->assertDatabaseHas('files',['hash' => '50c9e8d5fc98727b4bbc93cf5d64a68db647f04f']);
-        $this->assertDatabaseHas('files',['hash' => 'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec']);
+        $this->assertDatabaseHas('files',['sha1_hash' => '6dcd4ce23d88e2ee9568ba546c007c63d9131c1b']);     
+        $this->assertDatabaseHas('files',['sha1_hash' => '32096c2e0eff33d844ee6d675407ace18289357d']);
+        $this->assertDatabaseHas('files',['sha1_hash' => '50c9e8d5fc98727b4bbc93cf5d64a68db647f04f']);
+        $this->assertDatabaseHas('files',['sha1_hash' => 'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec']);
         
-        $this->assertDatabaseHas('mime',['mime' => 'application/octet-stream']);
+        $this->assertDatabaseHas('mimes',['mimegroup' => 'application','item'=>'octet-stream']);
         
-        $this->assertDatabaseHas('dirs',['full_path' => '/originals/6/d/c/']);
+        $this->assertDatabaseHas('fileobjects',['name' => 'c']);
     }
     
     public function testSync()

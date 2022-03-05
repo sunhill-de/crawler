@@ -11,9 +11,9 @@
  * Coverage: unknown
  * Dependencies: fileobject
  */
-namespace Sunhill\Files\Objects;
+namespace Sunhill\Crawler\Objects;
 
-use Sunhill\Files\Facades\MediaFiles;
+use Sunhill\Crawler\Facades\FileManager;
 
 /**
  * The class for dirs
@@ -26,7 +26,7 @@ class Dir extends fileobject
     public static $table_name = 'dirs';
     
     public static $object_infos = [
-        'name'=>'dir',       // A repetition of static:$object_name @todo see above
+        'name'=>'Dir',       // A repetition of static:$object_name @todo see above
         'table'=>'dirs',     // A repitition of static:$table_name
         'name_s' => 'directory',
         'name_p' => 'directories',
@@ -34,9 +34,9 @@ class Dir extends fileobject
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::integer('max_files')
             ->set_default(0)
             ->set_description('How many files per directory are allowed (0=no limit)')
@@ -56,26 +56,8 @@ class Dir extends fileobject
         if (!is_null($parent)) {
             return $this->parent_dir->full_path.$this->name.'/';
         } else {
-            return MediaFiles::get_media_dir().$this->name.'/';
+            return $this->name.'/';
         }
     }
     
-    public static function search_or_insert_dir(string $path) {
-        $path = MediaFiles::get_effective_dir($path);
-        $search = static::search()->where('full_path',$path)->load_if_exists();
-        if (is_null($search)) {
-            $parts = explode(DIRECTORY_SEPARATOR,$path);
-            array_pop($parts);
-            $dir = new dir();
-            $dir->name = array_pop($parts);
-            $parent_dir = implode(DIRECTORY_SEPARATOR,$parts);
-            if (!($parent_dir == MediaFiles::get_media_dir())) {
-                $dir->parent_dir = dir::search_or_insert_dir($parent_dir);
-            }
-            $dir->commit();
-            return $dir;
-        } else {
-            return $search;
-        }
-    }
 }

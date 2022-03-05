@@ -11,7 +11,7 @@
  * Coverage: unknown
  * Dependencies: fileobject
  */
-namespace Sunhill\Files\Objects;
+namespace Sunhill\Crawler\Objects;
 
 /**
  * The class for links
@@ -24,7 +24,7 @@ class Link extends fileobject
     public static $table_name = 'links';
     
     public static $object_infos = [
-        'name'=>'link',       // A repetition of static:$object_name @todo see above
+        'name'=>'Link',       // A repetition of static:$object_name @todo see above
         'table'=>'links',     // A repitition of static:$table_name
         'name_s' => 'link',
         'name_p' => 'links',
@@ -36,9 +36,9 @@ class Link extends fileobject
         return $this->parent_dir->full_path.$this->name.'.'.$this->ext;
     }
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::object('target')
             ->set_allowed_objects(['file'])
             ->set_default(null)

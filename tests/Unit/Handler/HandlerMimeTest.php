@@ -26,7 +26,7 @@ class HandlerMimeTest extends CrawlerTestCase
         $test = new HandlerMime();
         $test->process($descriptor);
         
-        $this->assertEquals($expected,$descriptor->file->mime);
+        $this->assertEquals($expected,$descriptor->fileinfo->mimeObj->mime);
     }
     
     public function MimeProvider()

@@ -11,7 +11,7 @@
  * Dependencies: Sunhill\Files\FilesException
  */
 
-namespace Sunhill\Files\Objects;
+namespace Sunhill\Crawler\Objects;
 
 use Sunhill\Files\FilesException;
 
