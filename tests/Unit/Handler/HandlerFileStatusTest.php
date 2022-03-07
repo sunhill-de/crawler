@@ -20,53 +20,43 @@ class HandlerFileStatusTest extends SunhillScenarioTestCase
         return ComplexScanScenario::class;
     }
     
-    public function testDirectory()
+    /**
+     * @dataProvider FileStatusProvider
+     * @param unknown $file
+     * @param unknown $field
+     * @param unknown $expect
+     * @param number $mode
+     */
+    public function testFileStatus($file,$field,$expect,$mode=0777)
     {
-        $temp = $this->getTempDir();
+        $source = $this->getTempDir().$file;
+        chmod($source,$mode);
         
         $descriptor = new CrawlerDescriptor();
-        $descriptor->source = $temp.'/scan';
+        $descriptor->setSource($source);
         
+        Config::set("crawler.media_dir",$this->getTempDir().'media');
         $test = new HandlerFileStatus(null);
         $test->process($descriptor);
         
-        $this->assertTrue($descriptor->filestate->exists);
-        $this->assertTrue($descriptor->filestate->readable);
-        $this->assertTrue($descriptor->filestate->writeable);
-        $this->assertEquals('directory',$descriptor->filestate->type);
+        $this->assertEquals($expect,$descriptor->filestate->$field);
+        
     }
     
-    public function testFile()
+    public function FileStatusProvider()
     {
-        $temp = $this->getTempDir();
-        
-        $descriptor = new CrawlerDescriptor();
-        $descriptor->source = $temp.'/scan/A.txt';
-        
-        $test = new HandlerFileStatus(null);
-        $test->process($descriptor);
-        
-        $this->assertTrue($descriptor->filestate->exists);
-        $this->assertTrue($descriptor->filestate->readable);
-        $this->assertTrue($descriptor->filestate->writeable);
-        $this->assertEquals('file',$descriptor->filestate->type);
-    }
-    
-    public function testUnwriteableFile()
-    {
-        $temp = $this->getTempDir();
-        chmod($temp."/scan/A.txt",0555);
-        
-        $descriptor = new CrawlerDescriptor();
-        $descriptor->source = $temp.'/scan/A.txt';
-        
-        $test = new HandlerFileStatus(null);
-        $test->process($descriptor);
-        
-        $this->assertTrue($descriptor->filestate->exists);
-        $this->assertTrue($descriptor->filestate->readable);
-        $this->assertFalse($descriptor->filestate->writeable);
-        $this->assertEquals('file',$descriptor->filestate->type);
+        return [
+            ['/scan/A.txt','exists',true],  
+            ['/scan/A.txt','readable',true],
+            ['/scan/A.txt','writeable',true],
+            ['/scan/A.txt','type','file'],
+            ['/scan/A.txt','writeable',false,0444],
+            ['/scan/A.txt','inMedia',false],
+            ['/media/originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt','inMedia',true],
+            ['/media/source/all/some/dir/link.txt','type','link'],
+            ['/media/source/all/some/dir/link.txt','sha1_hash','6dcd4ce23d88e2ee9568ba546c007c63d9131c1b'],
+            ['/media/source/all/some/dir/link.txt','inMedia',true],
+        ];
     }
     
     public function testUnreadableFile()
@@ -83,34 +73,6 @@ class HandlerFileStatusTest extends SunhillScenarioTestCase
         $this->assertFalse($descriptor->filestate->readable);
         $this->assertFalse($descriptor->filestate->writeable);
         $this->assertEquals('file',$descriptor->filestate->type);
-    }
-    
-    public function testInMedia()
-    {
-        $temp = $this->getTempDir();
-        Config::set("crawler.media_dir",$this->getTempDir().'/media');
-
-        $descriptor = new CrawlerDescriptor();
-        $descriptor->source = $temp.'/scan'; // Better not run as root
-
-        $test = new HandlerFileStatus(null);
-        $test->process($descriptor);
-        
-        $this->assertFalse($descriptor->filestate->inMedia);
-    }
-    
-    public function testNotInMedia()
-    {
-        $temp = $this->getTempDir();
-        Config::set("crawler.media_dir",$this->getTempDir().'/media');
-        
-        $descriptor = new CrawlerDescriptor();
-        $descriptor->source = $temp.'/media/originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt'; // Better not run as root
-        
-        $test = new HandlerFileStatus(null);
-        $test->process($descriptor);
-        
-        $this->assertTrue($descriptor->filestate->inMedia);
     }
     
 }
