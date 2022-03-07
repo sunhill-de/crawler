@@ -92,9 +92,9 @@ class ComplexScanScenario extends ScenarioBase
                 ]
             ],
             'File'=>[
-                ['sha1_hash','ext','size','mime','created','changed','parent_dir'],
+                ['sha1_hash','ext','size','mime','created','changed','parent_dir','type'],
                 [
-                    'file'=>['6dcd4ce23d88e2ee9568ba546c007c63d9131c1b','txt',1,'=>mime','2022-02-11 00:00:00','2022-02-11 00:00:00','=>dc'],
+                    'file'=>['6dcd4ce23d88e2ee9568ba546c007c63d9131c1b','txt',1,'=>mime','2022-02-11 00:00:00','2022-02-11 00:00:00','=>dc','regular'],
                 ]
             ],
             'Link'=>[
