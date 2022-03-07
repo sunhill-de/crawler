@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 use Sunhill\Basic\Tests\SunhillScenarioTestCase;
 use Sunhill\Crawler\CrawlerDescriptor;
-use Sunhill\Crawler\Handler\HandlerFileStatus;
+use Sunhill\Crawler\Handler\HandlerFileObject;
 use Tests\CrawlerTestCase;
 use Tests\CreatesApplication;
 use Tests\Scenarios\ComplexScanScenario;
@@ -27,16 +27,26 @@ class HandlerFileObjectTest extends SunhillScenarioTestCase
      * @param unknown $expect
      * @param number $mode
      */
-    public function testFileStatus($file,$group,$field,$expect,$mode=0777)
+    public function testFileStatus($file,$descriptorinfo,$group,$field,$expect)
     {
         $source = $this->getTempDir().$file;
-        chmod($source,$mode);
         
         $descriptor = new CrawlerDescriptor();
+        $descriptor->filestate->exists = true;
+        
+        foreach ($descriptorinfo as $key => $value) {
+            if (strpos($key,'.')) {
+                list($main,$sub) = explode('.',$key);
+                $descriptor->$main->$sub = $value;
+            } else {
+                $descripor->$key = $value;
+            }
+        }
+        
         $descriptor->setSource($source);
         
         Config::set("crawler.media_dir",$this->getTempDir().'media');
-        $test = new HandlerFileStatus(null);
+        $test = new HandlerFileObject(null);
         $test->process($descriptor);
         
         $this->assertEquals($expect,$descriptor->$group->$field);
@@ -46,33 +56,56 @@ class HandlerFileObjectTest extends SunhillScenarioTestCase
     public function FileStatusProvider()
     {
         return [
-            ['/scan/A.txt','exists',true],  
-            ['/scan/A.txt','readable',true],
-            ['/scan/A.txt','writeable',true],
-            ['/scan/A.txt','type','file'],
-            ['/scan/A.txt','writeable',false,0444],
-            ['/scan/A.txt','inMedia',false],
-            ['/media/originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt','inMedia',true],
-            ['/media/source/all/some/dir/link.txt','type','link'],
-            ['/media/source/all/some/dir/link.txt','sha1_hash','6dcd4ce23d88e2ee9568ba546c007c63d9131c1b'],
-            ['/media/source/all/some/dir/link.txt','inMedia',true],
+            [
+                '/scan/A.txt',
+                [
+                    'filestate.sha1_hash'=>'6dcd4ce23d88e2ee9568ba546c007c63d9131c1b'                    
+                ],
+                'dbstate','isInDatabase',true,                
+            ],  
+            [
+                '/scan/A.txt',
+                [
+                    'filestate.sha1_hash'=>'6dcd4ce23d88e2ee9568ba546c007c63d9131c1b'
+                ],
+                'dbstate','wasInDatabase',true,
+            ],
+            [
+                '/scan/A.txt',
+                [
+                    'filestate.sha1_hash'=>'6dcd4ce23d88e2ee9568ba546c007c63d9131c1b'
+                ],
+                'file','sha1_hash','6dcd4ce23d88e2ee9568ba546c007c63d9131c1b',
+            ],
+            [
+                '/scan/A.txt',
+                [
+                    'filestate.sha1_hash'=>'6dcd4ce23d88e2ee9568ba546c007c63d9131c1b'
+                ],
+                'file','type','regular',
+            ],
+            [
+                '/scan/A.txt',
+                [
+                    'filestate.sha1_hash'=>'6dcd4ce23d88e2ee9568ba546c007c63d9131c1b'
+                ],
+                'filestate','mime_str','application/octet-stream',
+            ],
+            [
+                '/scan/B.txt',
+                [
+                    'filestate.sha1_hash'=>'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec'
+                ],
+                'dbstate','isInDatabase',false,
+            ],
+            [
+                '/scan/B.txt',
+                [
+                    'filestate.sha1_hash'=>'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec'
+                ],
+                'dbstate','wasInDatabase',false,
+            ],
         ];
     }
     
-    public function testUnreadableFile()
-    {
-        $temp = $this->getTempDir();
-        
-        $descriptor = new CrawlerDescriptor();
-        $descriptor->source = "/etc/shadow"; // Better not run as root
-        
-        $test = new HandlerFileStatus(null);
-        $test->process($descriptor);
-        
-        $this->assertTrue($descriptor->filestate->exists);
-        $this->assertFalse($descriptor->filestate->readable);
-        $this->assertFalse($descriptor->filestate->writeable);
-        $this->assertEquals('file',$descriptor->filestate->type);
-    }
-    
-}
+ }
