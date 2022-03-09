@@ -88,7 +88,7 @@ class HandlerFileObject extends HandlerBase
     /**
      * @todo Add additonal detection here
      * @param string $source
-     * @return String
+     * @return Stringfalse
      */
     protected function detectMime(string $source): String
     {
@@ -197,7 +197,8 @@ class HandlerFileObject extends HandlerBase
         $descriptor->file->created = filectime($descriptor->getCurrentLocation());
         $descriptor->file->changed = filemtime($descriptor->getCurrentLocation());
         $descriptor->file->ext = $descriptor->filestate->ext;
-        $descriptor->file->type = 'regular';        
+        $descriptor->file->type = 'regular';  
+        $descriptor->file->mime = $descriptor->filestate->mime_obj;
     }
     
     function matches(CrawlerDescriptor $descriptor): Bool

@@ -53,7 +53,12 @@ class HandlerFileObjectTest extends SunhillScenarioTestCase
         $test = new HandlerFileObject(null);
         $test->process($descriptor);
         
-        $this->assertEquals($expect,$descriptor->$group->$field);
+        if (strpos($field,'.')) {
+            list($key1,$key2) = explode('.',$field);
+            $this->assertEquals($expect,$descriptor->$group->$key1->$key2);
+        } else {
+            $this->assertEquals($expect,$descriptor->$group->$field);
+        }
         
     }
     
@@ -109,7 +114,14 @@ class HandlerFileObjectTest extends SunhillScenarioTestCase
                 ],
                 'dbstate','wasInDatabase',false,
             ],
-        
+            [
+                '/scan/B.txt',
+                [
+                    'filestate.sha1_hash'=>'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec'
+                ],
+                'file','mime.mime','application/octet-stream',
+            ],
+            
             [
                 '../../files/testfiles/audio-flac/test.flac',
                 [
