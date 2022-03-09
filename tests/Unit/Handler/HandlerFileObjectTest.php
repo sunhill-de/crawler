@@ -29,7 +29,11 @@ class HandlerFileObjectTest extends SunhillScenarioTestCase
      */
     public function testFileStatus($file,$descriptorinfo,$group,$field,$expect)
     {
-        $source = $this->getTempDir().$file;
+        if ($file[0] == '/') {
+            $source = $this->getTempDir().$file;
+        } else {
+            $source = dirname(__FILE__).'/'.$file;    
+        }
         
         $descriptor = new CrawlerDescriptor();
         $descriptor->filestate->exists = true;
@@ -104,6 +108,35 @@ class HandlerFileObjectTest extends SunhillScenarioTestCase
                     'filestate.sha1_hash'=>'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec'
                 ],
                 'dbstate','wasInDatabase',false,
+            ],
+        
+            [
+                '../../files/testfiles/audio-flac/test.flac',
+                [
+                    'filestate.sha1_hash'=>'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec'
+                ],
+                'filestate','mime_str','audio/flac',
+            ],
+            [
+                '../../files/testfiles/audio-mp3/test.mp3',
+                [
+                    'filestate.sha1_hash'=>'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec'
+                ],
+                'filestate','mime_str','audio/mpeg',
+            ],
+            [
+                '../../files/testfiles/image-heif/test.heic',
+                [
+                    'filestate.sha1_hash'=>'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec'
+                ],
+                'filestate','mime_str','image/heic',
+            ],
+            [
+                '../../files/testfiles/image-jpeg/test.jpc',
+                [
+                    'filestate.sha1_hash'=>'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec'
+                ],
+                'filestate','mime_str','image/jpeg',
             ],
         ];
     }
