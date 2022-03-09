@@ -123,4 +123,13 @@ class CrawlerDescriptor extends Descriptor
         $this->filestate->current_location = $location;
         $this->filestate->original_location = $location;
     }
+    
+    public function commandIs($command)
+    {
+        if (is_array($command)) {
+            return in_array($this->command,$command);
+        } else {
+            return $this->command == $command;
+        }        
+    }
 }

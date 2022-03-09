@@ -197,7 +197,17 @@ class HandlerFileObject extends HandlerBase
         $descriptor->file->created = filectime($descriptor->getCurrentLocation());
         $descriptor->file->changed = filemtime($descriptor->getCurrentLocation());
         $descriptor->file->ext = $descriptor->filestate->ext;
-        $descriptor->file->type = 'regular';  
+        switch ($descriptor->command) {
+            case 'scan':
+                $descriptor->file->type = 'regular';
+                break;
+            case 'delete':
+                $descriptor->file->type = 'deleted';
+                break;
+            case 'ignore':
+                $descriptor->file->type = 'ignored';
+                break;
+        }
         $descriptor->file->mime = $descriptor->filestate->mime_obj;
     }
     
