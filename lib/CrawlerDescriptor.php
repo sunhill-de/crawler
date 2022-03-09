@@ -114,6 +114,7 @@ class CrawlerDescriptor extends Descriptor
     public function setCurrentLocation(string $location)
     {
         $this->source = $location;
+        $this->filestate->current_location = $location;
     }
     
     public function setSource(string $location)

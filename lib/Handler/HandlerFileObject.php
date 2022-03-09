@@ -2,19 +2,28 @@
 
 namespace Sunhill\Crawler\Handler;
 
-use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
+use Sunhill\Crawler\Objects\File;
 use Sunhill\Crawler\Objects\Mime;
 
 /**
- * Handles the entries in the database
+ * Checks if this file is already in the database. If yes, load it and fill some fields
+ * If not, create the best fitting file object 
  * @author klaus
- *
+ * Depends: none
+ * Modifies: 
+ * - filestate.mime
+ * - dbstate.isInDatabase
+ * - dbstate.wasInDatabase
+ * - dbstate.id
+ * - file
+ * - source
+ * Condition: none
  */
-class HandlerMime extends HandlerBase
+class HandlerFileObject extends HandlerBase
 {
-  
-    public static $prio = 6;
+ 
+    public static $prio = 5;
     
     /**
      * The signatures are taken from the getID3 project
@@ -28,27 +37,58 @@ class HandlerMime extends HandlerBase
         'image/heic' => '\\x66\\x74\\x79\\x70\\x6d\\x69\\x66'
     ];
     
+    private static $mime_to_ext = [
+        'audio/flac' => 'flac',
+        'audio/mpeg' => 'mp3',
+        'image/jpeg' => 'jpg',
+        'image/heic' => 'heic',
+    ];
+    
     function process(CrawlerDescriptor $descriptor)
     {
-        $this->verboseinfo("  Detecting mime");
-        $descriptor->fileinfo->mimeStr = $this->detectMime($descriptor->source);
-        $descriptor->fileinfo->mimeObj = $this->getMime($descriptor->fileinfo->mimeStr);
-        $descriptor->fileinfo->ext = $this->getExt($descriptor->source);
+        if ($file = $this->searchHash($descriptor->filestate->sha1_hash,$descriptor)) {
+            $this->alreadyInDatabase($descriptor,$file);
+        } else {
+            $this->notInDatabase($descriptor);
+        }        
     }
 
-    protected function getExt(string $file): String
+    protected function searchHash($hash,$descriptor)
     {
-        $filebase = pathinfo($file,PATHINFO_BASENAME);
-        if ($filebase[0] == '.') {
-            return "";
+        if ($result = File::search()->where('sha1_hash','=',$hash)->loadIfExists()) {
+            $this->verboseinfo(" Hash already in database");
+            return $result;
+        } else {
+            $this->verboseinfo(" Hash not in database");
+            return false;
         }
-        return strtolower(pathinfo($file,PATHINFO_EXTENSION));
     }
     
+    protected function alreadyInDatabase(CrawlerDescriptor $descriptor, File $file)
+    {
+        $descriptor->file = $file;
+        $descriptor->dbstate->isInDatabase = true;
+        $descriptor->dbstate->wasInDatabase = true;
+        $descriptor->dbstate->id = $file->getID();
+        $descriptor->filestate->mime_str = $file->mime->mime;
+        $descriptor->filestate->mime_obj = $file->mime;
+    }
+    
+    protected function notInDatabase(CrawlerDescriptor $descriptor)
+    {
+        $descriptor->dbstate->isInDatabase = false;
+        $descriptor->dbstate->wasInDatabase = false;
+        $descriptor->dbstate->id = false;
+        $descriptor->filestate->mime_str = $this->detectMime($descriptor->getCurrentLocation());
+        $descriptor->filestate->mime_obj = $this->getMime($descriptor->filestate->mime_str);
+        $descriptor->filestate->ext = $this->getExt($descriptor->source,$descriptor->filestate->mime_str);
+        $this->createFileObject($descriptor); 
+    }
+        
     /**
      * @todo Add additonal detection here
      * @param string $source
-     * @return String
+     * @return Stringfalse
      */
     protected function detectMime(string $source): String
     {
@@ -75,7 +115,7 @@ class HandlerMime extends HandlerBase
         $result->commit();
         return $result;
     }
-
+    
     private function get_header(string $path)
     {
         $fp = fopen($path, 'r');
@@ -133,7 +173,7 @@ class HandlerMime extends HandlerBase
      * @param string $fullpath
      * @return string Dateierweiterung der Datei
      */
-    public function get_ext(string $filename, string $mime_type)
+    public function getExt(string $filename, string $mime_type)
     {
         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         if (isset(self::$mime_to_ext[$mime_type])) {
@@ -142,10 +182,28 @@ class HandlerMime extends HandlerBase
             return $ext;
         }
     }
-
+    
+    protected function createFileObject($descriptor)
+    {
+        switch ($descriptor->filestate->mime_str)
+        {
+            default:
+                $descriptor->file = new File();
+                break;
+        }
+        $descriptor->file->sha1_hash = $descriptor->filestate->sha1_hash;
+        $descriptor->file->md5_hash = md5_file($descriptor->getCurrentLocation());
+        $descriptor->file->size  = filesize($descriptor->getCurrentLocation());
+        $descriptor->file->created = filectime($descriptor->getCurrentLocation());
+        $descriptor->file->changed = filemtime($descriptor->getCurrentLocation());
+        $descriptor->file->ext = $descriptor->filestate->ext;
+        $descriptor->file->type = 'regular';  
+        $descriptor->file->mime = $descriptor->filestate->mime_obj;
+    }
+    
     function matches(CrawlerDescriptor $descriptor): Bool
     {
-        return $descriptor->fileReadable() && !$descriptor->alreadyInDatabase();
+        return $descriptor->fileReadable();
     }
-        
+    
 }

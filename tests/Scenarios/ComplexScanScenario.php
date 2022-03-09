@@ -18,13 +18,16 @@ use Sunhill\ORM\Tests\Scenario\ScenarioWithRegistration;
 
 class ComplexScanScenario extends ScenarioBase
 {
-    use ScenarioWithDirs,ScenarioWithFiles,ScenarioWithObjects; 
+    use ScenarioWithDirs,ScenarioWithFiles,ScenarioWithLinks,ScenarioWithObjects; 
     
     protected $Requirements = [
         'Dirs'=>[
             'destructive'=>true,
         ],
         'Files'=>[
+            'destructive'=>true,
+        ],
+        'Links'=>[
             'destructive'=>true,
         ],
         'Objects'=>[
@@ -44,6 +47,9 @@ class ComplexScanScenario extends ScenarioBase
             '/media/originals/6/d/',
             '/media/originals/6/d/c/',
             '/media/source/',
+            '/media/source/all/',
+            '/media/source/all/some/',
+            '/media/source/all/some/dir/',
             '/scan/',
             '/scan/subdir/'
         ];
@@ -58,6 +64,13 @@ class ComplexScanScenario extends ScenarioBase
             ['path'=>'/scan/D.TXT','content'=>'D'],
             ['path'=>'/scan/subdir/AnotherA.txt','content'=>'A'],
             ['path'=>'/media/originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt','content'=>'A']
+        ];    
+    }
+    
+    protected function getLinks()
+    {
+        return [
+            ['link'=>'/media/source/all/some/dir/link.txt','target'=>'/media/originals/6/d/c/6dcd4ce23d88e2ee9568ba546c007c63d9131c1b.txt'],
         ];    
     }
     
@@ -79,9 +92,9 @@ class ComplexScanScenario extends ScenarioBase
                 ]
             ],
             'File'=>[
-                ['sha1_hash','ext','size','mime','created','changed','parent_dir'],
+                ['sha1_hash','ext','size','mime','created','changed','parent_dir','type'],
                 [
-                    'file'=>['6dcd4ce23d88e2ee9568ba546c007c63d9131c1b','txt',1,'=>mime','2022-02-11 00:00:00','2022-02-11 00:00:00','=>dc'],
+                    'file'=>['6dcd4ce23d88e2ee9568ba546c007c63d9131c1b','txt',1,'=>mime','2022-02-11 00:00:00','2022-02-11 00:00:00','=>dc','regular'],
                 ]
             ],
             'Link'=>[
