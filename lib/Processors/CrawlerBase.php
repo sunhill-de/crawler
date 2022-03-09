@@ -86,6 +86,7 @@ abstract class CrawlerBase
         $descriptor->keep = $this->keep;
         $descriptor->setSource($file);
         
+        $descriptor->command = $this->command;
         $descriptor->skip_duplicates = $this->skip_duplicates;
         $descriptor->ignore_source = $this->ignore_source;
         $descriptor->tags = $this->tags;
