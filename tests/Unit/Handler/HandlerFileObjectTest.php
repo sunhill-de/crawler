@@ -132,7 +132,7 @@ class HandlerFileObjectTest extends SunhillScenarioTestCase
                 'filestate','mime_str','image/heic',
             ],
             [
-                '../../files/testfiles/image-jpeg/test.jpc',
+                '../../files/testfiles/image-jpeg/test.jpg',
                 [
                     'filestate.sha1_hash'=>'ae4f281df5a5d0ff3cad6371f76d5c29b6d953ec'
                 ],
