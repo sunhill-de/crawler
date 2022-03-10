@@ -31,7 +31,7 @@ class Scanner extends CrawlerBase
     
     protected $associations;
     
-    protected $command = 'scan';
+    protected $called_command = 'scan';
     
     public function __construct($command,bool $keep,bool $recursive = true, 
                          bool $skip = false, bool $ignore_source = false, bool $erase_empty, 
