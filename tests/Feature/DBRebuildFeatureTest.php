@@ -63,6 +63,7 @@ class DBRebuildFeatureTest extends SunhillScenarioTestCase
         // Must insert the old source link
         $result = Link::search()->where('name','=','link')->loadIfExists();
         $this->assertFalse(is_null($result));
+        $this->assertEquals('6dcd4ce23d88e2ee9568ba546c007c63d9131c1b',$result->target->sha1_hash);
         
         // Mustn't create new source links
         $result = Link::search()->where('name','=','6dcd4ce23d88e2ee9568ba546c007c63d9131c1b')->loadIfExists();

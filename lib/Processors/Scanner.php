@@ -19,6 +19,7 @@ use Sunhill\Crawler\Handler\HandlerMoveDestination;
 use Sunhill\Crawler\Handler\HandlerSource;
 use Sunhill\Crawler\Handler\HandlerDBSource;
 use Sunhill\Crawler\Objects\Dir;
+use Sunhill\Crawler\Objects\Link;
 
 class Scanner extends CrawlerBase
 {
@@ -80,6 +81,23 @@ class Scanner extends CrawlerBase
         if ($this->erase_empty) {
             FileManager::eraseDirIfEmpty($target);
         }    
+    }
+    
+    protected function handleLink($target)
+    {
+        if (FileManager::fileInDir($target,FileManager::getMediaDir())) {
+            $link_target = readlink($target);
+            $this->handleFile($link_target); // In case, the target is not yet added
+            $target_dir = FileObjects::normalizeMediaPath(pathinfo($target,PATHINFO_DIRNAME));
+            $parent_dir = FileObjects::searchOrInsertDir($target_dir);
+            
+            $link = new Link();
+            $link->name = pathinfo($target,PATHINFO_FILENAME);
+            $link->ext = pathinfo($target,PATHINFO_EXTENSION);
+            $link->parent_dir = $parent_dir;
+            $link->target = FileObjects::searchFileByHash(pathinfo($link_target,PATHINFO_FILENAME));
+            $link->commit();
+        }
     }
     
     protected function getHandlers()
