@@ -38,6 +38,15 @@ class CrawlerDescriptor extends Descriptor
         }
     }
     
+    public function alreadyInMedia(): Bool
+    {
+        if ($this->isDefined('filestate') && $this->filestate->isDefined('alreadyInMedia')) {
+            return $this->filestate->alreadyInMedia;
+        } else {
+            throw new DescriptorException("filestate or filestate->alreadyInMedia not set.");
+        }
+    }
+    
     public function fileReadable(): Bool
     {
         if ($this->isDefined('filestate') && $this->filestate->isDefined('readable'))
