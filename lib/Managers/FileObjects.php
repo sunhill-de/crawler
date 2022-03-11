@@ -5,6 +5,7 @@ namespace Sunhill\Crawler\Managers;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\Objects\Dir;
+use Sunhill\Crawler\Objects\File;
 use Sunhill\Crawler\Facades\FileManager;
 
 class FileObjects 
@@ -111,9 +112,9 @@ class FileObjects
         }
     }
     
-    public function searchFileByHash(string $hash): Int
+    public function searchFileByHash(string $hash): File
     {
-        if ($result = DB::table("files")->where("sha1_hash",$hash)->first()) {
+        if ($result = File::search()->where("sha1_hash","=",$hash)->loadIfExists()) {
             return $result;
         } else {
             return null;
