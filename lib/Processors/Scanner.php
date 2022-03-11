@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Facades\FileManager;
+use Sunhill\Crawler\Facades\FileObjects;
 use Sunhill\Crawler\Handler\HandlerDBFile;
 use Sunhill\Crawler\Handler\HandlerDestination;
 use Sunhill\Crawler\Handler\HandlerDirs;
@@ -17,6 +18,7 @@ use Sunhill\Crawler\Handler\HandlerLinks;
 use Sunhill\Crawler\Handler\HandlerMoveDestination;
 use Sunhill\Crawler\Handler\HandlerSource;
 use Sunhill\Crawler\Handler\HandlerDBSource;
+use Sunhill\Crawler\Objects\Dir;
 
 class Scanner extends CrawlerBase
 {
@@ -63,6 +65,15 @@ class Scanner extends CrawlerBase
         $this->handleEntry($target);
     }
 
+    protected function enterDir($target)
+    {
+        parent::enterDir($target);
+        
+        if (FileManager::fileInDir($target,FileManager::getMediaDir())) {
+            FileObjects::searchOrInsertDir($target);
+        }
+    }
+    
     protected function leaveDir($target)
     {
         parent::leaveDir($target);
