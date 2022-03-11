@@ -38,7 +38,8 @@ class HandlerDBSource extends HandlerBase
     function matches(CrawlerDescriptor $descriptor): Bool
     {
         return $descriptor->fileReadable() && !$descriptor->ignore_source &&
-               (!$descriptor->fileInDatabase || !$descriptor->skip_duplicates);
+               (!$descriptor->fileInDatabase || !$descriptor->skip_duplicates)
+                && !$descriptor->alreadyInMedia();
     }
     
     

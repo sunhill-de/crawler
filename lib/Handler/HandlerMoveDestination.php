@@ -54,7 +54,7 @@ class HandlerMoveDestination extends HandlerBase
     
     function matches(CrawlerDescriptor $descriptor): Bool
     {
-        return $descriptor->fileProcessable() && !$descriptor->stateIs('ignored');
+        return $descriptor->fileProcessable() && !$descriptor->stateIs('ignored') && !$descriptor->alreadyInMedia();
     }
     
     
