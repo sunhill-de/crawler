@@ -112,7 +112,7 @@ class File extends fileobject {
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false);
-        self::varchar('content')
+        self::arrayofobjects('content')
             ->set_default('none')
             ->set_description('Linked contents')
             ->set_displayable(true)
