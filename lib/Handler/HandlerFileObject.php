@@ -192,6 +192,7 @@ class HandlerFileObject extends HandlerBase
                 break;
         }
         $descriptor->file->sha1_hash = $descriptor->filestate->sha1_hash;
+        $descriptor->file->name = pathinfo($descriptor->source,PATHINFO_FILENAME);
         $descriptor->file->md5_hash = md5_file($descriptor->getCurrentLocation());
         $descriptor->file->size  = filesize($descriptor->getCurrentLocation());
         $descriptor->file->created = filectime($descriptor->getCurrentLocation());

@@ -107,7 +107,7 @@ class File extends fileobject {
             ->set_displayable(true)
             ->set_editable(false)
             ->set_groupeditable(false);
-        self::arrayofstrings('sources')
+        self::arrayofobjects('sources')
             ->set_description('The source dir(s) this file was read from.')
             ->set_displayable(true)
             ->set_editable(true)
@@ -130,4 +130,13 @@ class File extends fileobject {
         }
     }
     
+    public function getDefaultDate()
+    {
+        return $this->created;
+    }
+    
+    public function getDefaultName()
+    {
+        return $this->name.".".$this->ext;
+    }
 }

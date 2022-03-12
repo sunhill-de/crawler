@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Sunhill\Crawler\CrawlerDescriptor;
 use Sunhill\Crawler\Facades\FileManager;
 use Sunhill\Crawler\Facades\FileObjects;
+use Sunhill\Crawler\Handler\HandlerAdditional;
 use Sunhill\Crawler\Handler\HandlerDBFile;
 use Sunhill\Crawler\Handler\HandlerDestination;
 use Sunhill\Crawler\Handler\HandlerDirs;
@@ -103,6 +104,7 @@ class Scanner extends CrawlerBase
     protected function getHandlers()
     {
         return [
+            HandlerAdditional::class,
             HandlerDBFile::class,
             HandlerDBSource::class,
             HandlerDestination::class,
