@@ -11,6 +11,6 @@
           <div class="const_label">Ver&auml;ndert</div><div class="const">$object->updated_at</div>
        </div>
        @yield('otherfields')
-       <input type="submit">
+       <input type="submit" />
       </form>
 @endsection
