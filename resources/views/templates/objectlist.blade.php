@@ -1,4 +1,4 @@
-@extends('templates.list_objects')
+@extends('templates.list')
 
 @section('table')
        <table>
