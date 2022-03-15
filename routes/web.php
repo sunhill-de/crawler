@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\ObjectsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
+
+Route::get('/classes/list', [ClassesController::class, 'list']);
+Route::get('/classes/show/{class}', [ClassesController::class, 'show']);
+
+Route::get('/objects/list/{class}', [ObjectsController::class, 'list']);
