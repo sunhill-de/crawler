@@ -1,9 +1,8 @@
-@extends('templates.default')
+@extends('templates.list')
 
 @section('title','Klassen auflisten')
 
-@section('body')
-      <div class="list">
+@section('table')
        <table>
         <th>
          <td>ID</td>
@@ -26,5 +25,4 @@
         </tr> 
         @endforelse
        </table>
-      </div> 
 @endsection
