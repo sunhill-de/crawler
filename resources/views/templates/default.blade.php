@@ -6,9 +6,9 @@
 
         <title>Crawler - @yield('title')</title>
 
-        <link rel="stylesheet" type="text/css" href="/css/sunhill.css">
+        <link rel="stylesheet" type="text/css" href="/css/crawler.css">
         <script type="text/javascript" src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
-        <script type="text/javascript" src="/js/sunhill.js"></script>  
+        <script type="text/javascript" src="/js/crawler.js"></script>  
 
     </head>
     <body>
