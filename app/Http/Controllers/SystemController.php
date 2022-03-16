@@ -5,14 +5,14 @@ namespace App/Http/Controllers;
 class SystemController extends Controller
 {
       public function css() {
-        $content = view('layouts.build',[
+        $content = view('templates.build',[
             'files'=>$this->get_files('css')
         ]);
         return response($content)->header('Content-Type','text/css');        
     }
     
     public function js() {
-        $content = view('layouts.build',[
+        $content = view('templates.build',[
             'files'=>$this->get_files('js')
         ]);
         return response($content)->header('Content-Type','text/javascript');
