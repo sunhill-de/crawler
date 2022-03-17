@@ -11,7 +11,7 @@
        </div>
        <div class="menublock">
         <h2>Objekte</h2>
-        <a href="/objects/list">auflisten</a>
+        <a href="/objects/list/object">auflisten</a>
        </div>
       </div>
 @endsection

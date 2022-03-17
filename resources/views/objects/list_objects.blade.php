@@ -31,4 +31,6 @@
         </tr> 
         @endforelse
        </table>
+       <a href="/">&Uuml;bersicht</a>
+       
 @endsection
