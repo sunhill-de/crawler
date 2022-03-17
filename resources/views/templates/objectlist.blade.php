@@ -2,13 +2,13 @@
 
 @section('table')
        <table>
-        <th>
-         <td>ID</td>
+        <tr>
+         <th>ID</th>
          @yield('list_header')
-         <td>&Ge&auml;ndert</td>
-         <td>&nbsp;</td>
-         <td>&nbsp;</td>
-        </th>
+         <th>&Ge&auml;ndert</th>
+         <th>&nbsp;</th>
+         <th>&nbsp;</th>
+        </tr>
         @forelse($objects as $object)
         <tr>
          <td>{{$object->id}}</td>

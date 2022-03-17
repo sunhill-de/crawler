@@ -4,15 +4,16 @@
 
 @section('table')
        <table>
-        <th>
-         <td>ID</td>
-         <td>UUID</td>
-         <td>Klasse</td>
-         <td>Erzeugt</td>
-         <td>&Ge&auml;ndert</td>
-         <td>&nbsp;</td>
-         <td>&nbsp;</td>
-        </th>
+        <tr>
+         <th>ID</th>
+         <th>UUID</th>
+         <th>Klasse</th>
+         <th>Erzeugt</th>
+         <th>Ge&auml;ndert</th>
+         <th>&nbsp;</th>
+         <th>&nbsp;</th>
+         <th>&nbsp;</th>
+        </tr>
         @forelse($objects as $object)
         <tr>
          <td>{{$object->id}}</td>
