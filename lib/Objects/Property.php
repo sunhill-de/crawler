@@ -4,7 +4,7 @@
  * @file Property.php
  * Provides informations about a property
  * Lang en
- * Reviewstatus: 2022-02-28
+ * Reviewstatus: 2022-03-17
  * Localization: unknown
  * Documentation: unknown
  * Tests: unknown
@@ -14,7 +14,7 @@
 namespace Sunhill\Crawler\Objects;
 
 /**
- * The class for persons
+ * The class for properties
  *
  * @author lokal
  *        
@@ -42,6 +42,59 @@ class Property extends ORMObject
             ->set_editable(true)
             ->set_groupeditable(false)
             ->searchable();
-    }
-    
+        self::object('owner')
+            ->set_allowed_objects(['FamilyMember'])
+            ->searchable()
+            ->set_editable(true)
+            ->set_groupeditable(true)
+            ->set_displayable(true);
+        self::enum('ingress_kind');        
+            ->set_enum_values(['made','bought','present','swap'])
+            ->searchable()
+            ->set_editable(true)
+            ->set_groupeditable(true)
+            ->set_displayable(true);
+        self::date('ingress_date')
+            ->searchable()
+            ->set_editable(true)
+            ->set_groupeditable(true)
+            ->set_displayable(true);
+        self::float('ingress_price')
+            ->searchable()
+            ->set_editable(true)
+            ->set_groupeditable(true)
+            ->set_displayable(true);
+        self::varchar('ingress_source')
+            ->searchable()
+            ->set_editable(true)
+            ->set_groupeditable(true)
+            ->set_displayable(true);
+        self::object('location')
+            ->searchable()
+            ->set_editable(true)
+            ->set_groupeditable(true)
+            ->set_displayable(true);
+            ->set_allowed_objects(['Location']);
+        self::enum('egress_kind')
+            ->searchable()
+            ->set_editable(true)
+            ->set_groupeditable(true)
+            ->set_displayable(true);
+            ->set_enum_values(['trash','sold','lost','present']);
+        self::date('egress_date')
+            ->searchable()
+            ->set_editable(true)
+            ->set_groupeditable(true)
+            ->set_displayable(true);
+        self::float('egress_price')
+            ->searchable()
+            ->set_editable(true)
+            ->set_groupeditable(true)
+            ->set_displayable(true);            
+        self::enum('type')
+            ->searchable()
+            ->set_editable(true)
+            ->set_groupeditable(true)
+            ->set_displayable(true);
+            ->set_enum_values(['physical','virtual']);
 }
