@@ -22,9 +22,6 @@
 	padding: 6px;
 }
 
-.list th {
-}
-
 .list td:nth-child(even) {
   background-color: #f0f0f0;
 }
