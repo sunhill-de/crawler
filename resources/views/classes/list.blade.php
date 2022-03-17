@@ -4,12 +4,12 @@
 
 @section('table')
        <table>
-        <th>
-         <td>Name</td>
-         <td>Parent</td>
-         <td>&nbsp;</td>
-         <td>&nbsp;</td>
-        </th>
+        <tr>
+         <th>Name</th>
+         <th>Parent</th>
+         <th>&nbsp;</th>
+         <th>&nbsp;</th>
+        </tr>
         @forelse($classes as $class)
         <tr>
          <td>{{$class->name}}</td>
