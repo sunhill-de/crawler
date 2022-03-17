@@ -13,6 +13,8 @@
  */
 namespace Sunhill\Crawler\Objects;
 
+use Sunhill\ORM\Objects\ORMObject;
+
 /**
  * The class for persons
  *

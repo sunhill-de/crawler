@@ -64,4 +64,5 @@ class ElectronicDevice extends Property
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true);
+    }
 }

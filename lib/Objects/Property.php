@@ -13,6 +13,8 @@
  */
 namespace Sunhill\Crawler\Objects;
 
+use Sunhill\ORM\Objects\ORMObject;
+
 /**
  * The class for properties
  *
@@ -48,7 +50,7 @@ class Property extends ORMObject
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true);
-        self::enum('ingress_kind');        
+        self::enum('ingress_kind')        
             ->set_enum_values(['made','bought','present','swap'])
             ->searchable()
             ->set_editable(true)
@@ -73,13 +75,13 @@ class Property extends ORMObject
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
-            ->set_displayable(true);
+            ->set_displayable(true)
             ->set_allowed_objects(['Location']);
         self::enum('egress_kind')
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
-            ->set_displayable(true);
+            ->set_displayable(true)
             ->set_enum_values(['trash','sold','lost','present']);
         self::date('egress_date')
             ->searchable()
@@ -95,6 +97,7 @@ class Property extends ORMObject
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
-            ->set_displayable(true);
+            ->set_displayable(true)
             ->set_enum_values(['physical','virtual']);
+    }
 }
