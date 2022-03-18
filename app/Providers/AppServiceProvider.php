@@ -11,13 +11,18 @@ use Sunhill\Basic\Facades\Checks;
 use Sunhill\Crawler\Checks\CheckFileDatabase;
 use Sunhill\ORM\Facades\Classes;
 
+use Sunhill\Crawler\Objects\Computer;
 use Sunhill\Crawler\Objects\FamilyMember;
 use Sunhill\Crawler\Objects\FileObject;
 use Sunhill\Crawler\Objects\File;
 use Sunhill\Crawler\Objects\Dir;
 use Sunhill\Crawler\Objects\Friend;
+use Sunhill\Crawler\Objects\Genre;
 use Sunhill\Crawler\Objects\Link;
+use Sunhill\Crawler\Objects\MediaDevice;
 use Sunhill\Crawler\Objects\Mime;
+use Sunhill\Crawler\Objects\MobileDevice;
+use Sunhill\Crawler\Objects\NetworkDevice;
 use Sunhill\Crawler\Objects\Person;
 use Sunhill\Crawler\Objects\Property;
 use Sunhill\Crawler\Objects\ElectronicDevice;
@@ -62,6 +67,11 @@ class AppServiceProvider extends ServiceProvider
        Classes::registerClass(FamilyMember::class);
        Classes::registerClass(Property::class);
        Classes::registerClass(ElectronicDevice::class);
+       Classes::registerClass(NetworkDevice::class);
+       Classes::registerClass(MobileDevice::class);
+       Classes::registerClass(Computer::class);
+       Classes::registerClass(MediaDevice::class);
        Classes::registerClass(Network::class);
+       Classes::registerClass(Genre::class);
     }
 }
