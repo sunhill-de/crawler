@@ -18,7 +18,7 @@
         <tr>
          <td>{{$object->id}}</td>
          <td>{{$object->uuid}}</td> 
-         <td><a href="/objects/list/{{$object::$object_infos['name']}}">{{$object::$object_infos['name']}}</a></td>
+         <td><a href="/objects/list/{{strtolower($object::$object_infos['name'])}}">{{$object::$object_infos['name']}}</a></td>
          <td>{{$object->created_at}}</td>
          <td>{{$object->updated_at}}</td>
          <td><a href="/objects/show/{{$object->id}}">anzeigen</a></td>
