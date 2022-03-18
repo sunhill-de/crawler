@@ -23,7 +23,7 @@ class ObjectsController extends Controller
                 
             }
         }
-        return view('objects.list_'.$class.'s', [
+        return view('objects.list.'.strtolower($class).'s', [
             'objects'=>$objects
         ]);
         
