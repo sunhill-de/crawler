@@ -21,6 +21,7 @@ use Sunhill\Crawler\Objects\Mime;
 use Sunhill\Crawler\Objects\Person;
 use Sunhill\Crawler\Objects\Property;
 use Sunhill\Crawler\Objects\ElectronicDevice;
+use Sunhill\Crawler\Objects\Network;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -61,5 +62,6 @@ class AppServiceProvider extends ServiceProvider
        Classes::registerClass(FamilyMember::class);
        Classes::registerClass(Property::class);
        Classes::registerClass(ElectronicDevice::class);
+       Classes::registerClass(Network::class);
     }
 }
