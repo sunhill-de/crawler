@@ -9,6 +9,21 @@ use Sunhill\ORM\Facades\Objects;
 
 class ObjectsController extends Controller
 {
+    
+    private function getBestTemplate(string $class, string $action)
+    {
+        $base = 'objects.$action.';
+        $path = resource_path("views/objects/$action/");
+        $inheritance = Classes::getInheritanceOfClass($class,true);
+        foreach ($inheritance as $class_entry) {
+            $class_entry = strtolower($class_entry);
+            if (file_exists($path.$class_entry.'.blade.php') {
+                return $base.$class_entry;
+            }    
+        }
+        throw new \Exception("Can't find a fitting template for '$class' and '$action'");        
+    }
+    
     /**
      * List all objects of a given class
      *
@@ -23,10 +38,9 @@ class ObjectsController extends Controller
                 
             }
         }
-        return view('objects.list.'.strtolower($class).'s', [
+        return view($this->getBestTemplate($class,'list'), [
             'objects'=>$objects
-        ]);
-        
+        ]);        
     }
     
     /**
@@ -36,6 +50,31 @@ class ObjectsController extends Controller
      */
     public function show($objectid)
     {
-        return 'Object : '.$id;
+        return view($this->getBestTemplate(Objects::getClassNameOf($objectid),'show'); [
+            'object'=>Objects::getObject($objectid)
+        ]);        
     }
+    
+    public function add($class)
+    {
+        return view($this->getBestTemplate($class,'add'); [
+        ]);        
+    }
+    
+    public function exec_add()
+    {
+    }
+    
+    public function edit($objectid)
+    {
+    }
+    
+    public function exec_edit($objectid)
+    {
+    }
+    
+    public function delete($objectid)
+    {
+    }
+    
 }
