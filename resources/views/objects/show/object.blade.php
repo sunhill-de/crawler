@@ -1,4 +1,4 @@
-@extends('templates.objectlist')
+@extends('templates.show')
 
 @section('title','Objekt anzeigen')
 
