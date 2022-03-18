@@ -44,6 +44,12 @@ class Person extends ORMObject
             ->set_editable(true)
             ->set_groupeditable(false)
             ->searchable();
+        self::varchar('middlename')
+            ->set_maxlen(100)
+            ->set_description('The middle name of the person')
+            ->set_displayable(true)
+            ->set_editable(true)
+            ->set_groupeditable(false);
         self::varchar('lastname')
             ->set_maxlen(100)
             ->set_description('The last name of the person')
