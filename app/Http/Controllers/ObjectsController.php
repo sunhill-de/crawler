@@ -17,7 +17,7 @@ class ObjectsController extends Controller
         $inheritance = Classes::getInheritanceOfClass($class,true);
         foreach ($inheritance as $class_entry) {
             $class_entry = strtolower($class_entry);
-            if (file_exists($path.$class_entry.'.blade.php') {
+            if (file_exists($path.$class_entry.'.blade.php')) {
                 return $base.$class_entry;
             }    
         }
@@ -50,14 +50,14 @@ class ObjectsController extends Controller
      */
     public function show($objectid)
     {
-        return view($this->getBestTemplate(Objects::getClassNameOf($objectid),'show'); [
+        return view($this->getBestTemplate(Objects::getClassNameOf($objectid),'show'), [
             'object'=>Objects::getObject($objectid)
         ]);        
     }
     
     public function add($class)
     {
-        return view($this->getBestTemplate($class,'add'); [
+        return view($this->getBestTemplate($class,'add'), [
         ]);        
     }
     
