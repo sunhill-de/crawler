@@ -4,6 +4,7 @@
 
 @section('show')
     @parent
+    <h1>Person</h1>
     <div class="label">Titel</div>:<div class="value">{{$object->title}}</div>
     <div class="label">Vorname</div>:<div class="value">{{$object->firstname}}</div>
     <div class="label">Mittlerer Name(n)</div>:<div class="value">{{$object->middlename}}</div>
