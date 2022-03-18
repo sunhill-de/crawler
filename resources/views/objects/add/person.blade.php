@@ -1,4 +1,4 @@
-@extends('templates.add')
+@extends('objects.add.object')
 
 @section('title', 'Person hinzuf&uuml;gen')
 
