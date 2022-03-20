@@ -38,8 +38,8 @@ class NetworkDevice extends ElectronicDevice {
     {
         parent::setupProperties();
         self::object('network')
-            ->set_allowed_objects(['Network'])
-            ->set_default(null)
+            ->setAllowedObjects(['Network'])
+            ->setDefault(null)
             ->set_description('What network does this device belong to')
             ->set_displayable(true)
             ->set_editable(true)
@@ -60,21 +60,21 @@ class NetworkDevice extends ElectronicDevice {
             ->set_groupeditable(false);
         self::integer('pingable')
             ->set_description('Is this device pingable')
-            ->set_default(1)
+            ->setDefault(1)
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true);
         self::varchar('ip4_address')
             ->setMaxLen(15)
             ->set_description('What is the ip4 address of this device')
-            ->set_default(null) // default no address
+            ->setDefault(null) // default no address
             ->set_displayable(true)
             ->set_editable(false)
             ->set_groupeditable(false);
         self::varchar('ip6_address')
             ->setMaxLen(17)
             ->set_description('What is the ip6 address of this device')
-            ->set_default(null) // default no address
+            ->setDefault(null) // default no address
             ->set_displayable(true)
             ->set_editable(false)
             ->set_groupeditable(false);

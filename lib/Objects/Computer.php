@@ -21,7 +21,7 @@ namespace Sunhill\Crawler\Objects;
  */
 class Computer extends NetworkDevice
 {
-    public static $table_name = 'electronicdevices';
+    public static $table_name = 'computers';
     
     public static $object_infos = [
         'name'=>'Computer',       // A repetition of static:$object_name @todo see above
@@ -32,20 +32,20 @@ class Computer extends NetworkDevice
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::enum('computer_type')
             ->set_description('What kind of computer is this')
-            ->set_enum_values(['server','laptop','tablet','standalone'])
+            ->setEnumValues(['server','laptop','tablet','standalone'])
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true)
             ->searchable();
         self::varchar('operating_system')
             ->set_description('What OS runs it')
-            ->set_maxlen(100)
-            ->set_default(null)
+            ->setMaxLen(100)
+            ->setDefault(null)
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)

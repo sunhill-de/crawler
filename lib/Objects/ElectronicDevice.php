@@ -32,33 +32,33 @@ class ElectronicDevice extends Property
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::enum('power_supply')
             ->set_description('How this device is powered')
-            ->set_enum_values(['plug','AA','AAA','Baby','Mono','Akku','9V','other','none'])
+            ->setEnumValues(['plug','AA','AAA','Baby','Mono','Akku','9V','other','none'])
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true)
             ->searchable();
         self::varchar('manufacturer')
             ->set_description('Which company made this device')
-            ->set_maxlen(100)
-            ->set_default(null)
+            ->setMaxLen(100)
+            ->setDefault(null)
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true);
         self::varchar('model_name')
             ->set_description('Whats the model name of this device')
-            ->set_maxlen(100)
-            ->set_default(null)
+            ->setMaxLen(100)
+            ->setDefault(null)
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true);
-        self::arrayofstring('device_groups')
+        self::arrayOfStrings('device_groups')
             ->set_description('Which device groups does this device belong to')
             ->searchable()
             ->set_editable(true)

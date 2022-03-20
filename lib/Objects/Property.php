@@ -34,24 +34,24 @@ class Property extends ORMObject
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::varchar('name')
-            ->set_maxlen(100)
+            ->setMaxLen(100)
             ->set_description('The name of the property')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false)
             ->searchable();
         self::object('owner')
-            ->set_allowed_objects(['FamilyMember'])
+            ->setAllowedObjects(['FamilyMember'])
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true);
         self::enum('ingress_kind')        
-            ->set_enum_values(['made','bought','present','swap'])
+            ->setEnumValues(['made','bought','present','swap'])
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
@@ -76,13 +76,13 @@ class Property extends ORMObject
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true)
-            ->set_allowed_objects(['Location']);
+            ->setAllowedObjects(['Location']);
         self::enum('egress_kind')
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true)
-            ->set_enum_values(['trash','sold','lost','present']);
+            ->setEnumValues(['trash','sold','lost','present']);
         self::date('egress_date')
             ->searchable()
             ->set_editable(true)
@@ -98,6 +98,6 @@ class Property extends ORMObject
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true)
-            ->set_enum_values(['physical','virtual']);
+            ->setEnumValues(['physical','virtual']);
     }
 }

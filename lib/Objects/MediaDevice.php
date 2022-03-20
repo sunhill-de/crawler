@@ -32,12 +32,12 @@ class MediaDevice extends NetworkDevice
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::enum('media_type')
             ->set_description('What kind of device is this')
-            ->set_enum_values(['tv','console','echo','other'])
+            ->setEnumValues(['tv','console','echo','other'])
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true)

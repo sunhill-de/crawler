@@ -34,17 +34,17 @@ class Genre extends ORMObject
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::varchar('name')
             ->set_description('The name of this genre')
-            ->set_maxlen(70)
+            ->setMaxLen(70)
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true);
-        self::arrayofstring('media_type')
+        self::arrayOfStrings('media_type')
             ->set_description('For what kind of medias is this genre')
             ->searchable()
             ->set_editable(true)
@@ -52,7 +52,7 @@ class Genre extends ORMObject
             ->set_displayable(true);            
         self::object('parent')
             ->set_description('What genre does this genre belong to')
-            ->set_allowed_objects(['Genre'])
+            ->setAllowedObjects(['Genre'])
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)

@@ -37,13 +37,13 @@ class FileObject extends ORMObject {
     protected static function setupProperties() {
         parent::setupProperties();
         self::integer('fileobject_exists')
-            ->set_default(1)
+            ->setDefault(1)
             ->set_description('Does this file object (still) exists?')
             ->set_displayable(true)
             ->set_editable(false)
             ->set_groupeditable(false);
         self::integer('fileobject_created')
-            ->set_default(1)
+            ->setDefault(1)
             ->set_description('Was this fileobject created?')
             ->set_displayable(true)
             ->set_editable(false)
@@ -61,13 +61,13 @@ class FileObject extends ORMObject {
             ->set_editable(true)
             ->set_groupeditable(false);
         self::object('parent_dir')
-            ->set_allowed_objects(['Dir'])
+            ->setAllowedObjects(['Dir'])
             ->searchable()
             ->set_decription('Parentdir')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false);
-        self::arrayofobjects('associations')
+        self::arrayOfObjects('associations')
             ->searchable()
             ->set_decription('Association to this fileobject')
             ->set_displayable(true)

@@ -34,38 +34,38 @@ class Person extends ORMObject
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::varchar('firstname')
-            ->set_maxlen(100)
+            ->setMaxLen(100)
             ->set_description('The first name of the person')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false)
             ->searchable();
         self::varchar('middlename')
-            ->set_maxlen(100)
+            ->setMaxLen(100)
             ->set_description('The middle name of the person')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false);
         self::varchar('lastname')
-            ->set_maxlen(100)
+            ->setMaxLen(100)
             ->set_description('The last name of the person')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false)
             ->searchable();
         self::varchar('title')
-            ->set_maxlen(50)
-            ->set_default('')
+            ->setMaxLen(50)
+            ->setDefault('')
             ->set_description('The title of the person')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false);
         self::enum('sex')
-            ->set_enum_values(['male','female','divers'])
+            ->setEnumValues(['male','female','divers'])
             ->set_editable(true)
             ->set_groupeditable(false)
             ->set_description('Sex of this person.');

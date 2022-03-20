@@ -19,7 +19,7 @@ namespace Sunhill\Crawler\Objects;
  * @author lokal
  *        
  */
-class Link extends fileobject
+class Link extends FileObject
 {
     public static $table_name = 'links';
     
@@ -40,8 +40,8 @@ class Link extends fileobject
     {
         parent::setupProperties();
         self::object('target')
-            ->set_allowed_objects(['file'])
-            ->set_default(null)
+            ->setAllowedObjects(['file'])
+            ->setDefault(null)
             ->searchable()
             ->set_description('What file does this link point to')
             ->set_displayable(true)

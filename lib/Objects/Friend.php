@@ -32,19 +32,19 @@ class Friend extends Person
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::date('date_of_birth')
             ->set_description('The birthday of this person')
-            ->set_default(null)
+            ->setDefault(null)
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false)
             ->searchable();
         self::object('address')
             ->set_allowedObjects(['Address'])
-            ->set_default(null)
+            ->setDefault(null)
             ->set_description('The address of this person')
             ->set_displayable(true)
             ->set_editable(true)

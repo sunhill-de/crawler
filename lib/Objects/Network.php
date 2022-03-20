@@ -34,18 +34,18 @@ class Network extends ORMObject
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::varchar('name')
-            ->set_maxlen(100)
+            ->setMaxLen(100)
             ->set_description('The name of the network')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false)
             ->searchable();
         self::varchar('prefix')
-            ->set_maxlen(20)
+            ->setMaxLen(20)
             ->set_description('The network prefix (e.g. 192.168.3)')
             ->searchable()
             ->set_editable(true)
@@ -58,7 +58,7 @@ class Network extends ORMObject
             ->set_groupeditable(true)
             ->set_displayable(true);
         self::object('part_of')
-            ->set_allowed_objects(['Network'])
+            ->setAllowedObjects(['Network'])
             ->set_description('If this network is part of a larger network')
             ->set_displayable(true)
             ->set_editable(false)

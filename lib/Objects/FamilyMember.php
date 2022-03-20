@@ -32,24 +32,24 @@ class FamilyMember extends Friend
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::time('time_of_birth')
-            ->set_default(null)
+            ->setDefault(null)
             ->set_description('When was this person born')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false);
         self::object('mother')
-            ->set_default(null)
+            ->setDefault(null)
             ->set_description('Who is the mother')
             ->set_allowedObjects(['FamilyMember'])
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true);
         self::object('father')
-            ->set_default(null)
+            ->setDefault(null)
             ->set_description('Who is the father')
             ->set_allowedObjects(['FamilyMember'])
             ->set_displayable(true)

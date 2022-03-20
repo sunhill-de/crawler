@@ -21,7 +21,7 @@ use Sunhill\Crawler\Facades\FileManager;
  * @author lokal
  *        
  */
-class Dir extends fileobject
+class Dir extends FileObject
 {
     public static $table_name = 'dirs';
     
@@ -38,13 +38,13 @@ class Dir extends fileobject
     {
         parent::setupProperties();
         self::integer('max_files')
-            ->set_default(0)
+            ->setDefault(0)
             ->set_description('How many files per directory are allowed (0=no limit)')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false);
         self::integer('max_levels')
-            ->set_default(0)
+            ->setDefault(0)
             ->set_description('How deep can we built a directory tree under this directory (0=no limit)')
             ->set_displayable(true)
             ->set_editable(true)

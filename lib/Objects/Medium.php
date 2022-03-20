@@ -32,20 +32,20 @@ class Medium extends Property
         'options'=>0,           // Reserved for later purposes
     ];
     
-    protected static function setup_properties()
+    protected static function setupProperties()
     {
-        parent::setup_properties();
+        parent::setupProperties();
         self::varchar('ean')
             ->set_description('What is the EAN of this medium')
-            ->set_maxlen(20)
-            ->set_default(null)
+            ->setMaxLen(20)
+            ->setDefault(null)
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true);
         self::object('genre')
             ->set_description('What genre does this medium belong to')
-            ->set_allowed_objects(['Genre'])
+            ->setAllowedObjects(['Genre'])
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)

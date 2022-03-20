@@ -42,7 +42,7 @@ class Mime extends ORMObject {
             ->set_editable(false)
             ->set_groupeditable(false);
         self::varchar('item')
-            ->set_default(1)
+            ->setDefault(1)
             ->set_description('Was this fileobject created?')
             ->set_displayable(true)
             ->set_editable(false)
@@ -60,7 +60,7 @@ class Mime extends ORMObject {
             ->set_editable(true)
             ->set_groupeditable(false);
         self::object('alias_for')
-            ->set_allowed_objects(['mime']);
+            ->setAllowedObjects(['mime']);
     }
 
     public function calculate_mime() {

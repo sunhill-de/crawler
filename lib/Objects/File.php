@@ -23,7 +23,7 @@ use Sunhill\Crawler\Facades\FileManager;
  * @author lokal
  *        
  */
-class File extends fileobject {
+class File extends FileObject {
 
     protected $current_location = '';
     
@@ -42,8 +42,8 @@ class File extends fileobject {
     {
         parent::setupProperties();
         self::object('reference')
-            ->set_allowed_objects(['file'])
-            ->set_default(null)
+            ->setAllowedObjects(['file'])
+            ->setDefault(null)
             ->set_description('Referenced file')
             ->set_displayable(true)
             ->set_editable(true)
@@ -68,13 +68,13 @@ class File extends fileobject {
             ->set_editable(true)
             ->set_groupeditable(true);
         self::object('mime')
-            ->set_allowed_objects(['mime'])
+            ->setAllowedObjects(['mime'])
             ->set_description('The mime type of this file')
             ->set_displayable(true)
             ->set_editable(false)
             ->set_groupeditable(false);
         self::varchar('checkout_state')
-            ->set_default('')
+            ->setDefault('')
             ->searchable()
             ->set_description('Whats the checkout state of this file')
             ->set_displayable(true)
@@ -107,13 +107,13 @@ class File extends fileobject {
             ->set_displayable(true)
             ->set_editable(false)
             ->set_groupeditable(false);
-        self::arrayofobjects('sources')
+        self::arrayOfObjects('sources')
             ->set_description('The source dir(s) this file was read from.')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(false);
-        self::arrayofobjects('content')
-            ->set_default('none')
+        self::arrayOfObjects('content')
+            ->setDefault('none')
             ->set_description('Linked contents')
             ->set_displayable(true)
             ->set_editable(true)
