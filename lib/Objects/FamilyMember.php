@@ -44,14 +44,14 @@ class FamilyMember extends Friend
         self::object('mother')
             ->setDefault(null)
             ->set_description('Who is the mother')
-            ->set_allowedObjects(['FamilyMember'])
+            ->setallowedObjects(['FamilyMember'])
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true);
         self::object('father')
             ->setDefault(null)
             ->set_description('Who is the father')
-            ->set_allowedObjects(['FamilyMember'])
+            ->setallowedObjects(['FamilyMember'])
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true);

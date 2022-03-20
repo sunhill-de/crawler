@@ -20,7 +20,7 @@
         @forelse($objects as $object)
         <tr>
          <td>{{$object->id}}</td>
-         <td><a href="/objects/list/{{strtolower($object::$object_infos['name'])}}">{{$object::$object_infos['name']}}</a></td>
+         <td><a href="/objects/list/{{$object::$object_infos['name']}}">{{$object::$object_infos['name']}}</a></td>
          <td>{{$object->title}}</td> 
          <td>{{$object->firstname}}</td> 
          <td>{{$object->lastname}}</td> 

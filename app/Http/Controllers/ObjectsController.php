@@ -115,7 +115,7 @@ class ObjectsController extends Controller
         $object = Classes::createObject($class);
         $input = $request->all();
         foreach ($input as $key => $value) {
-            if ($key[0] !== '_') {
+            if (($key[0] !== '_') && !empty($value)) {
                 $object->$key = $value;
             }
         }

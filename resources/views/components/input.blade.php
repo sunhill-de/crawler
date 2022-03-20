@@ -79,7 +79,7 @@
 
 			list: {
 				onChooseEvent: function() {
-					$('#{{$name}}').value = $("#_{{$name}}").getSelectedItemData().id;
+					$('#{{$name}}').val($("#_{{$name}}").getSelectedItemData().id);
 				}
 			},
   			requestDelay: 400

@@ -20,18 +20,11 @@ class ApiController extends Controller
         foreach ($allowedClasses as $class) {
             $result = array_merge($result,$this->findObjects($class,$request->input('phrase')));
         }
-        $search = Person::search()->where('lastname','begins with',$request->input('phrase'))->get();
-        foreach ($search as $person) 
-        {
-            $obj = new \StdClass();
-            $obj->name = $person->firstname." ".$person->lastname;
-            $obj->id = $person->id;
-            $result[] = $obj;
-        }
+
         return response()->json($result,200)->header('Content-type', 'application/json');
     }
     
-    private function findObject($class,$search)
+    private function findObjects($class,$search)
     {
         $result = $this->getResults($class,$search);
         return $this->prepareResults($class,$result);
@@ -61,6 +54,8 @@ class ApiController extends Controller
                     $obj->name = $result->lastname.", ".$result->firstname;
                     break;
             }
+            $return[] = $obj;
         }
+        return $return;
     }
 }
