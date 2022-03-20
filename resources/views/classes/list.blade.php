@@ -4,9 +4,11 @@
 
 @section('table')
        <table>
+        <caption>Klassen auflisten</caption>
         <tr>
          <th>Name</th>
          <th>Parent</th>
+         <th>&nbsp;</th>
          <th>&nbsp;</th>
          <th>&nbsp;</th>
         </tr>
@@ -16,6 +18,7 @@
          <td>{{$class->parent}}</td>
          <td><a href="/classes/show/{{$class->name}}">anzeigen</a></td>
          <td><a href="/objects/list/{{$class->name}}">Objekte auflisten</a></td>
+         <td><a href="/objects/add/{{$class->name}}">Objekt hinzuf&uuml;gen</a></td>
         </tr>
         @empty
         <tr>

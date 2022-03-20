@@ -3,7 +3,9 @@
 @section('title','Alle Objekte auflisten')
 
 @section('table')
+       @parent
        <table>
+       <caption>Alle Objekte auflisten</caption>
         <tr>
          <th>ID</th>
          <th>UUID</th>
@@ -18,7 +20,7 @@
         <tr>
          <td>{{$object->id}}</td>
          <td>{{$object->uuid}}</td> 
-         <td><a href="/objects/list/{{strtolower($object::$object_infos['name'])}}">{{$object::$object_infos['name']}}</a></td>
+         <td><a href="/objects/list/{{$object::$object_infos['name']}}">{{$object::$object_infos['name']}}</a></td>
          <td>{{$object->created_at}}</td>
          <td>{{$object->updated_at}}</td>
          <td><a href="/objects/show/{{$object->id}}">anzeigen</a></td>

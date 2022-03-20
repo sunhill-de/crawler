@@ -4,8 +4,10 @@
 
 @section('table')
        <table>
+        <caption>Freunde auflisten</caption>
         <tr>
          <th>ID</th>
+         <th>Klasse</th>
          <th>Titel</th>
          <th>Vorname</th>
          <th>Nachname</th>
