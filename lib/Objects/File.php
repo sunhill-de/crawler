@@ -42,7 +42,7 @@ class File extends FileObject {
     {
         parent::setupProperties();
         self::object('reference')
-            ->setAllowedObjects(['file'])
+            ->setAllowedObjects('File')
             ->setDefault(null)
             ->set_description('Referenced file')
             ->set_displayable(true)
@@ -68,7 +68,7 @@ class File extends FileObject {
             ->set_editable(true)
             ->set_groupeditable(true);
         self::object('mime')
-            ->setAllowedObjects(['mime'])
+            ->setAllowedObjects('Mime')
             ->set_description('The mime type of this file')
             ->set_displayable(true)
             ->set_editable(false)
@@ -113,6 +113,7 @@ class File extends FileObject {
             ->set_editable(true)
             ->set_groupeditable(false);
         self::arrayOfObjects('content')
+            ->setAllowedObjects(['Person','Location','Date'])
             ->setDefault('none')
             ->set_description('Linked contents')
             ->set_displayable(true)

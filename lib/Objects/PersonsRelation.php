@@ -21,7 +21,7 @@ use Sunhill\ORM\Objects\ORMObject;
  * @author lokal
  *        
  */
-class PersonRelations extends ORMObject
+class PersonsRelation extends ORMObject
 {
     public static $table_name = 'personrelations';
     

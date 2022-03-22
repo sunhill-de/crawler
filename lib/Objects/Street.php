@@ -40,6 +40,6 @@ class Street extends Location
             ->set_default(null)
             ->set_displayable(true)
             ->set_editable(true)
-            ->set_groupeditable(false)
+            ->set_groupeditable(false);
     }
 }

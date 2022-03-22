@@ -45,7 +45,7 @@ class Property extends ORMObject
             ->set_groupeditable(false)
             ->searchable();
         self::object('owner')
-            ->setAllowedObjects(['FamilyMember'])
+            ->setAllowedObjects('FamilyMember')
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)
@@ -76,7 +76,7 @@ class Property extends ORMObject
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true)
-            ->setAllowedObjects(['Location']);
+            ->setAllowedObjects('Location');
         self::enum('egress_kind')
             ->searchable()
             ->set_editable(true)
@@ -98,6 +98,6 @@ class Property extends ORMObject
             ->set_editable(true)
             ->set_groupeditable(true)
             ->set_displayable(true)
-            ->setEnumValues(['physical','virtual']);
+            ->setEnumValues(['physical','virtual']); 
     }
 }

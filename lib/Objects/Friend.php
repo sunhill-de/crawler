@@ -51,7 +51,7 @@ class Friend extends Person
             ->set_groupeditable(false)
             ->searchable();
         self::object('address')
-            ->set_allowedObjects(['Address'])
+            ->set_allowedObjects('Address')
             ->setDefault(null)
             ->set_description('The address of this person')
             ->set_displayable(true)

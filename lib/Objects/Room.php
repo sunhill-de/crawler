@@ -41,7 +41,7 @@ class Room extends Location
             ->set_boolean(true)
             ->set_displayable(true)
             ->set_editable(true)
-            ->set_groupeditable(false)
+            ->set_groupeditable(false);
         self::enum('type')        
             ->setEnumValues(['sleep', 'bath', 'living', 'kitchen', 'dining', 'office', 'fun', 'garden', 'other'])
             ->searchable()
@@ -49,7 +49,7 @@ class Room extends Location
             ->set_groupeditable(true)
             ->set_displayable(true);
         self::object('owner')
-            ->setAllowedObjects(['FamilyMember'])
+            ->setAllowedObjects('FamilyMember')
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)

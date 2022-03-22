@@ -45,7 +45,7 @@ class Location extends ORMObject
             ->set_groupeditable(false)
             ->searchable();
         self::object('part_of')
-            ->setAllowedObjects(['Location'])
+            ->setAllowedObjects('Location')
             ->searchable()
             ->set_editable(true)
             ->set_groupeditable(true)

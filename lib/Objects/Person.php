@@ -29,7 +29,7 @@ class Person extends ORMObject
         'name'=>'Person',       // A repetition of static:$object_name @todo see above
         'table'=>'persons',     // A repitition of static:$table_name
         'name_s' => 'peroson',
-        'name_p' => 'personss',
+        'name_p' => 'persons',
         'description' => 'Class for persons',
         'options'=>0,           // Reserved for later purposes
     ];

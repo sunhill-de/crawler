@@ -43,7 +43,7 @@ class FamilyMember extends Friend
             ->set_groupeditable(false);
          self::object('place_of_birth')
             ->setDefault(null)
-            ->setAllowedObjects(['Location'])
+            ->setAllowedObjects('Location')
             ->set_description('Where was this person born')
             ->set_displayable(true)
             ->set_editable(true)
@@ -51,14 +51,14 @@ class FamilyMember extends Friend
        self::object('mother')
             ->setDefault(null)
             ->set_description('Who is the mother')
-            ->setAllowedObjects(['FamilyMember'])
+            ->setAllowedObjects('FamilyMember')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true);
         self::object('father')
             ->setDefault(null)
             ->set_description('Who is the father')
-            ->setAllowedObjects(['FamilyMember'])
+            ->setAllowedObjects('FamilyMember')
             ->set_displayable(true)
             ->set_editable(true)
             ->set_groupeditable(true);

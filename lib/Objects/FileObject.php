@@ -61,7 +61,7 @@ class FileObject extends ORMObject {
             ->set_editable(true)
             ->set_groupeditable(false);
         self::object('parent_dir')
-            ->setAllowedObjects(['Dir'])
+            ->setAllowedObjects('Dir')
             ->searchable()
             ->set_decription('Parentdir')
             ->set_displayable(true)

@@ -19,9 +19,9 @@ namespace Sunhill\Crawler\Objects;
  * @author lokal
  *        
  */
-class Property extends ORMObject
+class City extends Location
 {
-    public static $table_name = 'properties';
+    public static $table_name = 'cities';
     
     public static $object_infos = [
         'name'=>'City',       // A repetition of static:$object_name @todo see above
