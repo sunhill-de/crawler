@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class input extends Component
+class Input extends Component
 {
     
     public $class;
@@ -20,7 +20,8 @@ class input extends Component
      */
     public function __construct($class,$name,$type)
     {
-        //
+        $this->class = $class;
+        $this->name  = $name;
     }
 
     /**
