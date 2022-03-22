@@ -38,6 +38,13 @@ class ApiController extends Controller
             case 'Friend':
             case 'FamilyMember':
                 return $namespace::search()->where('lastname','begins with',$search)->orWhere('firstname','begins with',$search)->get();
+            case 'Location':
+            case 'Country':
+            case 'City':
+            case 'Street':
+            case 'Address':
+            case 'Room':
+                return $namespace::search()->where('name','begins with',$search)->get();
         }
     }
     
@@ -52,6 +59,14 @@ class ApiController extends Controller
                 case 'Friend':
                 case 'FamilyMember':
                     $obj->name = $result->lastname.", ".$result->firstname;
+                    break;
+            case 'Location':
+            case 'Country':
+            case 'City':
+            case 'Street':
+            case 'Address':
+            case 'Room':
+                    $obj->name = $result->name;
                     break;
             }
             $return[] = $obj;
