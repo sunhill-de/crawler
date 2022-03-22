@@ -70,7 +70,13 @@ class Person extends ORMObject
             ->set_groupeditable(false)
             ->set_description('Sex of this person.');
         self::arrayOfStrings('groups')
-            ->set_description('What user groups is this person member of');
+            ->set_description('What user groups is this person member of')
+            ->set_editable(true)
+            ->set_groupeditable(true);            
+        self::arrayOfStrings('aliases')
+            ->set_description('Other names for this person')
+            ->set_editable(true)
+            ->set_groupeditable(true);            
     }
     
 }
