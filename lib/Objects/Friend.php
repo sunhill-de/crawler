@@ -42,6 +42,14 @@ class Friend extends Person
             ->set_editable(true)
             ->set_groupeditable(false)
             ->searchable();
+        self::varchar('birth_name')
+            ->setMaxLen(100)
+            ->setDefault(null)
+            ->set_description('The birth name of the person')
+            ->set_displayable(true)
+            ->set_editable(true)
+            ->set_groupeditable(false)
+            ->searchable();
         self::object('address')
             ->set_allowedObjects(['Address'])
             ->setDefault(null)
