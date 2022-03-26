@@ -2,7 +2,7 @@
 
 @section('title','Alle Straßen auflisten')
 
-@section('table')
+@section('objecttable')
         @parent
        <table>
         <caption>Straßen auflisten</caption>
@@ -46,7 +46,4 @@
         </tr> 
         @endforelse
        </table>
-       <a href="/">&Uuml;bersicht</a>&nbsp;*&nbsp;
-       <a href="/objects/add/Street">Stra&szlig;e hinzuf&uuml;gen</a>
-       
 @endsection

@@ -11,6 +11,7 @@
 		<a href="/objects/list/{{$class}}/{{$nr}}">{{$nr}}</a>&nbsp;
 		@endforeach
 		</div>
-		<a href="/">&Uuml;bersicht</a>
+		<a href="/">&Uuml;bersicht</a>&nbsp;*&nbsp;
+		<a href="/objects/add/{{$class}}">{{$classname}} hinzuf&uuml;gen</a>
 		
 @endsection

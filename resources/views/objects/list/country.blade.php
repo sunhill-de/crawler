@@ -2,7 +2,7 @@
 
 @section('title','Alle Länder auflisten')
 
-@section('table')
+@section('objecttable')
         @parent
        <table>
         <caption>Länder auflisten</caption>
@@ -30,8 +30,5 @@
          <td colspan="8">Keine Eintr&auml;ge</td>
         </tr> 
         @endforelse
-       </table>
-       <a href="/">&Uuml;bersicht</a>&nbsp;*&nbsp;
-       <a href="/objects/add/Country">Land hinzuf&uuml;gen</a>
-       
+       </table>       
 @endsection

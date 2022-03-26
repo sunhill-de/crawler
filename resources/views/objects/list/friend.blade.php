@@ -2,7 +2,7 @@
 
 @section('title','Alle Freunde auflisten')
 
-@section('table')
+@section('objecttable')
         @parent
        <table>
         <caption>Freunde auflisten</caption>
@@ -36,7 +36,5 @@
          <td colspan="8">Keine Eintr&auml;ge</td>
         </tr> 
         @endforelse
-       </table>
-       <a href="/">&Uuml;bersicht</a>
-       
+       </table>       
 @endsection
