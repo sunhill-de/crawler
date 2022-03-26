@@ -116,7 +116,14 @@ class ObjectsController extends Controller
         $input = $request->all();
         foreach ($input as $key => $value) {
             if (($key[0] !== '_') && !empty($value)) {
-                $object->$key = $value;
+                $type = Classes::getNamespaceOfClass($class)::getPropertyObject($key)->getType();
+                switch ($type) {
+                    case 'Object':
+                        $object->$key = Objects::load($value);
+                        break;
+                    default:
+                        $object->$key = $value;
+                }
             }
         }
         $object->commit();
