@@ -1,7 +1,22 @@
 .inputgroup {
 	padding-bottom: 4px;
+	float: left;
+	width: 30%;
+}
+
+.inputgroup:nth-child(3n+4) {
+  content:"";
+  display: table;
+  clear:both;
 }
 
 .inputgroup label {
 	font-weight: bold;
+}
+
+.buttons {
+  content:"";
+  display: table;
+  clear:both;
+	
 }
