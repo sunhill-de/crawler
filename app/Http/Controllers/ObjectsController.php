@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Psr\Http\Message\ServerRequestInterface;
 use Sunhill\ORM\Facades\Classes;
 use Sunhill\ORM\Facades\Objects;
+use Sunhill\ORM\Utils\ObjectList;
+
+define("ENTRIES_PER_PAGE", 25);
 
 class ObjectsController extends Controller
 {
@@ -41,19 +44,39 @@ class ObjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\View\View
      */
-    public function list($class='object')
+    public function list($class='object', $page=0)
     {
-        $objects = Objects::getObjectList($class);
+        $all_objects = Objects::getObjectList($class);
+        $objects = $this->sliceObjectList($all_objects,$page,ENTRIES_PER_PAGE);
         $pass_objects = [];
         foreach ($objects as $object) {
             if ($object && ($object->id > 0)) {
                 $pass_objects[] = $object;
             }
         }
+        $pages = [];
+        if (count($all_objects) > ENTRIES_PER_PAGE) {
+            $count = ceil(count($all_objects) / ENTRIES_PER_PAGE);
+            for ($i=0;$i<$count;$i++) {
+                $pages[$i] = $i*ENTRIES_PER_PAGE;
+            }
+        } 
         return view($this->getBestTemplate($class,'list'), [
+            'class'=>$class,
             'inheritance'=>array_reverse($this->getFixedInheritance($class)),
-            'objects'=>$pass_objects
+            'objects'=>$pass_objects,
+            'pages'=>$pages
         ]);        
+    }
+    
+    private function sliceObjectList($objectlist,$delta)
+    {
+        $result = new ObjectList();   
+        $i = 0;
+        while (($i + $delta * ENTRIES_PER_PAGE < count($objectlist)) && ($i < ENTRIES_PER_PAGE)) {
+            $result->add($objectlist[($i++)+$delta*ENTRIES_PER_PAGE]);
+        }
+        return $result;
     }
     
     /**

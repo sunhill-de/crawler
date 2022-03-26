@@ -2,7 +2,7 @@
 
 @section('title','Alle Objekte auflisten')
 
-@section('table')
+@section('objecttable')
        @parent
        <table>
        <caption>Alle Objekte auflisten</caption>
@@ -33,6 +33,5 @@
         </tr> 
         @endforelse
        </table>
-       <a href="/">&Uuml;bersicht</a>
        
 @endsection

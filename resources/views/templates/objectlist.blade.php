@@ -5,4 +5,12 @@
 		@foreach($inheritance as $parent)
 		 <a href="/objects/list/{{$parent}}">{{$parent}}</a>&nbsp;&gt;&nbsp;
 		@endforeach
+		@yield('objecttable')
+		<div class="paginator">
+		@foreach($pages as $nr => $delta)
+		<a href="/objects/list/{{$class}}/{{$nr}}">{{$nr}}</a>&nbsp;
+		@endforeach
+		</div>
+		<a href="/">&Uuml;bersicht</a>
+		
 @endsection
