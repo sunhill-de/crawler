@@ -3,6 +3,7 @@
 @section('title','Alle Freunde auflisten')
 
 @section('table')
+        @parent
        <table>
         <caption>Freunde auflisten</caption>
         <tr>

@@ -3,6 +3,7 @@
 @section('title','Alle Länder auflisten')
 
 @section('table')
+        @parent
        <table>
         <caption>Länder auflisten</caption>
         <tr>
@@ -30,6 +31,7 @@
         </tr> 
         @endforelse
        </table>
-       <a href="/">&Uuml;bersicht</a>
+       <a href="/">&Uuml;bersicht</a>&nbsp;*&nbsp;
+       <a href="/objects/add/Country">Land hinzuf&uuml;gen</a>
        
 @endsection

@@ -1,8 +1,8 @@
 @extends('templates.list')
 
 @section('table')
-		*&nbsp;
+		&gt;&nbsp;
 		@foreach($inheritance as $parent)
-		 <a href="/objects/list/{{$parent}}">{{$parent}}</a>&nbsp;*&nbsp;
+		 <a href="/objects/list/{{$parent}}">{{$parent}}</a>&nbsp;&gt;&nbsp;
 		@endforeach
 @endsection

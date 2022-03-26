@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\View\Components\Input;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Sunhill\Crawler\Managers\FileManager;
 use Sunhill\Crawler\Managers\Utils;
@@ -91,5 +93,7 @@ class AppServiceProvider extends ServiceProvider
        Classes::registerClass(Property::class);
        Classes::registerClass(Room::class);
        Classes::registerClass(Street::class);
+       
+       Blade::component('input', Input::class);
     }
 }

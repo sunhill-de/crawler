@@ -3,6 +3,7 @@
 @section('title','Alle Orte auflisten')
 
 @section('table')
+        @parent
        <table>
         <caption>Orte auflisten</caption>
         <tr>
