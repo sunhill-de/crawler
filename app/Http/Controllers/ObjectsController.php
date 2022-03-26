@@ -65,7 +65,8 @@ class ObjectsController extends Controller
             'class'=>$class,
             'inheritance'=>array_reverse($this->getFixedInheritance($class)),
             'objects'=>$pass_objects,
-            'pages'=>$pages
+            'pages'=>$pages,
+            'classname'=>__($class)
         ]);        
     }
     

@@ -35,5 +35,10 @@
   	"title":"Titel",
   	"sex":"Geschlecht",
   	"The type ':type' isn't implemented.":"Der Datentyp ':type' wurde nicht definiert.",
-  	"List objects of class":"Objekte der Klasse auflisten"
+  	"List objects of class":"Objekte der Klasse auflisten",
+  	"Country":"Land",
+  	"City":"Stadt",
+  	"Street":"Straße",
+  	"FamilyMember":"Familienmitglied",
+  	"Friend":"Freund"
 }

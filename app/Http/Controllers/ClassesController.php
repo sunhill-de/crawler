@@ -32,6 +32,11 @@ class ClassesController extends Controller
         ]);
     }
     
+    public function add()
+    {
+        return view('classes.add');    
+    }
+    
     /**
      * @todo Implement me
      * @param unknown $class

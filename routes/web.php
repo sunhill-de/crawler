@@ -25,6 +25,7 @@ Route::get('/', function () {
 Route::post('/api/objectSearch', [ApiController::class, 'objectSearch']);
 
 Route::get('/classes/list', [ClassesController::class, 'list']);
+Route::get('/classes/add', [ClassesController::class, 'add']);
 Route::get('/classes/show/{class}', [ClassesController::class, 'show']);
 
 Route::get('/objects/list/{class}/{page?}', [ObjectsController::class, 'list']);
