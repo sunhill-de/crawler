@@ -4,12 +4,12 @@
 /.vagrant
 .phpunit.result.cache
 /database/database.sqlite
-.env
+.env*
 .buildpath
 .editorconfig
-.env.example
 *.log
 database/database.sqlite
 *~
 .settings
 .project
+composer.lock

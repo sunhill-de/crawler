@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('found_files', function(Blueprint $table) {
-           $table->string('hash', 40)->primary();
-           $table->string('path');
+           $table->id();
+           $table->string('short_hash', 40)->index('short_hash');
+           $table->string('long_hash', 40)->unique('long_hash');
+           $table->string('path')->unique('path');
            $table->string('mime', 40);
         });
     }

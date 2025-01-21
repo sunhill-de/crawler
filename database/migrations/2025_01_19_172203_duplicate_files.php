@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('duplicate_files', function(Blueprint $table) {
             $table->id();
             $table->string('path');
-            $table->string('hash', 40);
+            $table->integer('original');
         });
     }
 
