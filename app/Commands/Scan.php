@@ -15,6 +15,7 @@ class Scan extends Command
      */
     protected $signature =  'app:scan '.
                             '{--recursive}'.
+                            '{--resume}'.
                             '{--handle-new=record}'.
                             '{--handle-known=ignore}'. 
                             '{--new-log=./new.log}'. 
@@ -61,6 +62,7 @@ class Scan extends Command
         
         $scanner = new \ScanCrawler();
         $scanner->setRecursive($this->option('recursive'))
+                ->setResume($this->option('resume'))
                 ->setScanDir($this->argument('dir'))
                 ->setNewLog($this->option('new-log'))
                 ->setKnownLog($this->option('known-log'))

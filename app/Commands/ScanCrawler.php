@@ -15,6 +15,14 @@ class ScanCrawler
         return $this;
     }
     
+    protected $resume = false;
+    
+    public function setResume(bool $value = true): static
+    {
+        $this->resume = $value;
+        return $this;
+    }
+    
     protected $scan_dir = '.';
     
     public function setScanDir(string $scan_dir): static
@@ -102,6 +110,52 @@ class ScanCrawler
         }
     }
     
+    protected function handle_dir(string $dir)
+    {
+        if ($this->recursive) {
+            $this->scan_dir($dir.'/'.$entry);
+        }        
+    }
+    
+    protected function handle_link(string $link)
+    {
+        
+    }
+    
+    protected function get_short_hash(string $file)
+    {
+         $handle = fopen($file, "r");
+         return sha1(fread($handle,3000));
+    }
+    
+    protected function file_in_list(string $file): \stdClass
+    {
+        $short_hash = $this->get_short_hash($file);
+        if ($record = $this->short_hash_in_list($short_hash)) {
+            
+        }        
+    }
+    
+    protected function file_already_scanned(string $file)
+    {
+        if (DB::table('found_files')->where('path',$file)->first()) {
+            return true;
+        }
+        return false;
+    }
+    
+    protected function handle_file(string $file)
+    {
+        if (($this->resume) && ($this->file_already_scanned($file))) {
+            return;
+        }
+        if ($infos = $this->file_in_list($file)) {
+            $this->handle_known_file($infos);
+        } else {
+            $this->handle_new_file($infos);
+        }
+    }
+    
     protected function scan_dir(string $dir)
     {
         $handler = dir($dir);
@@ -112,18 +166,11 @@ class ScanCrawler
                 continue;
             }
             if (is_dir($dir.'/'.$entry)) {
-                if ($this->recursive) {
-                    $this->scan_dir($dir.'/'.$entry);
-                }
+                $this->handle_dir(realpath($dir.'/'.$entry));
             } else if (is_link($dir.'/'.$entry)) {
-                
+                $this->handle_file(realpath($dir.'/'.$entry));
             } else {
-                $hash = sha1_file($dir.'/'.$entry);
-                if ($query = DB::table('found_files')->where('hash',$hash)->first()) {
-                    $this->handle_known_file($dir.'/'.$entry, $query);
-                } else {
-                    $this->handle_new_file($dir.'/'.$entry, $hash);
-                }
+                $this->handle_file(realpath($dir.'/'.$entry));
             }
         }
         $this->command->line("Leaving '$dir'", null, 'v');
