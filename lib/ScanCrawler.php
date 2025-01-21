@@ -130,12 +130,42 @@ class ScanCrawler
          return sha1(fread($handle,3000));
     }
     
-    protected function file_in_list(string $file): \stdClass
+    protected function short_hash_in_list(string $hash)
+    {
+        $query = DB::table('found_files')->where('short_hash',$hash)->get();
+        return $query;
+    }
+    
+    protected function file_in_list(string $file, &$info): bool
     {
         $short_hash = $this->get_short_hash($file);
+        $long_hash = '';
         if ($record = $this->short_hash_in_list($short_hash)) {
-            
+            // Short hash found
+            // Was found long hash already calculated
+            if (!$record[0]->long_hash) 
+            {
+                // No: Do it
+                $record[0]->long_hash = sha1_file($record[0]->path);
+                DB::table('found_files')->where('short_hash',$short_hash)->update(['long_hash'=>$record[0]->long_hash]);
+            }                
+            // Yes or after calculation, is it equal
+            $long_hash = sha1_file($file);
+            foreach ($record as $entry) {
+                if ($entry->long_hash == $long_hash) {
+                    // Yes in list
+                    $info = $entry;
+                    return true;
+                }
+            }
+            // No not in list
         }        
+        $info = new \stdClass();
+        $info->short_hash = $short_hash;
+        $info->long_hash = $long_hash;
+        $info->path = $file;
+        $info->mime = mime_content_type($file);
+        return false;
     }
     
     protected function file_already_scanned(string $file)
@@ -151,7 +181,8 @@ class ScanCrawler
         if (($this->resume) && ($this->file_already_scanned($file))) {
             return;
         }
-        if ($infos = $this->file_in_list($file)) {
+        $infos = null;
+        if ( $this->file_in_list($file,$infos)) {
             $this->handle_known_file($infos);
         } else {
             $this->handle_new_file($infos);
