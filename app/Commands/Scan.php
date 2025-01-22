@@ -5,6 +5,7 @@ namespace App\Commands;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use Illuminate\Support\Facades\DB;
+use Crawler\ScanCrawler;
 
 class Scan extends Command
 {
@@ -60,7 +61,7 @@ class Scan extends Command
         $handle_known = explode(',', $this->option('handle-known'));
         $this->check_known_handlers($handle_known);
         
-        $scanner = new \ScanCrawler();
+        $scanner = new ScanCrawler();
         $scanner->setRecursive($this->option('recursive'))
                 ->setResume($this->option('resume'))
                 ->setScanDir($this->argument('dir'))
