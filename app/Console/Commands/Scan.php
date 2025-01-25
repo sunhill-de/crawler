@@ -4,8 +4,7 @@ namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use Illuminate\Support\Facades\DB;
-use Crawler\ScanCrawler;
+use Sunhill\Crawler\ScanCrawler;
 
 class Scan extends Command
 {

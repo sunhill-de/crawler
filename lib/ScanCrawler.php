@@ -1,8 +1,7 @@
 <?php
 
-namespace Crawler;
+namespace Sunhill\Crawler;
 
-use phpDocumentor\Reflection\Types\Static_;
 use LaravelZero\Framework\Commands\Command;
 use Illuminate\Support\Facades\DB;
 

@@ -17,6 +17,9 @@ return new class extends Migration
            $table->string('long_hash', 40)->unique('long_hash');
            $table->string('path')->unique('path');
            $table->string('mime', 40);
+           $table->integer('size');
+           $table->dateTime('creation');
+           $table->dateTime('modification');
         });
     }
 
