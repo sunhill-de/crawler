@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('found_files', function(Blueprint $table) {
            $table->id();
            $table->string('short_hash', 40)->index('short_hash');
-           $table->string('long_hash', 40)->unique('long_hash');
+           $table->string('long_hash', 40)->nullable();
            $table->string('path')->unique('path');
            $table->string('mime', 40);
            $table->integer('size');

@@ -125,17 +125,51 @@ class File
     
     public function wasThisPathAlreadyScanned(): bool
     {
-        
+        return !(DB::table('found_files')->where('path',$this->filename)->first() == null);
+    }
+    
+    private function searchShortHash()
+    {
+        return DB::table('found_files')->where('short_hash', $this->getShortHash())->get();    
+    }
+    
+    private function recalulateLongHash(\stdClass $result)
+    {
+        $long_hash = sha1_file($result->path);
+        DB::table('found_files')->where('id', $result->id)->update(['long_hash'=>$long_hash]);
+        $result->long_hash = $long_hash;
+        return $result;
     }
     
     public function isHashAlreadyInDatabase(): bool
     {
-        
+        $query = $this->searchShortHash();
+        if (count($query) == 0) {
+            return false;
+        }
+        foreach ($query as $result) {
+            if (is_null($result->long_hash)) {
+                $result = $this->recalulateLongHash($result);
+            }
+            if ($result->long_hash == $this->getLongHash()) {
+                $this->id = $result->id;
+                return true;
+            }
+        }
+        return false;
     }
     
     public function commit()
     {
-        DB::table('found_files'); 
+        DB::table('found_files')->insert([
+            'path'=>$this->filename,
+            'size'=>$this->getSize(),
+            'mime'=>$this->getMime(),
+            'short_hash'=>$this->getShortHash(),
+            'long_hash'=>$this->long_hash,
+            'creation'=>$this->getCreation(),
+            'modification'=>$this->getLastModification()
+            ]); 
     }
     
 }

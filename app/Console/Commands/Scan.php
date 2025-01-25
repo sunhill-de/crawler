@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Commands;
+namespace App\Console\Commands;
 
-use Illuminate\Console\Scheduling\Schedule;
-use LaravelZero\Framework\Commands\Command;
+use Illuminate\Console\Command;
 use Sunhill\Crawler\ScanCrawler;
 
 class Scan extends Command
@@ -14,14 +13,14 @@ class Scan extends Command
      * @var string
      */
     protected $signature =  'app:scan '.
-                            '{--recursive}'.
-                            '{--resume}'.
-                            '{--handle-new=record}'.
-                            '{--handle-known=ignore}'. 
-                            '{--new-log=./new.log}'. 
-                            '{--known-log=./known.log}'.
-                            '{dir=.}';
-
+        '{--recursive}'.
+        '{--resume}'.
+        '{--handle-new=record}'.
+        '{--handle-known=ignore}'.
+        '{--new-log=./new.log}'.
+        '{--known-log=./known.log}'.
+        '{dir=.}';
+    
     /**
      * The console command description.
      *
@@ -46,7 +45,7 @@ class Scan extends Command
             if (!in_array($handler, $allowed_known_handlers)) {
                 throw new \Exception("'$handler' is not allowed here");
             }
-        }        
+        }
     }
     
     /**
@@ -62,21 +61,13 @@ class Scan extends Command
         
         $scanner = new ScanCrawler();
         $scanner->setRecursive($this->option('recursive'))
-                ->setResume($this->option('resume'))
-                ->setScanDir($this->argument('dir'))
-                ->setNewLog($this->option('new-log'))
-                ->setKnownLog($this->option('known-log'))
-                ->setNewHandlers($handle_new)
-                ->setKnownHandlers($handle_known)
-                ->setCommand($this);
-        $scanner->run();                
-    }
-
-    /**
-     * Define the command's schedule.
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
+        ->setResume($this->option('resume'))
+        ->setScanDir($this->argument('dir'))
+        ->setNewLog($this->option('new-log'))
+        ->setKnownLog($this->option('known-log'))
+        ->setNewHandlers($handle_new)
+        ->setKnownHandlers($handle_known)
+        ->setCommand($this);
+        $scanner->run();
     }
 }
