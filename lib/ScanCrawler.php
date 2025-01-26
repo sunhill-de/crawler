@@ -79,7 +79,7 @@ class ScanCrawler
             switch ($handler) {
                 case 'log':
                     $this->command->line("Log file '".$file->getFilename()."'", null, 'vv');
-                    fwrite($this->known_log_file, $file->getFilename()."=>".$file->getPointsTo()."\n");
+                    fwrite($this->known_log_file, $file->getFilename()." => ".$file->getPointsTo()."\n");
                     break;
                 case 'record':
                     $this->command->line("Record file '$file", null, 'vv');
@@ -128,6 +128,7 @@ class ScanCrawler
         $file_obj->loadFromFilesystem($file);
         
         if (($this->resume) && $file_obj->wasThisPathAlreadyScanned()) {
+            $this->command->line("Skipping already scanned file (resume mode): '".$file."'", null, 'v');
             return;
         }
         if ($file_obj->isHashAlreadyInDatabase()) {
