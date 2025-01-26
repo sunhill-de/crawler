@@ -25,6 +25,8 @@ class File
     
     protected $creation;
     
+    protected $points_to;
+    
     /**
      * Loads a file from the filesystem, detects all standard values (not the hashes)
      * 
@@ -37,6 +39,21 @@ class File
         $this->size = filesize($this->filename);
         $this->last_modification = filemtime($this->filename);
         $this->creation = filectime($this->filename);
+    }
+    
+    public function getFilename()
+    {
+        return $this->filename;    
+    }
+    
+    public function getPointsTo(): string
+    {
+        return $this->points_to??'';
+    }
+    
+    public function getID(): int
+    {
+        return $this->id??0;    
     }
     
     /**
@@ -153,6 +170,7 @@ class File
             }
             if ($result->long_hash == $this->getLongHash()) {
                 $this->id = $result->id;
+                $this->points_to = $result->path;
                 return true;
             }
         }

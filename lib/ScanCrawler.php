@@ -2,8 +2,8 @@
 
 namespace Sunhill\Crawler;
 
-use LaravelZero\Framework\Commands\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Console\Command;
 
 class ScanCrawler
 {
@@ -72,19 +72,19 @@ class ScanCrawler
         return $this;
     }
         
-    protected function handle_known_file(string $file, $query)
+    protected function handle_known_file(File $file)
     {
-        $this->command->line("Found known file '$file'=>'".$query->path."'", null, 'v');
+        $this->command->line("Found known file '".$file->getFilename()."'=>'".$file->getPointsTo()."'", null, 'v');
         foreach ($this->known_handlers as $handler) {
             switch ($handler) {
                 case 'log':
-                    $this->command->line("Log file '$file", null, 'vv');
-                    fwrite($this->known_log.'=>'.$query->path, $file."\n");
+                    $this->command->line("Log file '".$file->getFilename()."'", null, 'vv');
+                    fwrite($this->known_log_file, $file->getFilename()."=>".$file->getPointsTo()."\n");
                     break;
                 case 'record':
                     $this->command->line("Record file '$file", null, 'vv');
                     DB::table('duplicate_files')->insert(
-                        ['hash'=>$query-hash,'path'=>$file]);
+                        ['original'=>$file->getID(),'path'=>$file->getFilename()]);
                     break;
                 case 'delete':
                     $this->command->line("Deleting file '$file", null, 'v');
@@ -93,19 +93,18 @@ class ScanCrawler
         }
     }
     
-    protected function handle_new_file(string $file, string $hash)
+    protected function handle_new_file(File $file)
     {
-        $this->command->line("Found new file '$file", null, 'v');
+        $this->command->line("Found new file '".$file->getFilename()."'", null, 'v');
         foreach ($this->new_handlers as $handler) {
             switch ($handler) {
                 case 'log':
-                    $this->command->line("Log file '$file", null, 'v');
-                    fwrite($this->new_log, $file."\n");
+                    $this->command->line("Log file '".$file->getFilename()."'", null, 'v');
+                    fwrite($this->new_log_file, $file->getFilename()."\n");
                     break;
                 case 'record':
-                    $this->command->line("Record file '$file", null, 'v');
-                    DB::table('found_files')->insert(
-                        ['hash'=>$hash,'path'=>$file,'mime'=>mime_content_type($file)]);
+                    $this->command->line("Record file '".$file->getFilename()."'", null, 'v');
+                    $file->commit();
                     break;
             }
         }
@@ -114,7 +113,7 @@ class ScanCrawler
     protected function handle_dir(string $dir)
     {
         if ($this->recursive) {
-            $this->scan_dir($dir.'/'.$entry);
+            $this->scan_dir($dir);
         }        
     }
     
@@ -123,68 +122,18 @@ class ScanCrawler
         
     }
     
-    protected function get_short_hash(string $file)
-    {
-         $handle = fopen($file, "r");
-         return sha1(fread($handle,3000));
-    }
-    
-    protected function short_hash_in_list(string $hash)
-    {
-        $query = DB::table('found_files')->where('short_hash',$hash)->get();
-        return $query;
-    }
-    
-    protected function file_in_list(string $file, &$info): bool
-    {
-        $short_hash = $this->get_short_hash($file);
-        $long_hash = '';
-        if ($record = $this->short_hash_in_list($short_hash)) {
-            // Short hash found
-            // Was found long hash already calculated
-            if (!$record[0]->long_hash) 
-            {
-                // No: Do it
-                $record[0]->long_hash = sha1_file($record[0]->path);
-                DB::table('found_files')->where('short_hash',$short_hash)->update(['long_hash'=>$record[0]->long_hash]);
-            }                
-            // Yes or after calculation, is it equal
-            $long_hash = sha1_file($file);
-            foreach ($record as $entry) {
-                if ($entry->long_hash == $long_hash) {
-                    // Yes in list
-                    $info = $entry;
-                    return true;
-                }
-            }
-            // No not in list
-        }        
-        $info = new \stdClass();
-        $info->short_hash = $short_hash;
-        $info->long_hash = $long_hash;
-        $info->path = $file;
-        $info->mime = mime_content_type($file);
-        return false;
-    }
-    
-    protected function file_already_scanned(string $file)
-    {
-        if (DB::table('found_files')->where('path',$file)->first()) {
-            return true;
-        }
-        return false;
-    }
-    
     protected function handle_file(string $file)
     {
-        if (($this->resume) && ($this->file_already_scanned($file))) {
+        $file_obj = new File();
+        $file_obj->loadFromFilesystem($file);
+        
+        if (($this->resume) && $file_obj->wasThisPathAlreadyScanned()) {
             return;
         }
-        $infos = null;
-        if ( $this->file_in_list($file,$infos)) {
-            $this->handle_known_file($infos);
+        if ($file_obj->isHashAlreadyInDatabase()) {
+            $this->handle_known_file($file_obj);
         } else {
-            $this->handle_new_file($infos);
+            $this->handle_new_file($file_obj);
         }
     }
     
