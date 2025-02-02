@@ -82,9 +82,9 @@ class ScanCrawler
                     fwrite($this->known_log_file, $file->getFilename()." => ".$file->getPointsTo()."\n");
                     break;
                 case 'record':
-                    $this->command->line("Record file '$file", null, 'vv');
-                    DB::table('duplicate_files')->insert(
-                        ['original'=>$file->getID(),'path'=>$file->getFilename()]);
+                    $file->setState('duplicate');
+                    $this->command->line("Record file '".$file->getFilename(), null, 'vv');
+                    $file->commit();                    
                     break;
                 case 'delete':
                     $this->command->line("Deleting file '$file", null, 'v');
@@ -125,7 +125,14 @@ class ScanCrawler
     protected function handle_file(string $file)
     {
         $file_obj = new File();
-        $file_obj->loadFromFilesystem($file);
+        try {
+            $file_obj->loadFromFilesystem($file);
+        } catch (\Exception $e) {
+            $this->command->line("Error scanning $file");
+            $handle = fopen('error.log',"w+");
+            fwrite($handle,"Error scanning $file\n");
+            fclose($handle);
+        }
         
         if (($this->resume) && $file_obj->wasThisPathAlreadyScanned()) {
             $this->command->line("Skipping already scanned file (resume mode): '".$file."'", null, 'v');

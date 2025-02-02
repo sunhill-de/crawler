@@ -27,6 +27,14 @@ class File
     
     protected $points_to;
     
+    protected $state = 'original';
+    
+    public function setState(string $state)
+    {
+        $this->state = $state;
+        return $this;
+    }
+    
     /**
      * Loads a file from the filesystem, detects all standard values (not the hashes)
      * 
@@ -116,14 +124,14 @@ class File
      */
     public function getShortHash()
     {        
-        if (is_null($this->short_hash)) {
-            if ($this->size <= SHORT_HASH_SIZE) {
-                $this->short_hash = $this->getLongHash();
-            } else {
-                $handle = fopen($this->filename, "r");
-                $this->short_hash = sha1(fread($handle,SHORT_HASH_SIZE));
+            if (is_null($this->short_hash)) {
+                if ($this->size <= SHORT_HASH_SIZE) {
+                    $this->short_hash = $this->getLongHash();
+                } else {
+                    $handle = fopen($this->filename, "r");
+                    $this->short_hash = sha1(fread($handle,SHORT_HASH_SIZE));
+                }
             }
-        }
         return $this->short_hash;
     }
     
@@ -169,8 +177,7 @@ class File
                 $result = $this->recalulateLongHash($result);
             }
             if ($result->long_hash == $this->getLongHash()) {
-                $this->id = $result->id;
-                $this->points_to = $result->path;
+                $this->points_to = $result->id;
                 return true;
             }
         }
@@ -186,7 +193,9 @@ class File
             'short_hash'=>$this->getShortHash(),
             'long_hash'=>$this->long_hash,
             'creation'=>$this->getCreation(),
-            'modification'=>$this->getLastModification()
+            'modification'=>$this->getLastModification(),
+            'link'=>$this->points_to,
+            'state'=>$this->state
             ]); 
     }
     
